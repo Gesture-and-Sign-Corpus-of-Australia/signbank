@@ -67,7 +67,6 @@ jobs:
   build:
     name: Build release
     runs-on: ubuntu-latest
-    environment: uat
     outputs:
       artifact_name: ${{ steps.output.outputs.artifact_name }}
       artifact_filename: ${{ steps.output.outputs.artifact_filename }}
