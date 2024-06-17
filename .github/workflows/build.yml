@@ -110,7 +110,9 @@ jobs:
   deploy:
     name: Deploy release
     runs-on: ubuntu-latest
-    environment: uat
+    environment:
+      name: uat
+      url: https://uat.auslan.org.au
     needs: build
 
     steps:
@@ -123,14 +125,14 @@ jobs:
         # uses: cross-the-world/ssh-scp-ssh-pipelines@78e864b4890087a58248ff39320406971ca88b89
         uses: cross-the-world/ssh-scp-ssh-pipelines@v1.1.4
         with:
-          host: ${{ secrets.STAGING_REMOTE_HOST }}
+          host: ${{ vars.STAGING_REMOTE_HOST }}
           port: 22
-          user: ${{ secrets.STAGING_REMOTE_USER }}
+          user: ${{ vars.STAGING_REMOTE_USER }}
           key: ${{ secrets.STAGING_SSH_PRIVATE_KEY }}
-          first_ssh: mkdir -p ${{ secrets.STAGING_REMOTE_TARGET }}/signbank
+          first_ssh: mkdir -p ${{ vars.STAGING_REMOTE_TARGET }}/signbank
           # scp from local to remote
           scp: |
-            '${{ needs.build.outputs.artifact_filename }}' => "${{ secrets.STAGING_REMOTE_TARGET }}/signbank"
+            '${{ needs.build.outputs.artifact_filename }}' => "${{ vars.STAGING_REMOTE_TARGET }}/signbank"
           last_ssh: |
             tar -xzf signbank/${{ needs.build.outputs.artifact_filename }} --directory /opt/signbank
             sudo mv /opt/signbank/*.service /etc/systemd/system --force
@@ -138,4 +140,4 @@ jobs:
             echo "Restarting existing application..."
             sudo systemctl restart signbank
             echo "Deleting release tarball..."
-            rm ${{ secrets.STAGING_REMOTE_TARGET }}/signbank/${{ needs.build.outputs.artifact_filename }}
+            rm ${{ vars.STAGING_REMOTE_TARGET }}/signbank/${{ needs.build.outputs.artifact_filename }}
