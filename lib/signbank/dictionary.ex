@@ -251,10 +251,9 @@ defmodule Signbank.Dictionary do
           l_movement_path: fragment("phonology->>?", "movement_path"),
           m_movement_repeated: fragment("phonology->>?", "movement_repeated"),
           n_dominant_final_handshape: fragment("phonology->>?", "dominant_final_handshape"),
-          o_dominant_final_handshape: fragment("phonology->>?", "dominant_final_handshape"),
-          p_compound_of: fragment("morphology->>?", "compound_of"),
-          q_sense_number: s.sense_number,
-          r_id_gloss: s.id_gloss
+          o_compound_of: fragment("morphology->>?", "compound_of"),
+          p_sense_number: s.sense_number,
+          q_id_gloss: s.id_gloss
         }
     )
   end
