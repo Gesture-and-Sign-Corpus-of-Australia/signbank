@@ -21,6 +21,7 @@ defmodule Signbank.DictionaryTest do
       assert Dictionary.get_sign!(sign.id) == sign
     end
 
+    # TODO: fill in valid attrs
     test "create_sign/1 with valid data creates a sign" do
       valid_attrs = %{}
 

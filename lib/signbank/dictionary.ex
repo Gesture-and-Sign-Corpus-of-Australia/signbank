@@ -50,6 +50,9 @@ defmodule Signbank.Dictionary do
       iex> list_signs(1)
       [%Sign{}, ...]
   """
+  def list_signs do
+    list_signs(1)
+  end
   def list_signs(page) do
     Repo.paginate(
       from(s in Sign, order_by: [asc: s.id_gloss, asc: s.id]),
@@ -229,23 +232,25 @@ defmodule Signbank.Dictionary do
         where: s.id_gloss in ^id_glosses,
         select: %{
           a_subordinate_initial_handshape:
+            fragment("phonology->>?", "dominant_initial_handshape"),
+          b_subordinate_initial_handshape:
             fragment("phonology->>?", "subordinate_initial_handshape"),
-          b_dominant_initial_finger_hand_orientation:
+          c_dominant_initial_finger_hand_orientation:
             fragment("phonology->>?", "dominant_initial_finger_hand_orientation"),
-          c_subordinate_initial_handshape:
+          d_subordinate_initial_handshape:
             fragment("phonology->>?", "subordinate_initial_handshape"),
-          d_initial_primary_location: fragment("phonology->>?", "initial_primary_location"),
-          e_dominant_initial_palm_orientation:
+          e_initial_primary_location: fragment("phonology->>?", "initial_primary_location"),
+          f_dominant_initial_palm_orientation:
             fragment("phonology->>?", "dominant_initial_palm_orientation"),
-          f_subordinate_initial_finger_hand_orientation:
+          g_subordinate_initial_finger_hand_orientation:
             fragment("phonology->>?", "subordinate_initial_finger_hand_orientation"),
-          g_subordinate_initial_palm_orientation:
+          h_subordinate_initial_palm_orientation:
             fragment("phonology->>?", "subordinate_initial_palm_orientation"),
-          h_dominant_final_finger_hand_orientation:
+          i_dominant_final_finger_hand_orientation:
             fragment("phonology->>?", "dominant_final_finger_hand_orientation"),
-          i_dominant_initial_interacting_handpart:
+          j_dominant_initial_interacting_handpart:
             fragment("phonology->>?", "dominant_initial_interacting_handpart"),
-          j_subordinate_initial_interacting_handpart:
+          k_subordinate_initial_interacting_handpart:
             fragment("phonology->>?", "subordinate_initial_interacting_handpart"),
           k_movement_direction: fragment("phonology->>?", "movement_direction"),
           l_movement_path: fragment("phonology->>?", "movement_path"),

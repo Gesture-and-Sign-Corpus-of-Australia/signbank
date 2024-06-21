@@ -13,6 +13,7 @@ defmodule SignbankWeb.SignLiveTest do
     %{sign: sign}
   end
 
+  # TODO: Fix these tests, they're looking for undefined routes
   describe "Index" do
     setup [:create_sign]
 
@@ -74,6 +75,7 @@ defmodule SignbankWeb.SignLiveTest do
     end
   end
 
+  # These tests are all wrong (based on the generators, heavy use of modals, undesirable)
   describe "Show" do
     setup [:create_sign]
 

@@ -1,9 +1,10 @@
 <link phx-track-static rel="stylesheet" href={~p"/assets/home.css"} />
 
 <h2>
-  Welcome to Auslan Signbank
+  Welcome to <%= Application.fetch_env!(:signbank, :application_name) %>
 </h2>
 
+<%!-- TODO: move this text to a CRM/something editable without a programmer --%>
 <p>
   Auslan Signbank is a language resources site for Auslan (Australian Sign Language).
   Auslan is the language of the deaf community in Australia. Here you will find:
