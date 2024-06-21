@@ -6,5 +6,12 @@ defmodule Signbank.Cldr do
   Most function calls in Cldr will be calls
   to functions on this module.
   """
-  use Cldr, locales: ["en"], default_locale: "en"
+  use Cldr,
+    default_locale: "en",
+    locales: ["en"],
+    gettext: SignbankWeb.Gettext,
+    otp_app: :signbank,
+    providers: [Cldr.Number, Cldr.List],
+    generate_docs: true,
+    force_locale_download: false
 end
