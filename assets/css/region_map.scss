@@ -53,3 +53,57 @@
 .region_map_svg__select_tas #TAS {
   fill: var(--region-map-fill--selected);
 }
+
+/*
+  NOTE: this will be broken if two individual states are selected, I don't think this
+  is present in the data as of June 2024
+*/
+/* Hide other states when single state is selected */ 
+.region_map_svg__select_vic #root > *,
+.region_map_svg__select_wa #root > *,
+.region_map_svg__select_sa #root > *,
+.region_map_svg__select_nt #root > *,
+.region_map_svg__select_qld #root > *,
+.region_map_svg__select_nsw #root > *,
+.region_map_svg__select_tas #root > * {
+  display: none;
+}
+
+.region_map_svg__select_qld #QLD {
+  display: block;
+  transform: translateX(-100%) scale(1.7);
+}
+
+.region_map_svg__select_qld #QLD {
+  display: block;
+  transform: translateX(-100%) scale(1.7);
+}
+
+.region_map_svg__select_vic #VIC  {
+  display: block;
+  transform: translateX(-170%) translateY(-180%) scale(3);
+}
+.region_map_svg__select_wa #WA  {
+  display: block;
+  transform: translateX(0%) translateY(-10%) scale(1.4);
+}
+.region_map_svg__select_sa #SA  {
+  display: block;
+  transform: translateX(-70%) translateY(-70%) scale(2);
+}
+.region_map_svg__select_nt #NT  {
+  display: block;
+  transform: translateX(-100%) scale(1.7);
+}
+.region_map_svg__select_qld #QLD  {
+  display: block;
+  transform: translateX(-100%) scale(1.7);
+}
+.region_map_svg__select_nsw #NSW  {
+  display: block;
+  transform: translateX(-150%) translateY(-90%) scale(2.2);
+}
+.region_map_svg__select_tas #TAS  {
+  display: block;
+  transform: translateY(-320%) translateX(-280%) scale(4);
+}
