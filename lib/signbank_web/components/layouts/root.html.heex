@@ -16,9 +16,12 @@
     <ul class="relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end">
       <%= if @current_user do %>
         <li class="text-[0.8125rem] leading-6 text-zinc-900">
-          <%= @current_user.email %> (<%= if @current_user.role == :editor,
-            do: "Editor",
-            else: "Regular user" %>)
+          <%= @current_user.email %> (<%= case @current_user.role do
+              :editor -> "Editor"
+              :tech -> "Tech"
+              :none -> "Regular user"
+              end
+              %>)
         </li>
         <li>
           <.link
