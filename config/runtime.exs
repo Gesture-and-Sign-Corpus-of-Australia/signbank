@@ -32,8 +32,7 @@ config :signbank, :media_url, System.get_env("MEDIA_URL")
 config :signbank,
   application_name: System.get_env("APPLICATION_NAME") || "Signbank"
 
-config :signbank, Signbank.Mailer,
-  from_address: System.get_env("MAIL_FROM") || "info@example.org"
+config :signbank, Signbank.Mailer, from_address: System.get_env("MAIL_FROM") || "info@example.org"
 
 if config_env() == :prod do
   database_url =

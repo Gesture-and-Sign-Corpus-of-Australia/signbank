@@ -17,11 +17,10 @@
       <%= if @current_user do %>
         <li class="text-[0.8125rem] leading-6 text-zinc-900">
           <%= @current_user.email %> (<%= case @current_user.role do
-              :editor -> "Editor"
-              :tech -> "Tech"
-              :none -> "Regular user"
-              end
-              %>)
+            :editor -> "Editor"
+            :tech -> "Tech"
+            :none -> "Regular user"
+          end %>)
         </li>
         <li>
           <.link

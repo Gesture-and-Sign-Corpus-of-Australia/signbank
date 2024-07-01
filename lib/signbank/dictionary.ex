@@ -53,6 +53,7 @@ defmodule Signbank.Dictionary do
   def list_signs do
     list_signs(1)
   end
+
   def list_signs(page) do
     Repo.paginate(
       from(s in Sign, order_by: [asc: s.id_gloss, asc: s.id]),
@@ -132,7 +133,7 @@ defmodule Signbank.Dictionary do
                active_video: []
              ],
              where:
-               fragment("?=any(lower(keywords ::text)::text[])", ^keyword) and
+               fragment("?=any(keywords::citext[])", ^keyword) and
                  s.type == :citation
            )
          ) do
@@ -148,7 +149,7 @@ defmodule Signbank.Dictionary do
   are no other keywords that start with `query`), then it only returns that one match.
   """
   def fuzzy_find_keyword(query, region_preference \\ :australia_wide) do
-    region_sorter = fn [_id_gloss, _kw, regions, _score] ->
+    region_sorter = fn [_id_gloss, _kw, regions] ->
       Enum.find_index(sort_order(region_preference), fn x ->
         Atom.to_string(x) == Enum.at(regions, 0)
         # TODO: deal with signs with multiple regions
@@ -161,15 +162,10 @@ defmodule Signbank.Dictionary do
         select
           id_gloss,
           kw,
-          array(select region from sign_regions sr where sr.sign_id = s2.id) regions,
-          case
-            when starts_with(kw,$1) then 1.0
-            else similarity(kw,$1)
-          end similarity
+          array(select region from sign_regions sr where sr.sign_id = s2.id) regions
         from
         (select id, unnest(keywords) as kw, id_gloss, "type" from signs where "type" = 'citation') s2
-        where similarity(kw,$1) > 0.4 or
-          starts_with(kw,$1);
+        where starts_with(lower(kw),lower($1));
         """,
         [query]
       )
@@ -178,7 +174,7 @@ defmodule Signbank.Dictionary do
       {:ok, %Postgrex.Result{rows: rows}} ->
         results =
           rows
-          |> Enum.group_by(fn [_id_gloss, kw, _regions, _similarity] -> kw end)
+          |> Enum.group_by(fn [_id_gloss, kw, _regions] -> kw end)
           |> Enum.map(fn {kw, matches} ->
             similarity = matches |> Enum.at(0) |> Enum.at(3)
 
