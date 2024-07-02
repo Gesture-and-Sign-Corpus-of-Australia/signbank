@@ -18,10 +18,12 @@ defmodule SignbankWeb.SignLive.Index do
       |> assign(:inexact_matches, [])
       |> assign(:error, nil)
 
+    query = Map.get(params, "q")
     # TODO: use actual set region preference
-    case Dictionary.fuzzy_find_keyword(Map.get(params, "q"), :northern) do
-      {:ok, [[kw, id_gloss, _]]} ->
-        {:noreply, push_patch(socket, to: ~p"/dictionary/sign/#{id_gloss}?q=#{kw}")}
+    case Dictionary.fuzzy_find_keyword(query, :northern) do
+      # if we match a keyword exactly, and its the only match, jump straight to results
+      {:ok, [[^query, id_gloss, _]]} ->
+        {:noreply, push_patch(socket, to: ~p"/dictionary/sign/#{id_gloss}?q=#{query}")}
 
       {:ok, inexact_matches} ->
         {:noreply,

@@ -37,7 +37,7 @@
   </p>
   <%!-- <p :if={@search_query != nil and not Enum.empty?(@search_results)}> --%>
   <p>
-    <%= for {result, index} <- Enum.with_index(@search_results, 1) do %>
+    <%= for {result, index} <- Enum.with_index(Enum.sort_by(@search_results, fn %{id_gloss: id_gloss} -> id_gloss end, :asc), 1) do %>
       <.link
         id={"search_result_#{result.id_gloss}"}
         class="entry-page__search_result"

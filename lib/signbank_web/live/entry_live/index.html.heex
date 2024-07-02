@@ -4,9 +4,14 @@
   <%= if not Enum.empty?(@inexact_matches) do %>
     <div>
       <%= Enum.count(@inexact_matches) %> close matches found <hr />
-      <%= for [keyword, id_gloss, _] <- @inexact_matches do %>
-        <.link href={~p"/dictionary/sign/#{id_gloss}?q=#{keyword}"}><%= keyword %></.link>
-      <% end %>
+      <% IO.inspect(@inexact_matches) %>
+      <ul class="keyword-disambig">
+        <%= for [keyword, id_gloss, published] <- @inexact_matches do %>
+        <li class="keyword-disambig__keyword" data-published={published}>
+          <.link href={~p"/dictionary/sign/#{id_gloss}?q=#{keyword}"}><%= keyword %></.link>
+        </li>
+        <% end %>
+      </ul>
     </div>
   <% else %>
     <p>

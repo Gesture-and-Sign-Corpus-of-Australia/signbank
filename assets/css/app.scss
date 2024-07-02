@@ -391,6 +391,25 @@ footer {
   }
 }
 
+
+.keyword-disambig {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 18em;
+  list-style-type: none;
+  gap: 0em 2em;
+
+  .keyword-disambig__keyword:not([data-published]):after {
+    content: '*';
+    font-size: 1.3em;
+    text-decoration: none;
+    /* slight kerning adjustment */
+    margin-left: -0.2em;
+  } 
+}
+
+
 .flash {
   position: fixed;
   top: 0.5rem;
