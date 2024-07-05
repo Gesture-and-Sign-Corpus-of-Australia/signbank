@@ -6,7 +6,7 @@
       <%= Enum.count(@inexact_matches) %> close matches found <hr />
       <% IO.inspect(@inexact_matches) %>
       <ul class="keyword-disambig">
-        <%= for [keyword, id_gloss, published] <- @inexact_matches do %>
+        <%= for [keyword, id_gloss, published] <- Enum.sort_by(@inexact_matches, fn s -> s |> Enum.at(0) |> String.downcase end) do %>
         <li class="keyword-disambig__keyword" data-published={published}>
           <.link href={~p"/dictionary/sign/#{id_gloss}?q=#{keyword}"}><%= keyword %></.link>
         </li>
