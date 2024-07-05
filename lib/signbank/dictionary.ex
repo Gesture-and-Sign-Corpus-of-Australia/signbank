@@ -8,39 +8,20 @@ defmodule Signbank.Dictionary do
 
   alias Signbank.Dictionary.Sign
 
-  @southern_states [:victoria, :new_south_wales, :tasmania]
-  @northern_states [:queensland, :western_australia]
   @default_order [
     :australia_wide,
-    :no_region,
     :southern_dialect,
     :northern_dialect,
     :victoria,
     :new_south_wales,
     :queensland,
     :western_australia,
-    :tasmania
+    :south_australia,
+    :tasmania,
+    :no_region
   ]
-  @southern_order [
-                    :australia_wide,
-                    :no_region,
-                    :southern_dialect,
-                    :northern_dialect
-                  ] ++
-                    @southern_states ++
-                    @northern_states
-  @northern_order [
-                    :australia_wide,
-                    :no_region,
-                    :northern_dialect,
-                    :southern_dialect
-                  ] ++
-                    @northern_states ++
-                    @southern_states
 
-  defp sort_order(:northern_dialect), do: @northern_order
-  defp sort_order(:southern_dialect), do: @southern_order
-  defp sort_order(_), do: @default_order
+  defp sort_order, do: @default_order
 
   @doc """
   Returns a paginated list of signs.
@@ -114,9 +95,9 @@ defmodule Signbank.Dictionary do
       {:ok, [["hour", "hour_clockface"], ["house", "house1a"]]}
 
   """
-  def get_sign_by_keyword!(keyword, region_preference \\ :australia_wide) do
+  def get_sign_by_keyword!(keyword) do
     region_sorter = fn %Sign{regions: regions} ->
-      Enum.find_index(sort_order(region_preference), fn x ->
+      Enum.find_index(sort_order(), fn x ->
         Atom.to_string(x) == Enum.at(regions, 0)
         # TODO: deal with signs with multiple regions
       end)
@@ -148,9 +129,9 @@ defmodule Signbank.Dictionary do
   If the search is not ambiguous (i.e., there is an exact keyword match and there
   are no other keywords that start with `query`), then it only returns that one match.
   """
-  def fuzzy_find_keyword(query, region_preference \\ :australia_wide) do
+  def fuzzy_find_keyword(query) do
     region_sorter = fn [_id_gloss, _kw, regions, _published] ->
-      Enum.find_index(sort_order(region_preference), fn x ->
+      Enum.find_index(sort_order(), fn x ->
         Atom.to_string(x) == Enum.at(regions, 0)
         # TODO: deal with signs with multiple regions
       end)

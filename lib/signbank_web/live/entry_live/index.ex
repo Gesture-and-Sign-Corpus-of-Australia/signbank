@@ -20,7 +20,7 @@ defmodule SignbankWeb.SignLive.Index do
 
     query = Map.get(params, "q")
     # TODO: use actual set region preference
-    case Dictionary.fuzzy_find_keyword(query, :northern) do
+    case Dictionary.fuzzy_find_keyword(query) do
       # if we match a keyword exactly, and its the only match, jump straight to results
       {:ok, [[^query, id_gloss, _]]} ->
         {:noreply, push_patch(socket, to: ~p"/dictionary/sign/#{id_gloss}?q=#{query}")}

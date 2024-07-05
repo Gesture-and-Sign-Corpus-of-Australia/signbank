@@ -172,6 +172,10 @@ footer {
   border-collapse: collapse;
 }
 
+.entry-page__search_result--current {
+  background-color: lightgray;
+}
+
 .entry-page__switch_entry {
   margin-bottom: 1em;
   display: flex;
