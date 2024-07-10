@@ -256,6 +256,7 @@ defmodule Signbank.Dictionary.Phonology do
     # TODO: change to enum
     field :repetition_type, Ecto.Enum,
       values: [
+        :none,
         :one_same_loc,
         :two_same_loc,
         :multiple_same_loc,

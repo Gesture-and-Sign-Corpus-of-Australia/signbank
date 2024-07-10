@@ -5,36 +5,65 @@ defmodule VideoScroller do
   use SignbankWeb, :live_component
 
   def render(assigns) do
-    assigns = assign(assigns, videos: Enum.concat([assigns.sign], assigns.sign.variants))
-    # TODO: this implementation means we *require* javascript. I don't like this.
-    # should refactor to use query params to control which video is selected
+    # if we're on a citation sign, concat it into list with all variants, if we're on a variant then travel up to the headsign and do that
+    citation_sign =
+      if assigns.sign.type == :citation do
+        assigns.sign
+      else
+        assigns.sign.citation
+      end
+
+    citation_and_variants =
+      [citation_sign]
+      |> Enum.concat(citation_sign.variants)
+      |> Enum.sort_by(& &1.id_gloss)
+
+    index_of_current_sign =
+      Enum.find_index(citation_and_variants, &(&1.id_gloss == assigns.sign.id_gloss))
+
+    assigns =
+      assign(
+        assigns,
+        citation_and_variants: citation_and_variants,
+        next_sign_link:
+          if index_of_current_sign > 0 do
+            case Enum.fetch(citation_and_variants, index_of_current_sign - 1) do
+              {:ok, s} -> ~p"/dictionary/sign/#{s.id_gloss}"
+              :error -> nil
+            end
+          else
+            nil
+          end,
+        previous_sign_link:
+          case Enum.fetch(citation_and_variants, index_of_current_sign + 1) do
+            {:ok, s} -> ~p"/dictionary/sign/#{s.id_gloss}"
+            :error -> nil
+          end
+      )
+
     ~H"""
     <div class="entry-page__videos_scroller">
-      <button
-        :if={not Enum.empty?(@sign.variants)}
+      <.link
+        :if={@next_sign_link}
         id="previous_variant"
         class="entry-page__videos_scroller_slide_buttons"
-        href="#"
-        phx-click="previous"
-        phx-target={@myself}
-        disabled={@counter == 0}
+        href={@next_sign_link}
+        disabled={!@next_sign_link}
         aria-label="previous variant"
       >
         <Heroicons.arrow_left class="icon--small" />
-      </button>
-      <button
-        :if={not Enum.empty?(@sign.variants)}
+      </.link>
+      <.link
+        :if={@previous_sign_link}
         id="next_variant"
         class="entry-page__videos_scroller_slide_buttons"
-        href="#"
-        phx-click="next"
-        phx-target={@myself}
-        disabled={@counter == Enum.count(@sign.variants)}
+        href={@previous_sign_link}
+        disabled={!@previous_sign_link}
         aria-label="next variant"
       >
         <Heroicons.arrow_right class="icon--small" />
-      </button>
-      <.video_frame id={"variant_video_#{@sign.id}_#{@counter}"} sign={Enum.at(@videos, @counter)} />
+      </.link>
+      <.video_frame id={"variant_video_#{@sign.id}_#{@counter}"} sign={@sign} />
     </div>
     """
   end

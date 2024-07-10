@@ -154,14 +154,17 @@ footer {
     padding: 0.5em 1em;
     border: solid 1px black;
     text-decoration: none;
-    color: black;
     border-collapse: collapse;
-
-    &[disabled] {
-      color: gray;
-      pointer-events: none;
-    }
   }
+  
+  .entry-page__dict_page_button:not([disabled]) {
+    color: black;
+  }
+}
+
+a[disabled] {
+  color: gray;
+  pointer-events: none;
 }
 
 .entry-page__search_result {
@@ -246,6 +249,13 @@ footer {
     height: 2.5em;
     border-radius: 0;
     border: 1px solid black;
+    color: black;
+    background-color: rgb(233, 233, 237);
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgb(198, 198, 201);
+    }
   }
 
   #next_variant {
@@ -255,8 +265,6 @@ footer {
   #previous_variant {
     left: 0;
   }
-
-
 }
 
 .video-frame {

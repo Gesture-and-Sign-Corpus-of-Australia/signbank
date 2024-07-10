@@ -52,7 +52,7 @@ defmodule SignbankWeb.Router do
 
     live_session :editor,
       on_mount: [{SignbankWeb.UserAuth, :ensure_authenticated}] do
-      live "/dictionary/sign/new", SignLive.Index, :new
+      live "/dictionary/new", SignLive.Index, :new
       live "/dictionary/sign/:id/edit", SignLive.Edit, :edit
     end
   end
