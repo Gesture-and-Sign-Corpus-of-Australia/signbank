@@ -72,7 +72,7 @@ defmodule Signbank.Dictionary do
       Repo.get_by!(
         from(s in Sign,
           preload: [
-            citation: [definitions: []],
+            citation: [definitions: [], variants: []],
             definitions: [],
             variants: [videos: [], regions: []],
             regions: [],

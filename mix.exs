@@ -68,7 +68,8 @@ defmodule Signbank.MixProject do
       {:ex_cldr_lists, "~> 2.11"},
       {:heroicons, "~> 0.5.5"},
       # Enables monitoring Ecto from the dashboard
-      {:ecto_psql_extras, "~> 0.7"}
+      {:ecto_psql_extras, "~> 0.7"},
+      {:csv, "~> 3.2"}
     ]
   end
 
