@@ -679,8 +679,8 @@ defmodule SignbankWeb.CoreComponents do
     :modifier,
     :augment,
     :pointing_sign,
-    :question,
     :interactive,
+    :question,
     :note,
     :editor_note
   ]
