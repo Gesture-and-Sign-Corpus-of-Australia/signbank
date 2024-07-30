@@ -47,7 +47,7 @@ defmodule VideoScroller do
         :if={@next_sign_link}
         id="previous_variant"
         class="entry-page__videos_scroller_slide_buttons"
-        href={@next_sign_link}
+        patch={@next_sign_link}
         disabled={!@next_sign_link}
         aria-label="previous variant"
       >
@@ -57,7 +57,7 @@ defmodule VideoScroller do
         :if={@previous_sign_link}
         id="next_variant"
         class="entry-page__videos_scroller_slide_buttons"
-        href={@previous_sign_link}
+        patch={@previous_sign_link}
         disabled={!@previous_sign_link}
         aria-label="next variant"
       >
