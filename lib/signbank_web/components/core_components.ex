@@ -123,7 +123,7 @@ defmodule SignbankWeb.CoreComponents do
       ]}
       {@rest}
     >
-      <p :if={@title} class="flex items-center gap-1.5 text-sm font-semibold leading-6">
+      <p :if={@title}>
         <Heroicons.information_circle :if={@kind == :info} class="icon--small" />
         <Heroicons.exclamation_circle :if={@kind == :error} class="icon--small" />
         <%= @title %>
@@ -614,7 +614,7 @@ defmodule SignbankWeb.CoreComponents do
   def hide(js \\ %JS{}, selector) do
     JS.hide(js,
       to: selector,
-      time: 200,
+      time: 1000,
       transition: {"transition__hide--start", "transition__hide--mid", "transition__hide--end"}
     )
   end
