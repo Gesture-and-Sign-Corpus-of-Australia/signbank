@@ -183,7 +183,10 @@
             This sign <%= if @sign.morphology.multi_sign_expression, do: "is", else: "is not" %> a multi-sign expression.
           </li>
           <%!-- TODO: refactor this hack into some kind of require_editor() fn, this approach will get annoying the more things we need to hide from unauthed users --%>
-          <li :if={@sign.phonology.hamnosys_variant_analysis && @current_user && @current_user.role in [:tech, :editor]}>
+          <li :if={
+            @sign.phonology.hamnosys_variant_analysis && @current_user &&
+              @current_user.role in [:tech, :editor]
+          }>
             HamNoSys variant analysis:
             <span class="hamnosys"><%= @sign.phonology.hamnosys_variant_analysis %></span>
           </li>
@@ -249,7 +252,9 @@
             Location side: <%= @sign.phonology.location_rightside_or_leftside %>
           </li>
           <%!-- TODO: refactor this hack into some kind of require_editor() fn, this approach will get annoying the more things we need to hide from unauthed users --%>
-          <li :if={@sign.phonology.hamnosys && @current_user && @current_user.role in [:tech, :editor]}}>
+          <li :if={
+            @sign.phonology.hamnosys && @current_user && @current_user.role in [:tech, :editor]
+          }>
             HamNoSys: <span class="hamnosys"><%= @sign.phonology.hamnosys %></span>
           </li>
         </ul>
