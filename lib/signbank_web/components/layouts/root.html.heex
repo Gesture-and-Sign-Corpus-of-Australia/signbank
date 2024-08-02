@@ -22,32 +22,23 @@
           end %>
         </li>
         <li>
-          <.link
-            href={~p"/users/settings"}
-          >
+          <.link href={~p"/users/settings"}>
             Settings
           </.link>
         </li>
         <li>
-          <.link
-            href={~p"/users/log_out"}
-            method="delete"
-          >
+          <.link href={~p"/users/log_out"} method="delete">
             Log out
           </.link>
         </li>
       <% else %>
         <li>
-          <.link
-            href={~p"/users/register"}
-          >
+          <.link href={~p"/users/register"}>
             Register
           </.link>
         </li>
         <li>
-          <.link
-            href={~p"/users/log_in"}
-          >
+          <.link href={~p"/users/log_in"}>
             Log in
           </.link>
         </li>

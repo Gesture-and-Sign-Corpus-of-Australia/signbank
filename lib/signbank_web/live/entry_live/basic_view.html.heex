@@ -57,12 +57,12 @@
   </div>
   <div class="entry-page__column">
     <%!-- TODO: inherit definitions (but not notes) from the citation form --%>
-    <.definitions type={:basic} definitions={@sign.definitions} />
     <.definitions
       :if={@sign.citation}
       type={:basic}
       definitions={Map.get(@sign.citation, :definitions, [])}
     />
+    <.definitions type={:basic} definitions={@sign.definitions} />
   </div>
 </div>
 

@@ -156,7 +156,7 @@ defmodule Signbank.Dictionary do
       {:ok, %Postgrex.Result{rows: rows}} ->
         results =
           rows
-          |> Enum.group_by(fn [_id_gloss, kw, _regions, published] -> kw end)
+          |> Enum.group_by(fn [_id_gloss, kw, _regions, _published] -> kw end)
           |> Enum.map(fn {kw, matches} ->
             similarity = matches |> Enum.at(0) |> Enum.at(3)
 

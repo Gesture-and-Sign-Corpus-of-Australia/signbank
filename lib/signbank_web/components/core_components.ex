@@ -672,8 +672,8 @@ defmodule SignbankWeb.CoreComponents do
   end
 
   @role_order [
-    :general,
     :auslan,
+    :general,
     :noun,
     :verb,
     :modifier,
@@ -702,7 +702,7 @@ defmodule SignbankWeb.CoreComponents do
   end
 
   defp definition_role_to_string(:general), do: SignbankWeb.Gettext.gettext("General Definition")
-  defp definition_role_to_string(:auslan), do: SignbankWeb.Gettext.gettext("Auslan Definition")
+  defp definition_role_to_string(:auslan), do: SignbankWeb.Gettext.gettext("Definition in Auslan")
   defp definition_role_to_string(:noun), do: SignbankWeb.Gettext.gettext("As a Noun")
   defp definition_role_to_string(:verb), do: SignbankWeb.Gettext.gettext("As a Verb or Adjective")
   defp definition_role_to_string(:modifier), do: SignbankWeb.Gettext.gettext("As Modifier")
@@ -754,6 +754,9 @@ defmodule SignbankWeb.CoreComponents do
         <ol class="definition__senses">
           <li :for={definition <- definitions}>
             <Heroicons.eye_slash :if={not definition.published} class="icon--small" /><%= definition.text %>
+            <video :if={definition.url} controls muted width="200">
+              <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{definition.url}"} />
+            </video>
           </li>
         </ol>
       </div>

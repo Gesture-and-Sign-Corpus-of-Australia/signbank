@@ -10,6 +10,7 @@ defmodule Signbank.Dictionary.Definition do
 
     field :text, :string
     field :pos, :integer
+    field :url, :string
 
     field :role, Ecto.Enum,
       values: [
@@ -18,13 +19,16 @@ defmodule Signbank.Dictionary.Definition do
         :noun,
         :verb,
         :modifier,
-        :augment,
         :pointing_sign,
         :question,
         :interactive,
+        # TODO: move this field to notes table
+        :augment,
+        # TODO: move this field to notes table
         :popular_explanation,
+        # TODO: move this field to notes table
         :note,
-        # TODO: move to text field
+        # TODO: move this field to notes table (or maybe text field on Sign)
         :editor_note
       ]
 
