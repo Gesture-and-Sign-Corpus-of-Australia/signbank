@@ -5,7 +5,8 @@ defmodule VideoScroller do
   use SignbankWeb, :live_component
 
   def render(assigns) do
-    # if we're on a citation sign, concat it into list with all variants, if we're on a variant then travel up to the headsign and do that
+    # if we're on a citation sign, concat it into list with all variants,
+    # if we're on a variant then travel up to the headsign and do that
     citation_sign =
       if assigns.sign.type == :citation do
         assigns.sign

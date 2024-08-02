@@ -32,12 +32,12 @@ defmodule SignbankWeb.Router do
     get "/about/grammar", PageController, :grammar
     get "/research/vocabulary", PageController, :vocabulary
 
-    # TODO: these routes are only slightly modified from `gen.live`, we don't want most of them
     live "/dictionary", SignLive.Index, :index
 
     live "/dictionary/sign/:id", SignLive.BasicView, :show
     live "/dictionary/sign/:id/linguistic", SignLive.LinguisticView, :show
 
+    # TODO: decide what to do with these
     # These are routes from the "recreated_signbank" project
     # live "/dictionary", SignLive.Index, :index
     # live "/dictionary/edit", SignLive.Edit, :new

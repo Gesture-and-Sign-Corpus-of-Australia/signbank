@@ -1,4 +1,6 @@
 defmodule SignbankWeb.UserAuth do
+  @moduledoc false
+
   use SignbankWeb, :verified_routes
 
   import Plug.Conn

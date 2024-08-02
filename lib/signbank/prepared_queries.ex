@@ -8,7 +8,7 @@ defmodule Signbank.Dictionary.PreparedQueries do
 
   alias Signbank.Dictionary.Sign
 
-  def keyword_mismatch() do
+  def keyword_mismatch do
     contains_keyword? = fn
       keyword ->
         fn definition ->

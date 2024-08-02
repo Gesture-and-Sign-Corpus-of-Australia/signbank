@@ -1,10 +1,9 @@
 defmodule SignbankWeb.UserAuthTest do
   use SignbankWeb.ConnCase, async: true
-
+  import Signbank.AccountsFixtures
   alias Phoenix.LiveView
   alias Signbank.Accounts
   alias SignbankWeb.UserAuth
-  import Signbank.AccountsFixtures
 
   @remember_me_cookie "_signbank_user_remember_me"
 

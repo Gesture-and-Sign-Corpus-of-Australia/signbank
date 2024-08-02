@@ -5,8 +5,9 @@ defmodule Signbank.Accounts do
 
   import Ecto.Query, warn: false
   alias Signbank.Repo
-
-  alias Signbank.Accounts.{User, UserToken, UserNotifier}
+  alias Signbank.Accounts.User
+  alias Signbank.Accounts.UserToken
+  alias Signbank.Accounts.UserNotifier
 
   @admin_roles [
     :editor,

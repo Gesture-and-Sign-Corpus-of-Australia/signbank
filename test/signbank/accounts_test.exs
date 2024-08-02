@@ -1,10 +1,10 @@
 defmodule Signbank.AccountsTest do
   use Signbank.DataCase
+  import Signbank.AccountsFixtures
 
   alias Signbank.Accounts
-
-  import Signbank.AccountsFixtures
-  alias Signbank.Accounts.{User, UserToken}
+  alias Signbank.Accounts.User
+  alias Signbank.Accounts.UserToken
 
   describe "get_user_by_email/1" do
     test "does not return the user if the email does not exist" do

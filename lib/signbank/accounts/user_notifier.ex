@@ -1,4 +1,6 @@
 defmodule Signbank.Accounts.UserNotifier do
+  @moduledoc false
+
   use SignbankWeb, :html
   import Swoosh.Email
 

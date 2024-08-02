@@ -1,9 +1,8 @@
 defmodule SignbankWeb.UserSettingsLiveTest do
   use SignbankWeb.ConnCase, async: true
-
-  alias Signbank.Accounts
   import Phoenix.LiveViewTest
   import Signbank.AccountsFixtures
+  alias Signbank.Accounts
 
   describe "Settings page" do
     test "renders settings page", %{conn: conn} do
