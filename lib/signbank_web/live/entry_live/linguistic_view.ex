@@ -33,7 +33,7 @@ defmodule SignbankWeb.SignLive.LinguisticView do
     with flags <- flags |> Map.filter(fn {_, v} -> v end) |> Map.keys() do
       Enum.join(
         if(Enum.empty?(flags), do: ["none"], else: flags),
-        ","
+        ", "
       )
     end
   end

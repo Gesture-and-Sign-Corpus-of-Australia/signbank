@@ -3,30 +3,30 @@
     <%!-- TODO: refactor these page entry nav buttons along with the same in basic_view.html.heex --%>
     <div class="entry-page__dict_page_nav">
       <.link
-      id={"search_result_#{@sign.id_gloss}_prev"}
-      disabled={@previous == nil}
-      class="button"
-      patch={if @previous, do: ~p"/dictionary/sign/#{@previous.id_gloss}/linguistic?#{@params}"}
-      phx-click={JS.push_focus()}
+        id={"search_result_#{@sign.id_gloss}_prev"}
+        disabled={@previous == nil}
+        class="button"
+        patch={if @previous, do: ~p"/dictionary/sign/#{@previous.id_gloss}/linguistic?#{@params}"}
+        phx-click={JS.push_focus()}
       >
-      Previous
+        Previous
       </.link>
       <div class="entry-page__dict_position">
-      Sign <%= @position %><br /> of <%= @sign_count %>
-    </div>
-    <.link
-    id={"search_result_#{@sign.id_gloss}_next"}
-    disabled={@next == nil}
-    class="button zzentry-page__dict_page_button"
-    patch={if @next, do: ~p"/dictionary/sign/#{@next.id_gloss}/linguistic?#{@params}"}
-    phx-click={JS.push_focus()}
-    >
-    Next
-    </.link>
+        Sign <%= @position %><br /> of <%= @sign_count %>
+      </div>
+      <.link
+        id={"search_result_#{@sign.id_gloss}_next"}
+        disabled={@next == nil}
+        class="button zzentry-page__dict_page_button"
+        patch={if @next, do: ~p"/dictionary/sign/#{@next.id_gloss}/linguistic?#{@params}"}
+        phx-click={JS.push_focus()}
+      >
+        Next
+      </.link>
     </div>
 
     <.link class="button" patch={~p"/dictionary/sign/#{@sign.id_gloss}?#{@params}"}>
-    <%= SignbankWeb.Gettext.gettext("Go to basic view") %>
+      <%= SignbankWeb.Gettext.gettext("Go to basic view") %>
     </.link>
   </div>
 </nav>
@@ -339,7 +339,7 @@
           gettext("fingers bend") => @sign.phonology.movement_fingers_bend,
         } do %>
             <div>
-              <input disabled type="checkbox" id={label} name={label} value={value} />
+              <input disabled type="checkbox" id={label} name={label} checked={value} />
               <label for={label}><%= label %></label>
             </div>
           <% end %>
@@ -359,7 +359,7 @@
             gettext("cross") => @sign.phonology.movement_cross,
           } do %>
             <div>
-              <input disabled type="checkbox" id={label} name={label} value={value} />
+              <input disabled type="checkbox" id={label} name={label} checked={value} />
               <label for={label}><%= label %></label>
             </div>
           <% end %>
@@ -387,36 +387,38 @@
       </div>
     </div>
 
-    <hr>
+    <hr />
 
     <.definitions type={:linguistic} user={@current_user} sign={@sign} />
 
-    <hr>
+    <hr />
 
-    <div
-      :if={@sign.type == :citation and Enum.count(@sign.variants) > 0}
-    class="box"
-    >
+    <div :if={@sign.type == :citation and Enum.count(@sign.variants) > 0} class="box">
       <h3 class="is-size-5">Variants</h3>
       <ol class="entry-page__variant_list">
         <%= for {variant, index} <- Enum.with_index(@sign.variants, 1) do %>
-      <li>
-        <.link class="button" href={~p"/dictionary/sign/#{variant.id_gloss}/linguistic?#{@params}"}>
-        <%= index %>
+          <li>
+            <.link
+              class="button"
+              href={~p"/dictionary/sign/#{variant.id_gloss}/linguistic?#{@params}"}
+            >
+              <%= index %>
             </.link>
           </li>
         <% end %>
       </ol>
     </div>
 
-    <div :if={@sign.type == :variant} >
-        <.link class="button" href={~p"/dictionary/sign/#{@sign.citation.id_gloss}/linguistic?#{@params}"}>
-          Citation form
-          <span class="icon is-small">
-            <Heroicons.chevron_right class="icon--small" />
-          </span>
-        </.link>
+    <div :if={@sign.type == :variant}>
+      <.link
+        class="button"
+        href={~p"/dictionary/sign/#{@sign.citation.id_gloss}/linguistic?#{@params}"}
+      >
+        Citation form
+        <span class="icon is-small">
+          <Heroicons.chevron_right class="icon--small" />
+        </span>
+      </.link>
     </div>
   </div>
 </div>
-

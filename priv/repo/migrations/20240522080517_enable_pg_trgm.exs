@@ -3,10 +3,10 @@ defmodule Signbank.Repo.Migrations.EnablePgTrgm do
   use Ecto.Migration
 
   def up do
-    execute("create extension pg_trgm;")
+    execute("create extension if not exists pg_trgm;")
   end
 
   def down do
-    execute("drop extension pg_trgm;")
+    execute("drop extension if exists pg_trgm;")
   end
 end

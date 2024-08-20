@@ -30,6 +30,12 @@ $footer-height: 4.5rem;
 @use "fonts.scss";
 @use "modal.scss";
 
+input[type="checkbox"],
+input[type="radio"] {
+  vertical-align: middle;
+}
+
+
 
 $gaps: ("small": 0.5em, "medium": 1em, "large": 2em);
 
