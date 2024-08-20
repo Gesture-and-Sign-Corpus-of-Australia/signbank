@@ -1,68 +1,86 @@
-<%!-- TODO: this was from `gen.live`, look over it again --%>
-<%!-- TODO: fix this markup, they were `.header` but that isn't useful anymore --%>
 <nav class="entry-page__switch_entry">
   <%!-- TODO: refactor these page entry nav buttons along with the same in linguistic_view.html.heex --%>
-  <p class="entry-page__dict_page_nav">
-    <%= if @previous != nil do %>
+  <div class="level-left">
+    <div class="entry-page__dict_page_nav">
       <.link
-        id={"search_result_#{@previous.id_gloss}"}
-        class="entry-page__dict_page_button"
-        patch={~p"/dictionary/sign/#{@previous.id_gloss}"}
+        id={"search_result_#{@sign.id_gloss}_prev"}
+        disabled={@previous == nil}
+        class="button"
+        patch={if @previous, do: ~p"/dictionary/sign/#{@previous.id_gloss}"}
         phx-click={JS.push_focus()}
       >
         Previous
       </.link>
-    <% else %>
-      <.link disabled={true} class="entry-page__dict_page_button">Previous</.link>
-    <% end %>
-    <%= if @next != nil do %>
+      <div class="entry-page__dict_position">
+        Sign <%= @position %><br /> of <%= @sign_count %>
+      </div>
       <.link
-        id={"search_result_#{@next.id_gloss}"}
-        class="entry-page__dict_page_button"
-        patch={~p"/dictionary/sign/#{@next.id_gloss}"}
+        id={"search_result_#{@sign.id_gloss}_next"}
+        disabled={@next == nil}
+        class="button zzentry-page__dict_page_button"
+        patch={if @next, do: ~p"/dictionary/sign/#{@next.id_gloss}"}
         phx-click={JS.push_focus()}
       >
         Next
       </.link>
-    <% else %>
-      <.link disabled={true} class="entry-page__dict_page_button">Next</.link>
-    <% end %>
-  </p>
+    </div>
 
-  <p>
-    To see more technical information
-    <.link patch={~p"/dictionary/sign/#{@sign.id_gloss}/linguistic"} phx-click={JS.push_focus()}>
-      go to the linguistic dictionary view.
+    <.link class="button" patch={~p"/dictionary/sign/#{@sign.id_gloss}/linguistic"}>
+      <%= SignbankWeb.Gettext.gettext("Go to linguistics view") %>
     </.link>
-  </p>
-  <%!-- <p :if={@search_query != nil and not Enum.empty?(@search_results)}> --%>
-  <p>
-    <%= for {result, index} <- Enum.with_index(Enum.sort_by(@search_results, fn %{id_gloss: id_gloss} -> id_gloss end, :asc), 1) do %>
-      <.link
-        id={"search_result_#{result.id_gloss}"}
-        class={"entry-page__search_result #{if @sign.id_gloss == result.id_gloss do "entry-page__search_result--current" end}"}
-        patch={~p"/dictionary/sign/#{result.id_gloss}?q=#{@search_query}"}
-        phx-click={JS.push_focus()}
-      >
-        <%= index %>
-      </.link>
-    <% end %>
-  </p>
+  </div>
+
+  <div class="level-right">
+    <%!-- <p :if={@search_query != nil and not Enum.empty?(@search_results)}> --%>
+    <div :if={@search_query != nil and not Enum.empty?(@search_results)} class="search-matches">
+      <div>Matches for the word <i><%= @search_query %></i>:</div>
+      <div class="field has-addons">
+        <%= for {result, index} <- Enum.with_index(Enum.sort_by(@search_results, fn %{id_gloss: id_gloss} -> id_gloss end, :asc), 1) do %>
+          <div class="control">
+            <.link
+              id={"search_result_#{result.id_gloss}"}
+              class={"button zzentry-page__search_result #{if @sign.id_gloss == result.id_gloss do "entry-page__search_result--current" end}"}
+              patch={~p"/dictionary/sign/#{result.id_gloss}?q=#{@search_query}"}
+              phx-click={JS.push_focus()}
+            >
+              <%= index %>
+            </.link>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
 </nav>
 
-<div class="entry-page__columns">
-  <div class="entry-page__column">
+<div class="columns">
+  <div class="column">
     <.live_component module={VideoScroller} counter={0} id={@sign.id} sign={@sign} />
     <p><strong>Keywords:</strong> <%= Enum.join(@sign.keywords || [], ", ") %></p>
+    <div :if={Enum.count(@sign.suggested_signs) > 0} style="margin-top: 0.5em">
+      <h2 class="is-size-5">Suggested signs</h2>
+      <p><%= @sign.suggested_signs_description %></p>
+      <ul class="suggested_signs">
+        <li :for={suggestion <- @sign.suggested_signs}>
+          <.modal id={"suggesed_sign_modal_#{suggestion.id}"}>
+            <video controls autoplay muted width="400">
+              <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{suggestion.url}"} />
+            </video>
+          </.modal>
+          <%!-- with preload="metadata" this functions as a thumbnail, although its not ideal --%>
+          <video
+            phx-click={show_modal("suggesed_sign_modal_#{suggestion.id}")}
+            preload="metadata"
+            muted
+            width="100"
+          >
+            <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{suggestion.url}"} />
+          </video>
+        </li>
+      </ul>
+    </div>
   </div>
-  <div class="entry-page__column">
-    <%!-- TODO: inherit definitions (but not notes) from the citation form --%>
-    <.definitions
-      :if={@sign.citation}
-      type={:basic}
-      definitions={Map.get(@sign.citation, :definitions, [])}
-    />
-    <.definitions type={:basic} definitions={@sign.definitions} />
+  <div class="column">
+    <.definitions type={:basic} sign={@sign} />
   </div>
 </div>
 

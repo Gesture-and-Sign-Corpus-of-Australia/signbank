@@ -24,7 +24,10 @@ defmodule Signbank.Dictionary.PreparedQueries do
 
     file = File.open!("test.csv", [:write, :utf8])
 
-    Repo.all(from s in Sign, preload: [:definitions, citation: [:definitions]])
+    query = from(s in Sign, preload: [:definitions, citation: [:definitions]])
+
+    query
+    |> Repo.all()
     |> Enum.filter(fn
       %{citation: nil} = s ->
         defs = s.definitions

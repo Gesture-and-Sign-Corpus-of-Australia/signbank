@@ -1,4 +1,3 @@
-# TODO: this was from `gen.live`, look over it again
 defmodule SignbankWeb.SignLive.LinguisticView do
   use SignbankWeb, :live_view
   import SignbankWeb.Gettext
@@ -7,21 +6,23 @@ defmodule SignbankWeb.SignLive.LinguisticView do
   on_mount {SignbankWeb.UserAuth, :mount_current_user}
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, socket}
+  def mount(params, _session, socket) do
+    {:ok, assign(socket, :params, params)}
   end
 
   @impl true
   def handle_params(%{"id" => id_gloss}, _, socket) do
     sign = Dictionary.get_sign_by_id_gloss!(id_gloss)
-    %{previous: previous, next: next} = Dictionary.get_prev_next_signs!(sign)
+    %{previous: previous, position: position, next: next} = Dictionary.get_prev_next_signs!(sign)
 
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(:sign, sign)
      |> assign(:previous, previous)
-     |> assign(:next, next)}
+     |> assign(:next, next)
+     |> assign(:sign_count, Dictionary.count_signs(socket.assigns.current_user))
+     |> assign(:position, position)}
   end
 
   # TODO: fix the page title
@@ -42,25 +43,24 @@ defmodule SignbankWeb.SignLive.LinguisticView do
 
   defp generate_initial_final_text(initial, final), do: "#{initial} → #{final}"
 
+  defp video_frame_type(sign) do
+    cond do
+      sign.english_entry -> "fingerspelled"
+      sign.is_signed_english_only -> "Signed English-only"
+      sign.type == :citation -> "citation"
+      sign.type == :variant -> "variant"
+    end
+  end
+
   defp video_frame_class(sign) do
     if sign.english_entry do
-      "fingerspelled"
+      "english_entry"
     else
       if sign.is_signed_english_only do
         "se_only"
       else
         Atom.to_string(sign.type)
       end
-    end
-  end
-
-  defp video_frame_type(sign) do
-    type = video_frame_class(sign)
-
-    if type == "se_only" do
-      "Signed English only"
-    else
-      type
     end
   end
 

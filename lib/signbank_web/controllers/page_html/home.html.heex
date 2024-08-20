@@ -1,5 +1,23 @@
 <link phx-track-static rel="stylesheet" href={~p"/assets/home.css"} />
 
+<form action="/dictionary" method="GET">
+  <input type="text" name="q" placeholder="Search..." />
+  <button type="submit" aria-label="Search">
+    <Heroicons.magnifying_glass class="icon--small" />
+  </button>
+</form>
+
+<ul class="homepage__quick-links">
+  <li>
+    <img src="some-icon" alt="The alt text" />
+    <span>Grammar</span>
+  </li>
+  <li>
+    <img src="some-other-icon" alt="The alt text" />
+    <span>Fingerspelling practice</span>
+  </li>
+</ul>
+
 <h2>
   Welcome to <%= Application.fetch_env!(:signbank, :application_name) %>
 </h2>
@@ -31,4 +49,3 @@
   Auslan, or a parents of deaf children&mdash;are invited to provide feedback to help improve the dictionary, using the
   links provided. Auslan is growing and changing all the time.
 </p>
-<p><br /></p>

@@ -1,10 +1,11 @@
-defmodule Signbank.Repo.Migrations.CreateSignOrderView do
+# excellent_migrations:safety-assured-for-this-file raw_sql_executed
+defmodule Signbank.Repo.Migrations.CreateSortOrderView do
   use Ecto.Migration
 
   def change do
     execute(
       """
-      create view sign_order as with s as (select id, row_number() over (order by
+      create or replace view sign_order as with s as (select id, row_number() over (order by
         coalesce(
           array_position(
           ARRAY[ 'relaxed', 'round', 'okay',
@@ -147,13 +148,21 @@ defmodule Signbank.Repo.Migrations.CreateSignOrderView do
           'love', 'animal', 'queer' ] :: varchar[],
           phonology ->> 'dominant_final_handshape'
           ),
-          null
+          0
         ),
-        morphology ->> 'compound_of',
-        sense_number,
-        id_gloss
+        morphology ->> 'compound_of' nulls first,
+        sense_number nulls first,
+        regexp_replace(
+          regexp_replace(
+            lower(id_gloss),
+            -- remove parenthesised part if it exists
+            '\\\(.*\\\)', ' ', 'i'
+          ),
+          '[-_]', ' ', 'ig'
+        )
       ) ordernum from signs)
       select
+        row_number() over (order by ordernum),
         s.id "sign_id",
         lag(s.id, 1) over (order by ordernum) "previous",
         lead(s.id, 1) over (order by ordernum) "next"

@@ -1,3 +1,4 @@
+# credo:disable-for-this-file Credo.Check.Refactor.VariableRebinding
 defmodule SignbankWeb.UserRegistrationLiveTest do
   use SignbankWeb.ConnCase, async: true
 

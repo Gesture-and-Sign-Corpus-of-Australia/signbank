@@ -4,7 +4,6 @@
   <%= if not Enum.empty?(@inexact_matches) do %>
     <div>
       <%= Enum.count(@inexact_matches) %> close matches found <hr />
-      <% IO.inspect(@inexact_matches) %>
       <ul class="keyword-disambig">
         <%= for [keyword, id_gloss, published] <- Enum.sort_by(@inexact_matches, fn s -> s |> Enum.at(0) |> String.downcase end) do %>
           <li class="keyword-disambig__keyword" data-published={published}>
@@ -14,27 +13,29 @@
       </ul>
     </div>
   <% else %>
-    <p>
-      There is no exact match to the word you typed.
-    </p>
-    <p>
-      There are three main reasons why there may be no match:
-      <ol>
-        <li>
-          There really is no Auslan sign for which that word is a good translation (you may need to fingerspell the word).
-        </li>
-        <li>
-          You have mis-typed the word or you have added unnecessary word endings. Follow these search tips:
-          <ul>
-            <li>type only the first few letters of a word</li>
-            <li>type words with no word endings like ‘ing’, ‘ed’, or ‘s’.</li>
-          </ul>
-        </li>
+    <div class="content">
+      <p>
+        There is no exact match to the word you typed.
+      </p>
+      <p>
+        There are three main reasons why there may be no match:
+        <ol>
+          <li>
+            There really is no Auslan sign for which that word is a good translation (you may need to fingerspell the word).
+          </li>
+          <li>
+            You have mis-typed the word or you have added unnecessary word endings. Follow these search tips:
+            <ul>
+              <li>type only the first few letters of a word</li>
+              <li>type words with no word endings like ‘ing’, ‘ed’, or ‘s’.</li>
+            </ul>
+          </li>
 
-        <li>
-          The match is blocked in the public view of Auslan Signbank because the word/sign is obscene or offensive in English or Auslan, or both. (Schools and parents have repeatedly requested that these type of words/signs be only visible to registered users.) If you login or register with Signbank, you will then be able to find these matching words/signs if they exist in Auslan.
-        </li>
-      </ol>
-    </p>
+          <li>
+            The match is blocked in the public view of Auslan Signbank because the word/sign is obscene or offensive in English or Auslan, or both. (Schools and parents have repeatedly requested that these type of words/signs be only visible to registered users.) If you login or register with Signbank, you will then be able to find these matching words/signs if they exist in Auslan.
+          </li>
+        </ol>
+      </p>
+    </div>
   <% end %>
 <% end %>

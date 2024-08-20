@@ -121,7 +121,6 @@ defmodule Signbank.Accounts.UserNotifier do
     |> IO.iodata_to_binary()
   end
 
-  # TODO: add logo and a *little* more styling
   defp html_to_text(html) do
     html
     |> Floki.parse_document!()

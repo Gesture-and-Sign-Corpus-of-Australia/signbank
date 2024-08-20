@@ -3,15 +3,14 @@ defmodule SignbankWeb.UserSettingsLive do
 
   alias Signbank.Accounts
 
-  # TODO: remove tailwind from this file
   def render(assigns) do
     ~H"""
-    <.header class="text-center">
+    <.header>
       Account Settings
       <:subtitle>Manage your account email address and password settings</:subtitle>
     </.header>
 
-    <div class="space-y-12 divide-y">
+    <div>
       <div>
         <.simple_form
           for={@email_form}

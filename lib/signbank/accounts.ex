@@ -4,10 +4,11 @@ defmodule Signbank.Accounts do
   """
 
   import Ecto.Query, warn: false
-  alias Signbank.Repo
+
   alias Signbank.Accounts.User
-  alias Signbank.Accounts.UserToken
   alias Signbank.Accounts.UserNotifier
+  alias Signbank.Accounts.UserToken
+  alias Signbank.Repo
 
   @admin_roles [
     :editor,
@@ -188,8 +189,6 @@ defmodule Signbank.Accounts do
     |> Ecto.Multi.delete_all(:tokens, UserToken.by_user_and_contexts_query(user, [context]))
   end
 
-  # TODO: revisit this, I think its odd that we're sending the confirmation
-  # instructions to the new email and not the old, but the other way round is weird too
   @doc ~S"""
   Delivers the update email instructions to the given user.
 
@@ -238,11 +237,13 @@ defmodule Signbank.Accounts do
       |> User.password_changeset(attrs)
       |> User.validate_current_password(password)
 
-    Ecto.Multi.new()
-    |> Ecto.Multi.update(:user, changeset)
-    |> Ecto.Multi.delete_all(:tokens, UserToken.by_user_and_contexts_query(user, :all))
-    |> Repo.transaction()
-    |> case do
+    res =
+      Ecto.Multi.new()
+      |> Ecto.Multi.update(:user, changeset)
+      |> Ecto.Multi.delete_all(:tokens, UserToken.by_user_and_contexts_query(user, :all))
+      |> Repo.transaction()
+
+    case res do
       {:ok, %{user: user}} -> {:ok, user}
       {:error, :user, changeset, _} -> {:error, changeset}
     end
@@ -253,11 +254,13 @@ defmodule Signbank.Accounts do
       user
       |> User.password_changeset(attrs)
 
-    Ecto.Multi.new()
-    |> Ecto.Multi.update(:user, changeset)
-    |> Ecto.Multi.delete_all(:tokens, UserToken.by_user_and_contexts_query(user, :all))
-    |> Repo.transaction()
-    |> case do
+    res =
+      Ecto.Multi.new()
+      |> Ecto.Multi.update(:user, changeset)
+      |> Ecto.Multi.delete_all(:tokens, UserToken.by_user_and_contexts_query(user, :all))
+      |> Repo.transaction()
+
+    case res do
       {:ok, %{user: user}} -> {:ok, user}
       {:error, :user, changeset, _} -> {:error, changeset}
     end
@@ -389,11 +392,13 @@ defmodule Signbank.Accounts do
 
   """
   def reset_user_password(user, attrs) do
-    Ecto.Multi.new()
-    |> Ecto.Multi.update(:user, User.password_changeset(user, attrs))
-    |> Ecto.Multi.delete_all(:tokens, UserToken.by_user_and_contexts_query(user, :all))
-    |> Repo.transaction()
-    |> case do
+    res =
+      Ecto.Multi.new()
+      |> Ecto.Multi.update(:user, User.password_changeset(user, attrs))
+      |> Ecto.Multi.delete_all(:tokens, UserToken.by_user_and_contexts_query(user, :all))
+      |> Repo.transaction()
+
+    case res do
       {:ok, %{user: user}} -> {:ok, user}
       {:error, :user, changeset, _} -> {:error, changeset}
     end

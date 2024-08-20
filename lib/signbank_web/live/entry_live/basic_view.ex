@@ -4,14 +4,15 @@ defmodule SignbankWeb.SignLive.BasicView do
   import SignbankWeb.Gettext
   alias Signbank.Dictionary
 
+  on_mount {SignbankWeb.UserAuth, :mount_current_user}
+
   @impl true
   def mount(_params, _session, socket) do
     {:ok, socket}
   end
 
   @impl true
-  def handle_params(params, _, socket) do
-    id_gloss = Map.get(params, "id")
+  def handle_params(%{"id" => id_gloss} = params, _, socket) do
     search_query = Map.get(params, "q")
 
     socket =
@@ -26,14 +27,17 @@ defmodule SignbankWeb.SignLive.BasicView do
         end
       )
 
+    # TODO: this is really quite broken, it doesn't take into account the logged in user
     sign = Dictionary.get_sign_by_id_gloss!(id_gloss)
-    %{previous: previous, next: next} = Dictionary.get_prev_next_signs!(sign)
+    %{previous: previous, position: position, next: next} = Dictionary.get_prev_next_signs!(sign)
 
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(:sign, sign)
      |> assign(:previous, previous)
+     |> assign(:position, position)
+     |> assign(:sign_count, Dictionary.count_signs(socket.assigns.current_user))
      |> assign(:next, next)
      |> assign(:search_query, search_query)}
   end

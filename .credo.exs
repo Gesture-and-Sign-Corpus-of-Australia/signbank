@@ -116,7 +116,7 @@
           {Credo.Check.Readability.WithCustomTaggedTuple, []},
           {Credo.Check.Refactor.NegatedIsNil, []},
           {Credo.Check.Readability.MultiAlias, []},
-          {Credo.Check.Refactor.ModuleDependencies, []},
+          {Credo.Check.Refactor.ModuleDependencies, [max_deps: 14]},
           {Credo.Check.Refactor.VariableRebinding, []},
           {Credo.Check.Readability.StrictModuleLayout, []},
           {ExcellentMigrations.CredoCheck.MigrationsSafety, []}

@@ -35,6 +35,9 @@ defmodule Signbank.Dictionary.Sign do
     has_many :videos, Dictionary.SignVideo
     has_many :regions, Dictionary.SignRegion
 
+    field :suggested_signs_description, :string
+    has_many :suggested_signs, Dictionary.SuggestedSign
+
     # If type == :citation
     has_many :variants, Dictionary.Sign,
       foreign_key: :variant_of_id,
@@ -46,6 +49,7 @@ defmodule Signbank.Dictionary.Sign do
       references: :id
 
     has_many :definitions, Dictionary.Definition
+    has_many :suggest_signs, Dictionary.SuggestedSign
 
     # TODO: uncomment this after adding %Relation{}
     # has_many :relations, Dictionary.Relation, foreign_key: :sign_a_id

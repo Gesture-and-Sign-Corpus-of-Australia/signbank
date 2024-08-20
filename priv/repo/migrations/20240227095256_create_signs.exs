@@ -15,6 +15,8 @@ defmodule Signbank.Repo.Migrations.CreateSigns do
       add :sense_number, :integer
       add :english_entry, :boolean, default: false
 
+      add :suggested_signs_description, :text
+
       add :editorial_doubtful_or_unsure, :boolean, default: false
       add :editorial_problematic, :boolean, default: false
       add :editorial_problematic_video, :boolean, default: false

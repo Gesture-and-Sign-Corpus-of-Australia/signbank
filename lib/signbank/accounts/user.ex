@@ -113,10 +113,12 @@ defmodule Signbank.Accounts.User do
   It requires the email to change otherwise an error is added.
   """
   def email_changeset(user, attrs, opts \\ []) do
-    user
-    |> cast(attrs, [:email])
-    |> validate_email(opts)
-    |> case do
+    changeset =
+      user
+      |> cast(attrs, [:email])
+      |> validate_email(opts)
+
+    case changeset do
       %{changes: %{email: _}} = changeset -> changeset
       %{} = changeset -> add_error(changeset, :email, "did not change")
     end
@@ -128,10 +130,12 @@ defmodule Signbank.Accounts.User do
   It requires the role to change otherwise an error is added.
   """
   def role_changeset(user, attrs, opts \\ []) do
-    user
-    |> cast(attrs, [:role])
-    |> validate_role(opts)
-    |> case do
+    changeset =
+      user
+      |> cast(attrs, [:role])
+      |> validate_role(opts)
+
+    case changeset do
       %{changes: %{role: _}} = changeset -> changeset
       %{} = changeset -> add_error(changeset, :role, "did not change")
     end

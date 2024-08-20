@@ -47,9 +47,9 @@ defmodule VideoScroller do
       <.link
         :if={@next_sign_link}
         id="previous_variant"
-        class="entry-page__videos_scroller_slide_buttons"
+        class="button entry-page__videos_scroller_slide_buttons"
         patch={@next_sign_link}
-        disabled={!@next_sign_link}
+        data-disabled={!@next_sign_link}
         aria-label="previous variant"
       >
         <Heroicons.arrow_left class="icon--small" />
@@ -57,9 +57,9 @@ defmodule VideoScroller do
       <.link
         :if={@previous_sign_link}
         id="next_variant"
-        class="entry-page__videos_scroller_slide_buttons"
+        class="button entry-page__videos_scroller_slide_buttons"
         patch={@previous_sign_link}
-        disabled={!@previous_sign_link}
+        data-disabled={!@previous_sign_link}
         aria-label="next variant"
       >
         <Heroicons.arrow_right class="icon--small" />
@@ -94,7 +94,6 @@ defmodule VideoScroller do
     # TODO: refactor along with linguistic_view.html.heex
     ~H"""
     <div id={"video_#{@id}"} class={["video-frame", video_frame_class(@sign)]}>
-      <%!-- TODO: refactor to support variant videos (we want to include the thing with the multiple videos, this may require svelte) --%>
       <div class="video-frame__video_wrapper">
         <video controls muted autoplay width="600">
           <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{Enum.at(@sign.videos,0).url}"} />
@@ -102,7 +101,7 @@ defmodule VideoScroller do
         <div class="video-frame__sign-type">
           <%= cond do
             @sign.english_entry -> "fingerspelled"
-            @sign.is_signed_english_only -> "se_only"
+            @sign.is_signed_english_only -> "Signed English-only"
             @sign.type == :citation -> "citation"
             @sign.type == :variant -> "variant"
           end %>

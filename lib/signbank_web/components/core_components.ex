@@ -18,7 +18,9 @@ defmodule SignbankWeb.CoreComponents do
 
   import SignbankWeb.Gettext
   alias Phoenix.LiveView.JS
+
   alias Signbank.Accounts
+  alias Signbank.Dictionary.Sign
 
   @doc """
   Renders a modal.
@@ -41,7 +43,7 @@ defmodule SignbankWeb.CoreComponents do
   attr :show, :boolean, default: false
   attr :on_cancel, JS, default: %JS{}
   slot :inner_block, required: true
-
+  # TODO: this needs a lot of work, it looks really bad
   def modal(assigns) do
     ~H"""
     <div
@@ -49,25 +51,27 @@ defmodule SignbankWeb.CoreComponents do
       phx-mounted={@show && show_modal(@id)}
       phx-remove={hide_modal(@id)}
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
-      class="relative z-50 hidden"
+      class="modal"
+      style="display: none;"
     >
-      <div id={"#{@id}-bg"} class="bg-zinc-50/90 fixed inset-0 transition-opacity" aria-hidden="true" />
+      <div id={"#{@id}-bg"} class="modal-background modal__bg" aria-hidden="true" />
       <div
-        class="fixed inset-0 overflow-y-auto"
+        class="modal__dialog"
         aria-labelledby={"#{@id}-title"}
         aria-describedby={"#{@id}-description"}
         role="dialog"
         aria-modal="true"
         tabindex="0"
+        class="modal__dialog"
       >
-        <div class="flex min-h-full items-center justify-center">
-          <div class="w-full max-w-3xl p-4 sm:p-6 lg:py-8">
+        <div class="modal__layout-wrapper">
+          <div class="modal__content">
             <.focus_wrap
               id={"#{@id}-container"}
               phx-window-keydown={JS.exec("data-cancel", to: "##{@id}")}
               phx-key="escape"
               phx-click-away={JS.exec("data-cancel", to: "##{@id}")}
-              class="shadow-zinc-700/10 ring-zinc-700/10 relative hidden rounded-2xl bg-white p-14 shadow-lg ring-1 transition"
+              class="modal__container"
             >
               <div class="absolute top-6 right-5">
                 <button
@@ -204,7 +208,7 @@ defmodule SignbankWeb.CoreComponents do
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-10 space-y-8 bg-white">
+      <div>
         <%= render_slot(@inner_block, f) %>
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
           <%= render_slot(action, f) %>
@@ -233,6 +237,7 @@ defmodule SignbankWeb.CoreComponents do
     <button
       type={@type}
       class={[
+        "button",
         "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
         "text-sm font-semibold leading-6 text-white active:text-white/80",
         @class
@@ -311,19 +316,23 @@ defmodule SignbankWeb.CoreComponents do
 
     ~H"""
     <div phx-feedback-for={@name}>
-      <label class="flex items-center gap-4 text-sm leading-6 text-zinc-600">
+      <div class="field">
         <input type="hidden" name={@name} value="false" />
-        <input
-          type="checkbox"
-          id={@id}
-          name={@name}
-          value="true"
-          checked={@checked}
-          class="rounded border-zinc-300 text-zinc-900 focus:ring-0"
-          {@rest}
-        />
-        <%= @label %>
-      </label>
+        <div class="control">
+          <label class="checkbox">
+            <input
+              type="checkbox"
+              id={@id}
+              name={@name}
+              value="true"
+              checked={@checked}
+              class="checkbox"
+              {@rest}
+            />
+            <%= @label %>
+          </label>
+        </div>
+      </div>
       <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
     """
@@ -372,21 +381,25 @@ defmodule SignbankWeb.CoreComponents do
   def input(assigns) do
     ~H"""
     <div phx-feedback-for={@name}>
-      <.label for={@id}><%= @label %></.label>
-      <input
-        type={@type}
-        name={@name}
-        id={@id}
-        value={Phoenix.HTML.Form.normalize_value(@type, @value)}
-        class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
-          "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400"
-        ]}
-        {@rest}
-      />
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <div class="field">
+        <.label for={@id}><%= @label %></.label>
+        <div class="control">
+          <input
+            type={@type}
+            name={@name}
+            id={@id}
+            value={Phoenix.HTML.Form.normalize_value(@type, @value)}
+            class={[
+              "input",
+              "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
+              @errors == [] && "",
+              @errors != [] && "is-danger"
+            ]}
+            {@rest}
+          />
+        </div>
+        <.error :for={msg <- @errors}><%= msg %></.error>
+      </div>
     </div>
     """
   end
@@ -399,7 +412,7 @@ defmodule SignbankWeb.CoreComponents do
 
   def label(assigns) do
     ~H"""
-    <label for={@for} class="block text-sm font-semibold leading-6 text-zinc-800">
+    <label for={@for} class="label">
       <%= render_slot(@inner_block) %>
     </label>
     """
@@ -412,7 +425,7 @@ defmodule SignbankWeb.CoreComponents do
 
   def error(assigns) do
     ~H"""
-    <p class="mt-3 flex gap-3 text-sm leading-6 text-rose-600 phx-no-feedback:hidden">
+    <p class="help is-danger phx-no-feedback:hidden">
       <.icon name="hero-exclamation-circle-mini" class="mt-0.5 h-5 w-5 flex-none" />
       <%= render_slot(@inner_block) %>
     </p>
@@ -614,7 +627,7 @@ defmodule SignbankWeb.CoreComponents do
   def hide(js \\ %JS{}, selector) do
     JS.hide(js,
       to: selector,
-      time: 1000,
+      time: 200,
       transition: {"transition__hide--start", "transition__hide--mid", "transition__hide--end"}
     )
   end
@@ -624,7 +637,8 @@ defmodule SignbankWeb.CoreComponents do
     |> JS.show(to: "##{id}")
     |> JS.show(
       to: "##{id}-bg",
-      transition: {"transition-all transform ease-out duration-300", "opacity-0", "opacity-100"}
+      time: 300,
+      transition: {"transition__hide--start", "transition__hide--mid", "transition__hide--end"}
     )
     |> show("##{id}-container")
     |> JS.add_class("overflow-hidden", to: "body")
@@ -635,7 +649,8 @@ defmodule SignbankWeb.CoreComponents do
     js
     |> JS.hide(
       to: "##{id}-bg",
-      transition: {"transition-all transform ease-in duration-200", "opacity-100", "opacity-0"}
+      time: 200,
+      transition: {"transition__hide--start", "transition__hide--mid", "transition__hide--end"}
     )
     |> hide("##{id}-container")
     |> JS.hide(to: "##{id}", transition: {"block", "block", "hidden"})
@@ -706,7 +721,7 @@ defmodule SignbankWeb.CoreComponents do
   defp definition_role_to_string(:noun), do: SignbankWeb.Gettext.gettext("As a Noun")
   defp definition_role_to_string(:verb), do: SignbankWeb.Gettext.gettext("As a Verb or Adjective")
   defp definition_role_to_string(:modifier), do: SignbankWeb.Gettext.gettext("As Modifier")
-  defp definition_role_to_string(:augment), do: SignbankWeb.Gettext.gettext("Augment")
+  defp definition_role_to_string(:augment), do: SignbankWeb.Gettext.gettext("Augmented meaning")
 
   defp definition_role_to_string(:pointing_sign),
     do: SignbankWeb.Gettext.gettext("As a Pointing Sign")
@@ -717,7 +732,7 @@ defmodule SignbankWeb.CoreComponents do
   defp definition_role_to_string(:editor_note), do: SignbankWeb.Gettext.gettext("Editor note")
 
   attr :type, :atom, values: [:basic, :linguistic], required: true
-  attr :definitions, :list, required: true
+  attr :sign, Sign, required: true
   attr :user, User, required: false
 
   def definitions(assigns) do
@@ -735,28 +750,62 @@ defmodule SignbankWeb.CoreComponents do
       end
     end
 
+    definitions =
+      assigns.sign.definitions
+      |> Enum.concat(
+        case assigns.sign do
+          %Sign{
+            citation: %Sign{definitions: definitions}
+          } ->
+            # TODO: once we switch to a :notes table table this is useless
+            # Filter to use only the definitions (the other roles represent notes
+            # and shouldn't be inherited by variants)
+            Enum.filter(
+              definitions,
+              &(&1.role in [
+                  :general,
+                  :auslan,
+                  :noun,
+                  :verb,
+                  :modifier,
+                  :pointing_sign,
+                  :questions,
+                  :interactive
+                ])
+            )
+
+          _ ->
+            []
+        end
+      )
+      |> Enum.filter(filter_unpublished)
+
     assigns =
       assign(
         assigns,
         :def_groups,
-        assigns.definitions
-        |> Enum.filter(filter_unpublished)
+        definitions
         |> group_definitions_by_role()
         |> Enum.filter(filter_editor_defs)
       )
 
     ~H"""
     <div class="definitions">
-      <div :for={{role, definitions} <- @def_groups} class="definition">
-        <div class="definition__role">
+      <div :for={{role, group} <- @def_groups} class="box zzdefinition content">
+        <div class="is-size-5">
           <%= definition_role_to_string(role) %>
         </div>
         <ol class="definition__senses">
-          <li :for={definition <- definitions}>
-            <Heroicons.eye_slash :if={not definition.published} class="icon--small" /><%= definition.text %>
-            <video :if={definition.url} controls muted width="200">
-              <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{definition.url}"} />
-            </video>
+          <li :for={definition <- group}>
+            <div>
+              <Heroicons.eye_slash :if={not definition.published} class="icon--small" />
+              <p>
+                <%= definition.text %>
+              </p>
+              <video :if={definition.url} controls muted width="200">
+                <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{definition.url}"} />
+              </video>
+            </div>
           </li>
         </ol>
       </div>

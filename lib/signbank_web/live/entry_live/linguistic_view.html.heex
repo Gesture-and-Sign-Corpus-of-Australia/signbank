@@ -1,55 +1,38 @@
-<%!-- TODO: this was from `gen.live`, look over it again --%>
-<%!-- TODO: fix this markup, they were `.header` but that isn't useful anymore --%>
-<nav class="entry-page__switch_entry">
-  <%!-- TODO: refactor these page entry nav buttons along with the same in basic_view.html.heex --%>
-  <p class="entry-page__dict_page_nav">
-    <%= if @previous != nil do %>
+<nav class="level">
+  <div class="level-left">
+    <%!-- TODO: refactor these page entry nav buttons along with the same in basic_view.html.heex --%>
+    <div class="entry-page__dict_page_nav">
       <.link
-        id={"search_result_#{@previous.id_gloss}"}
-        class="entry-page__dict_page_button"
-        patch={~p"/dictionary/sign/#{@previous.id_gloss}/linguistic"}
-        phx-click={JS.push_focus()}
+      id={"search_result_#{@sign.id_gloss}_prev"}
+      disabled={@previous == nil}
+      class="button"
+      patch={if @previous, do: ~p"/dictionary/sign/#{@previous.id_gloss}/linguistic?#{@params}"}
+      phx-click={JS.push_focus()}
       >
-        Previous
+      Previous
       </.link>
-    <% else %>
-      <.link disabled={true} class="entry-page__dict_page_button">Previous</.link>
-    <% end %>
-    <%= if @next != nil do %>
-      <.link
-        id={"search_result_#{@next.id_gloss}"}
-        class="entry-page__dict_page_button"
-        patch={~p"/dictionary/sign/#{@next.id_gloss}/linguistic"}
-        phx-click={JS.push_focus()}
-      >
-        Next
-      </.link>
-    <% else %>
-      <.link disabled={true} class="entry-page__dict_page_button">Next</.link>
-    <% end %>
-  </p>
+      <div class="entry-page__dict_position">
+      Sign <%= @position %><br /> of <%= @sign_count %>
+    </div>
+    <.link
+    id={"search_result_#{@sign.id_gloss}_next"}
+    disabled={@next == nil}
+    class="button zzentry-page__dict_page_button"
+    patch={if @next, do: ~p"/dictionary/sign/#{@next.id_gloss}/linguistic?#{@params}"}
+    phx-click={JS.push_focus()}
+    >
+    Next
+    </.link>
+    </div>
 
-  <p>
-    This page contains technical linguistic information about the sign.
-    <%!--
-      We want to avoid sending people to the basic view of a variant entry, really we
-      should just redirect if anyone lands there because they may manually change the
-      URL
-    --%>
-    <%= if @sign.type == :variant do %>
-      <.link patch={~p"/dictionary/sign/#{@sign.citation.id_gloss}"} phx-click={JS.push_focus()}>
-        Go to the regular dictionary view.
-      </.link>
-    <% else %>
-      <.link patch={~p"/dictionary/sign/#{@sign.id_gloss}"} phx-click={JS.push_focus()}>
-        Go to the regular dictionary view.
-      </.link>
-    <% end %>
-  </p>
+    <.link class="button" patch={~p"/dictionary/sign/#{@sign.id_gloss}?#{@params}"}>
+    <%= SignbankWeb.Gettext.gettext("Go to basic view") %>
+    </.link>
+  </div>
 </nav>
 
-<div class="entry-page__columns entry-page__ling">
-  <div class="entry-page__column">
+<div class="columns">
+  <div class="column">
     <%!-- TODO: refactor along with video_scroller.ex --%>
     <div class={["video-frame", video_frame_class(@sign)]}>
       <div class="video-frame__video_wrapper">
@@ -61,14 +44,15 @@
     </div>
     <p><strong>Keywords:</strong> <%= Enum.join(@sign.keywords || [], ", ") %></p>
   </div>
-  <div class="entry-page__column">
+
+  <div class="column is-flex is-flex-direction-column has-gap-large">
     <table class="summary-table">
       <%= for field <- [
-    :id_gloss,
-    :id_gloss_annotation,
-    :keywords,
-    :published
-] do %>
+        :id_gloss,
+        :id_gloss_annotation,
+        :keywords,
+        :published
+      ] do %>
         <tr>
           <th>
             <%= Gettext.gettext(SignbankWeb.Gettext, Atom.to_string(field)) %>
@@ -85,17 +69,52 @@
         </tr>
       <% end %>
     </table>
-    <%!-- TODO: gettext everything here --%>
-    <details class="ling-details-section">
-      <summary>
-        <h2 aria-label="Vocabulary:">Vocabulary</h2>
-        Usage - meaning - dialect
-      </summary>
 
-      <div class="ling-details-section__body">
-        <%!-- TODO: tags? --%>
+    <div class="panel" style="margin-bottom: 0;">
+      <div class="panel-tabs">
+        <a
+          id="vocab-tab"
+          class="tab is-size-7 is-active has-text-black"
+          phx-click={
+            JS.show(to: "#vocab-section")
+            |> JS.hide(to: ["#morph-section", "#phon-section"])
+            |> JS.remove_class("is-active", to: ".tab")
+            |> JS.add_class("is-active", to: "#vocab-tab")
+          }
+        >
+          <h2 class="is-size-5" aria-label="Vocabulary:">Vocabulary</h2>
+          Usage - meaning - dialect
+        </a>
+        <a
+          id="morph-tab"
+          class="tab is-size-7 has-text-black"
+          phx-click={
+            JS.show(to: "#morph-section")
+            |> JS.hide(to: ["#phon-section", "#vocab-section"])
+            |> JS.remove_class("is-active", to: ".tab")
+            |> JS.add_class("is-active", to: "#morph-tab")
+          }
+        >
+          <h2 class="is-size-5" aria-label="Morphology:">Morphology</h2>
+          Spatial - lexical
+        </a>
+        <a
+          id="phon-tab"
+          class="tab is-size-7 has-text-black"
+          phx-click={
+            JS.show(to: "#phon-section")
+            |> JS.hide(to: ["#morph-section", "#vocab-section"])
+            |> JS.remove_class("is-active", to: ".tab")
+            |> JS.add_class("is-active", to: "#phon-tab")
+          }
+        >
+          <h2 class="is-size-5" aria-label="Phonology:">Phonology</h2>
+          movement - orientation - location
+        </a>
+      </div>
+      <div id="vocab-section" class="panel-block">
         <div>
-          <h3>Dialects</h3>
+          <h3 class="is-size-6 has-text-weight-semibold">Dialects</h3>
           <%= if Enum.any?(@sign.regions) do %>
             <.australia_map selected={@sign.regions} />
           <% else %>
@@ -103,7 +122,7 @@
           <% end %>
         </div>
         <div>
-          <h3>Usage by other factors</h3>
+          <h3 class="is-size-6 has-text-weight-semibold">Usage by other factors</h3>
           <ul class="ling-details-section__properties">
             <li>
               Technical or specialist jargon: <%= bool_to_word(
@@ -120,7 +139,7 @@
           </ul>
         </div>
         <div>
-          <h3>Borrowings</h3>
+          <h3 class="is-size-6 has-text-weight-semibold">Borrowings</h3>
           <ul class="ling-details-section__properties">
             <li>ASL gloss: <%= if @sign.asl_gloss, do: @sign.asl_gloss, else: "N/A" %></li>
             <li>ASL loan?: <%= bool_to_word(@sign.is_asl_loan) %></li>
@@ -138,7 +157,7 @@
           </ul>
         </div>
         <div>
-          <h3>Other</h3>
+          <h3 class="is-size-6 has-text-weight-semibold">Other</h3>
           <ul class="ling-details-section__properties">
             <li aria-details="something">Iconicity: <%= @sign.iconicity %></li>
             <li>Popular explanation: <%= @sign.popular_explanation %></li>
@@ -149,14 +168,7 @@
           </ul>
         </div>
       </div>
-    </details>
-
-    <details class="ling-details-section">
-      <summary>
-        <h2 aria-label="Morphology:">Morphology</h2>
-        Spatial - lexical
-      </summary>
-      <div class="ling-details-section__body">
+      <div id="morph-section" class="panel-block" style="display: none;">
         <ul class="ling-details-section__properties">
           <li>
             Blend of: <%= if @sign.morphology.blend_of,
@@ -192,7 +204,7 @@
           </li>
         </ul>
         <div>
-          <h3>Spatial</h3>
+          <h3 class="is-size-6 has-text-weight-semibold">Spatial</h3>
           <ul class="ling-details-section__properties">
             <li>Directional: <%= bool_to_word(@sign.morphology.directional) %></li>
             <li>
@@ -213,7 +225,7 @@
           </ul>
         </div>
         <div>
-          <h3>Lexical</h3>
+          <h3 class="is-size-6 has-text-weight-semibold">Lexical</h3>
           <ul class="ling-details-section__properties">
             <li>Initialism: <%= bool_to_word(@sign.morphology.is_initialism) %></li>
             <li>Alphabet: <%= bool_to_word(@sign.morphology.is_alphabet) %></li>
@@ -221,15 +233,8 @@
           </ul>
         </div>
       </div>
-    </details>
-
-    <details class="ling-details-section">
-      <summary>
-        <h2 aria-label="Phonology:">Phonology</h2>
-        movement - orientation - location
-      </summary>
-      <div class="ling-details-section__body">
-        <ul class="ling-details-section__properties">
+      <div id="phon-section" class="panel-block" style="display: none;">
+        <ul>
           <li>
             Dominant handshape: <%= generate_initial_final_text(
               @sign.phonology.dominant_initial_handshape,
@@ -259,7 +264,9 @@
           </li>
         </ul>
         <div>
-          <h3>Finger-hand <small>(metacarpus)</small> orientation</h3>
+          <h3 class="is-size-6 has-text-weight-semibold">
+            Finger-hand <small>(metacarpus)</small> orientation
+          </h3>
           <ul class="ling-details-section__properties">
             <li>
               Dominant finger-hand orientation: <%= generate_initial_final_text(
@@ -278,7 +285,9 @@
         <%!-- TODO: the FM database has palm orientation, track down whether we need it or not --%>
 
         <div>
-          <h3>Interact location <small>(not for one-handed signs)</small></h3>
+          <h3 class="is-size-6 has-text-weight-semibold">
+            Interact location <small>(not for one-handed signs)</small>
+          </h3>
           <ul class="ling-details-section__properties">
             <li>
               Dominant interacting handpart: <%= generate_initial_final_text(
@@ -318,7 +327,9 @@
         </div>
 
         <div>
-          <h3>Small hand movements <small>(dominant hand)</small></h3>
+          <h3 class="is-size-6 has-text-weight-semibold">
+            Small hand movements <small>(dominant hand)</small>
+          </h3>
           <%= for {label, value} <- %{
           gettext("forearm rotates") => @sign.phonology.movement_forearm_rotation,
           gettext("wrist nods") => @sign.phonology.movement_wrist_nod,
@@ -335,7 +346,9 @@
         </div>
 
         <div>
-          <h3>Large movements <small>(interactions of hands) — Two-handed signs only</small></h3>
+          <h3 class="is-size-6 has-text-weight-semibold">
+            Large movements <small>(interactions of hands) — Two-handed signs only</small>
+          </h3>
           <%= for {label, value} <- %{
             gettext("dominant hand only") => @sign.phonology.movement_dominant_hand_only,
             gettext("symmetrical") => @sign.phonology.movement_symmetrical,
@@ -353,7 +366,9 @@
         </div>
 
         <div>
-          <h3>Large movements <small>(dominant hand)</small></h3>
+          <h3 class="is-size-6 has-text-weight-semibold">
+            Large movements <small>(dominant hand)</small>
+          </h3>
           <ul class="ling-details-section__properties">
             <li :if={@sign.phonology.movement_direction}>
               Direction: <%= @sign.phonology.movement_direction %>
@@ -370,32 +385,38 @@
           </ul>
         </div>
       </div>
-    </details>
+    </div>
 
-    <.definitions type={:linguistic} user={@current_user} definitions={@sign.definitions} />
+    <hr>
 
-    <p
+    <.definitions type={:linguistic} user={@current_user} sign={@sign} />
+
+    <hr>
+
+    <div
       :if={@sign.type == :citation and Enum.count(@sign.variants) > 0}
-      style="margin-bottom: 3rem"
+    class="box"
     >
-      <h4>Variants</h4>
+      <h3 class="is-size-5">Variants</h3>
       <ol class="entry-page__variant_list">
         <%= for {variant, index} <- Enum.with_index(@sign.variants, 1) do %>
-          <li>
-            <.link href={~p"/dictionary/sign/#{variant.id_gloss}/linguistic"}>
-              [<%= index %>]
+      <li>
+        <.link class="button" href={~p"/dictionary/sign/#{variant.id_gloss}/linguistic?#{@params}"}>
+        <%= index %>
             </.link>
           </li>
         <% end %>
       </ol>
-    </p>
+    </div>
 
-    <p :if={@sign.type == :variant} style="margin-bottom: 3rem">
-      <div>
-        <.link href={~p"/dictionary/sign/#{@sign.citation.id_gloss}/linguistic"}>
-          Citation form >
+    <div :if={@sign.type == :variant} >
+        <.link class="button" href={~p"/dictionary/sign/#{@sign.citation.id_gloss}/linguistic?#{@params}"}>
+          Citation form
+          <span class="icon is-small">
+            <Heroicons.chevron_right class="icon--small" />
+          </span>
         </.link>
-      </div>
-    </p>
+    </div>
   </div>
 </div>
+

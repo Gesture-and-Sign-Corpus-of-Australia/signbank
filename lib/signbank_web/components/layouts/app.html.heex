@@ -1,43 +1,88 @@
 <div id="content-wrap">
-  <header class="navbar">
-    <nav>
-      <a href="/" aria-label="Homepage" id="logo">
+  <nav class="navbar is-primary" role="navigation" aria-label="dropdown navigation">
+    <div class="navbar-brand">
+      <a href="/" aria-label="Homepage" id="logo" class="navbar-brand">
         <img
           alt="The Auslan Signbank logo. Yellow and light yellow text saying 'Auslan Signbank'."
           src={~p"/images/logo.svg"}
         />
       </a>
-      <div class="menu_and_search">
+      <a
+        role="button"
+        class="navbar-burger is-white"
+        aria-label="menu"
+        aria-expanded="false"
+        data-target="navbarBasicExample"
+        style="user-select: none;"
+        phx-click={
+          JS.toggle_class("is-active", to: "#navbar-menu")
+          |> JS.toggle_class("is-active", to: ".navbar-burger")
+        }
+      >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navbar-menu" class="navbar-menu navbar-end">
+      <div style="order: 99; /* place on the right for desktop */" class="navbar-item">
         <form action="/dictionary" method="GET">
-          <input type="text" name="q" placeholder="Search..." />
-          <button type="submit" aria-label="Search">
-            <Heroicons.magnifying_glass class="icon--small" />
-          </button>
+          <div class="field has-addons">
+            <div class="control has-icons-right">
+              <input
+                class="input"
+                type="text"
+                name="q"
+                placeholder={SignbankWeb.Gettext.gettext("Search...")}
+              />
+            </div>
+            <div class="control">
+              <button class="button">
+                <Heroicons.magnifying_glass class="icon--medium zzicon--small" />
+              </button>
+            </div>
+          </div>
         </form>
-        <ul>
-          <li><.link href={~p"/"}><%= SignbankWeb.Gettext.gettext("Home") %></.link></li>
-          <li>
-            <.link href={~p"/about/history"}>
-              <%= SignbankWeb.Gettext.gettext("About Auslan") %>
-            </.link>
-          </li>
-          <li>
-            <.link href={~p"/research"}><%= SignbankWeb.Gettext.gettext("Research") %></.link>
-          </li>
-          <li>
-            <.link href={~p"/vocabulary"}>
-              <%= SignbankWeb.Gettext.gettext("Vocabulary") %>
-            </.link>
-          </li>
-          <li>
-            <.link href={~p"/about/grammar"}>
-              <%= SignbankWeb.Gettext.gettext("Grammar") %>
-            </.link>
-          </li>
-        </ul>
       </div>
-    </nav>
-  </header>
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          <%= SignbankWeb.Gettext.gettext("Research") %>
+        </a>
+
+        <div class="navbar-dropdown is-right">
+          <.link class="navbar-item" href={~p"/research/corpus"}>
+            <%= SignbankWeb.Gettext.gettext("Corpus") %>
+          </.link>
+          <.link class="navbar-item" href={~p"/research/vocabulary"}>
+            <%= SignbankWeb.Gettext.gettext("Vocabulary") %>
+          </.link>
+          <.link class="navbar-item" href={~p"/about/grammar"}>
+            <%= SignbankWeb.Gettext.gettext("Grammar") %>
+          </.link>
+        </div>
+      </div>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          About
+        </a>
+
+        <div class="navbar-dropdown is-right">
+          <.link class="navbar-item" href={~p"/about/community"}>
+            <%= SignbankWeb.Gettext.gettext("Community") %>
+          </.link>
+          <.link class="navbar-item" href={~p"/about/history"}>
+            <%= SignbankWeb.Gettext.gettext("History") %>
+          </.link>
+          <.link class="navbar-item" href={~p"/about/acknowledgements"}>
+            <%= SignbankWeb.Gettext.gettext("Acknowledgements") %>
+          </.link>
+        </div>
+      </div>
+    </div>
+  </nav>
   <main>
     <.flash_group flash={@flash} />
     <%= @inner_content %>

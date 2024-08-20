@@ -36,7 +36,6 @@ defmodule Signbank.Dictionary.Definition do
     # ISO language code expected
     field :language, :string
     field :published, :boolean, default: false
-    # TODO: add video relation
 
     timestamps(type: :utc_datetime)
   end

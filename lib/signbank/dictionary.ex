@@ -4,9 +4,10 @@ defmodule Signbank.Dictionary do
   """
 
   import Ecto.Query, warn: false
-  alias Signbank.Repo
 
+  alias Signbank.Accounts.User
   alias Signbank.Dictionary.Sign
+  alias Signbank.Repo
 
   @default_order [
     :australia_wide,
@@ -77,6 +78,7 @@ defmodule Signbank.Dictionary do
             variants: [videos: [], regions: []],
             regions: [],
             videos: [],
+            suggested_signs: [],
             active_video: []
           ]
         ),
@@ -187,6 +189,8 @@ defmodule Signbank.Dictionary do
   Finds next and previous Signs in predefined sorting order.
   """
   def get_prev_next_signs!(%Sign{id: id}) do
+    # TODO: this won't work with unpublished signs, we need to know the publishing status of every sign to actually
+    # direct people to the correct sign
     Repo.one!(
       from so in "sign_order",
         left_join: p in Sign,
@@ -194,8 +198,23 @@ defmodule Signbank.Dictionary do
         left_join: n in Sign,
         on: [id: so.next],
         where: so.sign_id == ^id,
-        select: %{previous: p, next: n}
+        select: %{previous: p, position: so.row_number, next: n}
     )
+  end
+
+  @doc """
+  Counts the number of signs in the dictionary.
+  """
+  def count_signs do
+    Repo.aggregate(from(s in Sign, where: s.published == true), :count)
+  end
+
+  def count_signs(%User{role: role}) when role in [:tech, :editor] do
+    Repo.aggregate(from(s in Sign), :count)
+  end
+
+  def count_signs(_) do
+    count_signs()
   end
 
   @doc """

@@ -1,3 +1,4 @@
+# credo:disable-for-this-file Credo.Check.Refactor.VariableRebinding
 defmodule Signbank.AccountsTest do
   use Signbank.DataCase
   import Signbank.AccountsFixtures

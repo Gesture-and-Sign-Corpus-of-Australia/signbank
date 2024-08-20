@@ -25,9 +25,9 @@ defmodule SignbankWeb.Router do
     get "/about/acknowledgements", PageController, :acknowledgements
     get "/about/classes", PageController, :classes
     get "/about/community", PageController, :community
-    get "/about/corpus", PageController, :corpus
+    get "/research/corpus", PageController, :corpus
     get "/about/history", PageController, :history
-    get "/about/annotations", PageController, :annotations
+    get "/research/annotations", PageController, :annotations
     get "/about/dictionary", PageController, :dictionary
     get "/about/grammar", PageController, :grammar
     get "/research/vocabulary", PageController, :vocabulary
