@@ -34,16 +34,10 @@ defmodule SignbankWeb.Router do
 
     live "/dictionary", SignLive.Index, :index
 
+    live "/advanced-search", SignLive.Index, :index
+
     live "/dictionary/sign/:id", SignLive.BasicView, :show
     live "/dictionary/sign/:id/linguistic", SignLive.LinguisticView, :show
-
-    # TODO: decide what to do with these
-    # These are routes from the "recreated_signbank" project
-    # live "/dictionary", SignLive.Index, :index
-    # live "/dictionary/edit", SignLive.Edit, :new
-    # live "/dictionary/edit/:id_gloss", SignLive.Edit, :edit
-    # get "/dictionary/sign/:id_gloss", DictionaryController, :sign
-    # get "/dictionary/sign/:id_gloss/detail", DictionaryController, :detail_sign
   end
 
   # Editor routes
