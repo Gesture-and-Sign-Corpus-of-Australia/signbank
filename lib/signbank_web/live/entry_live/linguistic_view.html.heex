@@ -1,4 +1,4 @@
-<nav class="level">
+<nav class="entry-page__switch_entry">
   <div class="level-left">
     <%!-- TODO: refactor these page entry nav buttons along with the same in basic_view.html.heex --%>
     <div class="entry-page__dict_page_nav">
@@ -30,6 +30,18 @@
     </.link>
   </div>
 </nav>
+<div :if={@sign.sense_number} class="level">
+  <p :if={@sign.sense_number == 1}>
+    <%= SignbankWeb.Gettext.gettext(
+      "This sign has two or more completely separate meanings. Click Next to see the other ones."
+    ) %>
+  </p>
+  <p :if={@sign.sense_number > 1}>
+    <%= SignbankWeb.Gettext.gettext(
+      "This sign has two or more completely separate meanings. Click Next and Previous to see the other ones."
+    ) %>
+  </p>
+</div>
 
 <div class="columns">
   <div class="column">

@@ -52,6 +52,18 @@
   </div>
 </nav>
 
+<div :if={@sign.sense_number} class="level">
+  <p :if={@sign.sense_number == 1}>
+    <%= SignbankWeb.Gettext.gettext(
+      "This sign has two or more completely separate meanings. Click Next to see the other ones."
+    ) %>
+  </p>
+  <p :if={@sign.sense_number > 1}>
+    <%= SignbankWeb.Gettext.gettext(
+      "This sign has two or more completely separate meanings. Click Next and Previous to see the other ones."
+    ) %>
+  </p>
+</div>
 <div class="columns">
   <div class="column">
     <.live_component module={VideoScroller} counter={0} id={@sign.id} sign={@sign} />

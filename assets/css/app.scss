@@ -133,6 +133,10 @@ footer {
   display: block;
 }
 
+.panel-tabs {
+  align-items: normal;
+}
+
 .zzznavbar {
   $text-color: var(--signbank-yellow);
   $background-color: var(--signbank-purple);
@@ -303,7 +307,7 @@ footer {
   background-color: lightgray;
 }
 
-.entry-page__switch_entry {
+.xxentry-page__switch_entry {
   margin-bottom: 1em;
   display: flex;
   justify-content: space-between;
@@ -312,6 +316,13 @@ footer {
   p {
     margin: 0;
   }
+}
+
+.entry-page__switch_entry {
+  margin-bottom: 1em;
+      .level-left {
+        flex-direction: row;
+    }
 }
 
 .summary-table th {
