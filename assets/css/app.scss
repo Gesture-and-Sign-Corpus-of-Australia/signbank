@@ -307,22 +307,12 @@ footer {
   background-color: lightgray;
 }
 
-.xxentry-page__switch_entry {
-  margin-bottom: 1em;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  p {
-    margin: 0;
-  }
-}
-
 .entry-page__switch_entry {
   margin-bottom: 1em;
-      .level-left {
-        flex-direction: row;
-    }
+
+  .level-left {
+    flex-direction: row;
+  }
 }
 
 .summary-table th {
