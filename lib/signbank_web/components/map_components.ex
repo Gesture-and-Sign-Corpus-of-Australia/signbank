@@ -32,6 +32,8 @@ defmodule SignbankWeb.MapComponents do
       :victoria -> "region_map_svg__select_vic"
       :western_australia -> "region_map_svg__select_wa"
       :no_region -> ""
+      :not_applicable -> ""
+      :unknown -> ""
     end)
   end
 
@@ -40,6 +42,9 @@ defmodule SignbankWeb.MapComponents do
       selected,
       fn
         %{region: :australia_wide} -> false
+        %{region: :unknown} -> false
+        %{region: :not_applicable} -> false
+        %{region: :no_region} -> false
         _ -> true
       end
     )
@@ -53,6 +58,8 @@ defmodule SignbankWeb.MapComponents do
   attr(:selected, :atom,
     values: [
       :no_region,
+      :not_applicable,
+      :unknown,
       :australia_wide,
       :northern_dialect,
       :southern_dialect,
