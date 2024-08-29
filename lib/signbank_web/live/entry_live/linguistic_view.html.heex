@@ -33,8 +33,7 @@
       <%= for field <- [
         :id_gloss,
         :id_gloss_annotation,
-        :keywords,
-        :published
+        :keywords
       ] do %>
         <tr>
           <th>
@@ -51,6 +50,12 @@
           </td>
         </tr>
       <% end %>
+      <tr :if={@current_user && Map.get(@current_user, :role) in [:tech, :editor]}>
+        <th>
+          <%= Gettext.gettext(SignbankWeb.Gettext, "published") %>
+        </th>
+        <td><%= @sign.published %></td>
+      </tr>
     </table>
 
     <div class="panel" style="margin-bottom: 0;">

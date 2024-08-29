@@ -827,7 +827,7 @@ defmodule SignbankWeb.CoreComponents do
 
   def entry_nav(assigns) do
     %{previous: previous, position: position, next: next} =
-      Dictionary.get_prev_next_signs!(assigns.sign, Map.get(assigns, :current_user, nil))
+      Dictionary.get_prev_next_signs!(assigns.sign, Map.get(assigns, :current_user))
 
     assigns =
       assigns
@@ -848,7 +848,7 @@ defmodule SignbankWeb.CoreComponents do
         end
       )
       |> assign(:position, position)
-      |> assign(:sign_count, Dictionary.count_signs(Map.get(assigns, :current_user, nil)))
+      |> assign(:sign_count, Dictionary.count_signs(Map.get(assigns, :current_user)))
 
     ~H"""
     <div class={@class}>
