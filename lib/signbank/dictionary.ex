@@ -64,26 +64,35 @@ defmodule Signbank.Dictionary do
 
   ## Examples
 
-      iex> get_sign_by_id_gloss!("house1a")
+      iex> get_sign_by_id_gloss("house1a")
       %Sign{}
 
   """
-  def get_sign_by_id_gloss!(id_gloss),
-    do:
-      Repo.get_by!(
-        from(s in Sign,
-          preload: [
-            citation: [definitions: [], variants: []],
-            definitions: [],
-            variants: [videos: [], regions: []],
-            regions: [],
-            videos: [],
-            suggested_signs: [],
-            active_video: []
-          ]
-        ),
-        id_gloss: id_gloss
+  def get_sign_by_id_gloss(id_gloss, current_user \\ nil) do
+    query =
+      from(s in Sign,
+        preload: [
+          citation: [definitions: [], variants: []],
+          definitions: [],
+          variants: [videos: [], regions: []],
+          regions: [],
+          videos: [],
+          suggested_signs: [],
+          active_video: []
+        ],
+        where: s.id_gloss == ^id_gloss
       )
+
+    Repo.one(
+      case current_user do
+        %User{role: role} when role in [:tech, :editor] ->
+          query
+
+        _ ->
+          from s in query, where: s.published == true
+      end
+    )
+  end
 
   @doc """
   Returns a sign with the given `id_gloss`. It only returns citation entries.
@@ -198,15 +207,18 @@ defmodule Signbank.Dictionary do
         end
       )
 
-    Repo.one!(
-      from so in subquery(query),
-        left_join: p in Sign,
-        on: [id: so.previous],
-        left_join: n in Sign,
-        on: [id: so.next],
-        select: %{previous: p, next: n, position: so.position},
-        where: so.id == ^id
-    )
+    case Repo.one(
+           from so in subquery(query),
+             left_join: p in Sign,
+             on: [id: so.previous],
+             left_join: n in Sign,
+             on: [id: so.next],
+             select: %{previous: p, next: n, position: so.position},
+             where: so.id == ^id
+         ) do
+      nil -> %{previous: nil, next: nil, position: nil}
+      record -> record
+    end
   end
 
   @doc """

@@ -33,8 +33,11 @@ defmodule Signbank.SignOrder do
         select: %{
           id: selected_as(s.id, :id),
           position:
-            selected_as(row_number()
-            |> over(:sign_order), :position),
+            selected_as(
+              row_number()
+              |> over(:sign_order),
+              :position
+            ),
           previous: selected_as(lag(s.id) |> over(:sign_order), :previous),
           next: selected_as(lead(s.id) |> over(:sign_order), :next)
         }

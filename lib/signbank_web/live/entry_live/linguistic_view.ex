@@ -12,12 +12,19 @@ defmodule SignbankWeb.SignLive.LinguisticView do
 
   @impl true
   def handle_params(%{"id" => id_gloss}, _, socket) do
-    sign = Dictionary.get_sign_by_id_gloss!(id_gloss)
+    case Dictionary.get_sign_by_id_gloss(id_gloss, socket.assigns.current_user) do
+      nil ->
+        {:noreply,
+         socket
+         |> put_flash(:error, "You do not have permission to access this page, please log in.")
+         |> redirect(to: ~p"/users/log_in")}
 
-    {:noreply,
-     socket
-     |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:sign, sign)}
+      sign ->
+        {:noreply,
+         socket
+         |> assign(:page_title, page_title(socket.assigns.live_action))
+         |> assign(:sign, sign)}
+    end
   end
 
   # TODO: fix the page title

@@ -15,26 +15,32 @@ defmodule SignbankWeb.SignLive.BasicView do
   def handle_params(%{"id" => id_gloss} = params, _, socket) do
     search_query = Map.get(params, "q")
 
-    socket =
-      assign(
-        socket,
-        :search_results,
-        if is_nil(search_query) do
-          []
-        else
-          {:ok, search_results} = Dictionary.get_sign_by_keyword!(search_query)
-          search_results
-        end
-      )
+    case Dictionary.get_sign_by_id_gloss(id_gloss, socket.assigns.current_user) do
+      nil ->
+        {:noreply,
+         socket
+         |> put_flash(:error, "You do not have permission to access this page, please log in.")
+         |> redirect(to: ~p"/users/log_in")}
 
-    # TODO: this is really quite broken, it doesn't take into account the logged in user
-    sign = Dictionary.get_sign_by_id_gloss!(id_gloss)
+      sign ->
+        socket =
+          assign(
+            socket,
+            :search_results,
+            if is_nil(search_query) do
+              []
+            else
+              {:ok, search_results} = Dictionary.get_sign_by_keyword!(search_query)
+              search_results
+            end
+          )
 
-    {:noreply,
-     socket
-     |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:sign, sign)
-     |> assign(:search_query, search_query)}
+        {:noreply,
+         socket
+         |> assign(:page_title, page_title(socket.assigns.live_action))
+         |> assign(:sign, sign)
+         |> assign(:search_query, search_query)}
+    end
   end
 
   # TODO: fix the page title
