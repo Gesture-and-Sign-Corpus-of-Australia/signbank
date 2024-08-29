@@ -15,11 +15,13 @@ defmodule SignbankWeb.CoreComponents do
   Icons are provided by [heroicons](https://heroicons.com). See `icon/1` for usage.
   """
   use Phoenix.Component
+  use Phoenix.VerifiedRoutes, endpoint: SignbankWeb.Endpoint, router: SignbankWeb.Router
 
   import SignbankWeb.Gettext
   alias Phoenix.LiveView.JS
 
   alias Signbank.Accounts
+  alias Signbank.Dictionary
   alias Signbank.Dictionary.Sign
 
   @doc """
@@ -818,4 +820,73 @@ defmodule SignbankWeb.CoreComponents do
   #   <button>
   #   """
   # end
+
+  attr :class, :string, required: false
+  attr :sign, Sign, required: false
+  attr :linguistic_view, :boolean, required: false, default: false
+
+  def entry_nav(assigns) do
+    %{previous: previous, position: position, next: next} =
+      Dictionary.get_prev_next_signs!(assigns.sign, Map.get(assigns, :current_user, nil))
+
+    assigns =
+      assigns
+      |> assign(
+        :previous,
+        case [previous, assigns.linguistic_view] do
+          [nil, _] -> nil
+          [%Sign{id_gloss: id_gloss}, true] -> ~p"/dictionary/sign/#{id_gloss}/linguistic"
+          [%Sign{id_gloss: id_gloss}, _] -> ~p"/dictionary/sign/#{id_gloss}"
+        end
+      )
+      |> assign(
+        :next,
+        case [next, assigns.linguistic_view] do
+          [nil, _] -> nil
+          [%Sign{id_gloss: id_gloss}, true] -> ~p"/dictionary/sign/#{id_gloss}/linguistic"
+          [%Sign{id_gloss: id_gloss}, _] -> ~p"/dictionary/sign/#{id_gloss}"
+        end
+      )
+      |> assign(:position, position)
+      |> assign(:sign_count, Dictionary.count_signs(Map.get(assigns, :current_user, nil)))
+
+    ~H"""
+    <div class={@class}>
+      <div class="entry-page__dict_page_nav">
+        <.link
+          id={"search_result_#{@sign.id_gloss}_prev"}
+          disabled={@previous == nil}
+          class="button"
+          patch={@previous}
+          phx-click={JS.push_focus()}
+        >
+          Previous
+        </.link>
+        <div class="entry-page__dict_position">
+          Sign <%= @position %><br /> of <%= @sign_count %>
+        </div>
+        <.link
+          id={"search_result_#{@sign.id_gloss}_next"}
+          disabled={@next == nil}
+          class="button zzentry-page__dict_page_button"
+          patch={@next}
+          phx-click={JS.push_focus()}
+        >
+          Next
+        </.link>
+      </div>
+
+      <.link :if={@linguistic_view} class="button" patch={~p"/dictionary/sign/#{@sign.id_gloss}"}>
+        <%= SignbankWeb.Gettext.gettext("Go to basic view") %>
+      </.link>
+      <.link
+        :if={!@linguistic_view}
+        class="button"
+        patch={~p"/dictionary/sign/#{@sign.id_gloss}/linguistic"}
+      >
+        <%= SignbankWeb.Gettext.gettext("Go to linguistics view") %>
+      </.link>
+    </div>
+    """
+  end
 end

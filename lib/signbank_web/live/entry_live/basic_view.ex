@@ -29,16 +29,11 @@ defmodule SignbankWeb.SignLive.BasicView do
 
     # TODO: this is really quite broken, it doesn't take into account the logged in user
     sign = Dictionary.get_sign_by_id_gloss!(id_gloss)
-    %{previous: previous, position: position, next: next} = Dictionary.get_prev_next_signs!(sign)
 
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(:sign, sign)
-     |> assign(:previous, previous)
-     |> assign(:position, position)
-     |> assign(:sign_count, Dictionary.count_signs(socket.assigns.current_user))
-     |> assign(:next, next)
      |> assign(:search_query, search_query)}
   end
 

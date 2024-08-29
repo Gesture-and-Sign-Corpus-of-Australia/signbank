@@ -13,16 +13,11 @@ defmodule SignbankWeb.SignLive.LinguisticView do
   @impl true
   def handle_params(%{"id" => id_gloss}, _, socket) do
     sign = Dictionary.get_sign_by_id_gloss!(id_gloss)
-    %{previous: previous, position: position, next: next} = Dictionary.get_prev_next_signs!(sign)
 
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:sign, sign)
-     |> assign(:previous, previous)
-     |> assign(:next, next)
-     |> assign(:sign_count, Dictionary.count_signs(socket.assigns.current_user))
-     |> assign(:position, position)}
+     |> assign(:sign, sign)}
   end
 
   # TODO: fix the page title

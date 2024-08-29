@@ -188,17 +188,24 @@ defmodule Signbank.Dictionary do
   @doc """
   Finds next and previous Signs in predefined sorting order.
   """
-  def get_prev_next_signs!(%Sign{id: id}) do
-    # TODO: this won't work with unpublished signs, we need to know the publishing status of every sign to actually
-    # direct people to the correct sign
+  def get_prev_next_signs!(%Sign{id: id}, current_user) do
+    query =
+      Signbank.SignOrder.order_query(
+        Signbank.SignOrder.default_order(),
+        case current_user do
+          %User{role: role} when role in [:tech, :editor] -> true
+          _ -> false
+        end
+      )
+
     Repo.one!(
-      from so in "sign_order",
+      from so in subquery(query),
         left_join: p in Sign,
         on: [id: so.previous],
         left_join: n in Sign,
         on: [id: so.next],
-        where: so.sign_id == ^id,
-        select: %{previous: p, position: so.row_number, next: n}
+        select: %{previous: p, next: n, position: so.position},
+        where: so.id == ^id
     )
   end
 

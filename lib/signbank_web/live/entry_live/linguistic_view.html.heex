@@ -1,34 +1,5 @@
 <nav class="level entry-page__switch_entry">
-  <div class="level-left">
-    <%!-- TODO: refactor these page entry nav buttons along with the same in basic_view.html.heex --%>
-    <div class="entry-page__dict_page_nav">
-      <.link
-        id={"search_result_#{@sign.id_gloss}_prev"}
-        disabled={@previous == nil}
-        class="button"
-        patch={if @previous, do: ~p"/dictionary/sign/#{@previous.id_gloss}/linguistic?#{@params}"}
-        phx-click={JS.push_focus()}
-      >
-        Previous
-      </.link>
-      <div class="entry-page__dict_position">
-        Sign <%= @position %><br /> of <%= @sign_count %>
-      </div>
-      <.link
-        id={"search_result_#{@sign.id_gloss}_next"}
-        disabled={@next == nil}
-        class="button zzentry-page__dict_page_button"
-        patch={if @next, do: ~p"/dictionary/sign/#{@next.id_gloss}/linguistic?#{@params}"}
-        phx-click={JS.push_focus()}
-      >
-        Next
-      </.link>
-    </div>
-
-    <.link class="button" patch={~p"/dictionary/sign/#{@sign.id_gloss}?#{@params}"}>
-      <%= SignbankWeb.Gettext.gettext("Go to basic view") %>
-    </.link>
-  </div>
+  <.entry_nav class="level-left" sign={@sign} current_user={@current_user} linguistic_view={true} />
 </nav>
 <div :if={@sign.sense_number} class="level">
   <p :if={@sign.sense_number == 1}>
