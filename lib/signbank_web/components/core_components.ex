@@ -18,11 +18,10 @@ defmodule SignbankWeb.CoreComponents do
   use Phoenix.VerifiedRoutes, endpoint: SignbankWeb.Endpoint, router: SignbankWeb.Router
 
   import SignbankWeb.Gettext
-  alias Phoenix.LiveView.JS
 
+  alias Phoenix.LiveView.JS
   alias Signbank.Accounts
   alias Signbank.Dictionary
-  alias Signbank.Dictionary.Sign
 
   @doc """
   Renders a modal.
@@ -343,18 +342,16 @@ defmodule SignbankWeb.CoreComponents do
   def input(%{type: "select"} = assigns) do
     ~H"""
     <div phx-feedback-for={@name}>
-      <.label for={@id}><%= @label %></.label>
-      <select
-        id={@id}
-        name={@name}
-        class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
-        multiple={@multiple}
-        {@rest}
-      >
-        <option :if={@prompt} value=""><%= @prompt %></option>
-        <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
-      </select>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <div class="field">
+        <.label for={@id}><%= @label %></.label>
+        <div class="select">
+          <select id={@id} name={@name} multiple={@multiple} {@rest}>
+            <option :if={@prompt} value=""><%= @prompt %></option>
+            <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
+          </select>
+        </div>
+        <.error :for={msg <- @errors}><%= msg %></.error>
+      </div>
     </div>
     """
   end
@@ -491,8 +488,8 @@ defmodule SignbankWeb.CoreComponents do
       end
 
     ~H"""
-    <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
-      <table class="w-[40rem] mt-11 sm:w-full">
+    <div>
+      <table class="table">
         <thead class="text-sm text-left leading-6 text-zinc-500">
           <tr>
             <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal"><%= col[:label] %></th>
@@ -734,7 +731,7 @@ defmodule SignbankWeb.CoreComponents do
   defp definition_role_to_string(:editor_note), do: SignbankWeb.Gettext.gettext("Editor note")
 
   attr :type, :atom, values: [:basic, :linguistic], required: true
-  attr :sign, Sign, required: true
+  attr :sign, Dictionary.Sign, required: true
   attr :user, User, required: false
 
   def definitions(assigns) do
@@ -756,8 +753,8 @@ defmodule SignbankWeb.CoreComponents do
       assigns.sign.definitions
       |> Enum.concat(
         case assigns.sign do
-          %Sign{
-            citation: %Sign{definitions: definitions}
+          %Dictionary.Sign{
+            citation: %Dictionary.Sign{definitions: definitions}
           } ->
             # TODO: once we switch to a :notes table table this is useless
             # Filter to use only the definitions (the other roles represent notes
@@ -822,7 +819,7 @@ defmodule SignbankWeb.CoreComponents do
   # end
 
   attr :class, :string, required: false
-  attr :sign, Sign, required: false
+  attr :sign, Dictionary.Sign, required: false
   attr :linguistic_view, :boolean, required: false, default: false
 
   def entry_nav(assigns) do
@@ -834,17 +831,27 @@ defmodule SignbankWeb.CoreComponents do
       |> assign(
         :previous,
         case [previous, assigns.linguistic_view] do
-          [nil, _] -> nil
-          [%Sign{id_gloss: id_gloss}, true] -> ~p"/dictionary/sign/#{id_gloss}/linguistic"
-          [%Sign{id_gloss: id_gloss}, _] -> ~p"/dictionary/sign/#{id_gloss}"
+          [nil, _] ->
+            nil
+
+          [%Dictionary.Sign{id_gloss: id_gloss}, true] ->
+            ~p"/dictionary/sign/#{id_gloss}/linguistic"
+
+          [%Dictionary.Sign{id_gloss: id_gloss}, _] ->
+            ~p"/dictionary/sign/#{id_gloss}"
         end
       )
       |> assign(
         :next,
         case [next, assigns.linguistic_view] do
-          [nil, _] -> nil
-          [%Sign{id_gloss: id_gloss}, true] -> ~p"/dictionary/sign/#{id_gloss}/linguistic"
-          [%Sign{id_gloss: id_gloss}, _] -> ~p"/dictionary/sign/#{id_gloss}"
+          [nil, _] ->
+            nil
+
+          [%Dictionary.Sign{id_gloss: id_gloss}, true] ->
+            ~p"/dictionary/sign/#{id_gloss}/linguistic"
+
+          [%Dictionary.Sign{id_gloss: id_gloss}, _] ->
+            ~p"/dictionary/sign/#{id_gloss}"
         end
       )
       |> assign(:position, position)

@@ -24,6 +24,43 @@ defmodule Signbank.Dictionary do
 
   defp sort_order, do: @default_order
 
+  def query_from_filter(
+        %SignbankWeb.Search.SearchForm.Filter{
+          field: field,
+          op: :equal_to,
+          value: val
+        },
+        queryable
+      ) do
+    dynamic([s], ^queryable and field(s, ^field) == ^val)
+  end
+
+  def query_from_filter(
+        %SignbankWeb.Search.SearchForm.Filter{
+          field: field,
+          op: :contains,
+          value: val
+        },
+        queryable
+      ) do
+    dynamic([s], ^queryable and like(field(s, ^field), ^"%#{val}%"))
+  end
+
+  def query_from_filter(
+        %SignbankWeb.Search.SearchForm.Filter{
+          field: field,
+          op: :starts_with,
+          value: val
+        },
+        queryable
+      ) do
+    dynamic([s], ^queryable and like(field(s, ^field), ^"#{val}%"))
+  end
+
+  def query_from_filter(_, queryable) do
+    dynamic([s], ^queryable)
+  end
+
   @doc """
   Returns a paginated list of signs.
 
@@ -32,16 +69,48 @@ defmodule Signbank.Dictionary do
       iex> list_signs(1)
       [%Sign{}, ...]
   """
-  def list_signs do
-    list_signs(1)
-  end
+  def list_signs(
+        user \\ %User{},
+        page \\ 1,
+        %SignbankWeb.Search.SearchForm{filters: filters} \\ %SignbankWeb.Search.SearchForm{}
+      ) do
+    base_query =
+      from s in Sign,
+        order_by: [
+          fragment("lower(?) ASC", s.id_gloss)
+        ]
 
-  def list_signs(page) do
+    query =
+      if user && Map.get(user, :role) in [:tech, :editor] do
+        base_query
+      else
+        from s in base_query, where: s.published == true
+      end
+
+    where =
+      Enum.reduce(
+        filters,
+        dynamic(true),
+        &query_from_filter/2
+      )
+
     Repo.paginate(
-      from(s in Sign, order_by: [asc: s.id_gloss, asc: s.id]),
+      from(s in query,
+        where: ^where
+      ),
       %{page: page}
     )
   end
+
+  %{
+    "0" => %{"_persistent_id" => "0", "field" => "bsl_gloss"},
+    "1" => %{
+      "_persistent_id" => "1",
+      "field" => "published",
+      "op" => "equal_to",
+      "value" => "true"
+    }
+  }
 
   @doc """
   Gets a single sign.

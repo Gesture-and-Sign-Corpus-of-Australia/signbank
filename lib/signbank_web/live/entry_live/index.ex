@@ -18,12 +18,18 @@ defmodule SignbankWeb.SignLive.Index do
       |> assign(:inexact_matches, [])
       |> assign(:error, nil)
 
-    query = Map.get(params, "q")
+    search_term = Map.get(params, "q")
+    n = Map.get(params, "n")
 
-    case Dictionary.fuzzy_find_keyword(query) do
+    # TODO: we need to use `n` to get to a specific match number, but right now we can't
+    # see other matches and they're not sorted properly anyway
+    case Dictionary.fuzzy_find_keyword(search_term) do
       # if we match a keyword exactly, and its the only match, jump straight to results
-      {:ok, [[^query, id_gloss, _]]} ->
-        {:noreply, push_patch(socket, to: ~p"/dictionary/sign/#{id_gloss}?q=#{query}")}
+      {:ok, [[^search_term, id_gloss, _]]} ->
+        {:noreply,
+         push_patch(socket,
+           to: ~p"/dictionary/sign/#{id_gloss}?#{%{"q" => search_term, "n" => n}}"
+         )}
 
       {:ok, inexact_matches} ->
         {:noreply,

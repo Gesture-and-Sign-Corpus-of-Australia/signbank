@@ -9,15 +9,14 @@ $gray: lightgrey;
 $footer-height: 4.5rem;
 
 @use "bulma/utilities" with (
-  $family-primary: 'akkinson-hyperlegible, sans-serif',
+  $family-primary: "akkinson-hyperlegible, sans-serif",
   $primary: $purple
 );
 
-
 @use "bulma/components" with (
-  $navbar-burger-color: $yellow,
-  // $navbar-tab-active-background-color: $gray,
-);
+    $navbar-burger-color: $yellow,
+    // $navbar-tab-active-background-color: $gray,
+  );
 
 @use "bulma/form" with (
   $input-shadow: none
@@ -35,9 +34,11 @@ input[type="radio"] {
   vertical-align: middle;
 }
 
-
-
-$gaps: ("small": 0.5em, "medium": 1em, "large": 2em);
+$gaps: (
+  "small": 0.5em,
+  "medium": 1em,
+  "large": 2em,
+);
 
 @each $name, $gap in $gaps {
   .has-gap-#{$name} {
@@ -53,7 +54,8 @@ $gaps: ("small": 0.5em, "medium": 1em, "large": 2em);
 .navbar {
   align-items: center;
 
-  .navbar-item, .navbar-link {
+  .navbar-item,
+  .navbar-link {
     color: $yellow;
   }
 }
@@ -92,7 +94,6 @@ main {
   padding: 1rem;
 }
 
-
 #page-container {
   position: relative;
   min-height: 100vh;
@@ -108,7 +109,7 @@ footer {
   width: 100%;
   height: $footer-height;
   padding: 1rem 2rem;
-  background-color: #CACFD6; // TODO: move colors somewhere better
+  background-color: #cacfd6; // TODO: move colors somewhere better
   text-align: right;
 
   .app_version {
@@ -128,6 +129,10 @@ footer {
   }
 }
 
+.control .button {
+  height: var(--bulma-control-height);
+}
+
 /* bulma has the panel-blocks as flexboxes, we don't necessarily want this */
 .panel-block {
   display: block;
@@ -135,6 +140,10 @@ footer {
 
 .panel-tabs {
   align-items: normal;
+}
+
+.search-filter {
+  display: flex;
 }
 
 .zzznavbar {
@@ -294,7 +303,6 @@ footer {
   }
 }
 
-
 .entry-page__search_result {
   padding: 0.5em 1em;
   border: solid 1px black;
@@ -359,7 +367,6 @@ footer {
   }
 }
 
-
 .entry-page__videos_scroller {
   position: relative;
 
@@ -401,19 +408,19 @@ footer {
   border-radius: 2px;
 
   &.citation {
-    background-color: #3374FF;
+    background-color: #3374ff;
   }
 
   &.variant {
-    background-color: #709DFF;
+    background-color: #709dff;
   }
 
   &.english_entry {
-    background-color: #F3A712;
+    background-color: #f3a712;
   }
 
   &.se_only {
-    background-color: #D23D32;
+    background-color: #d23d32;
   }
 
   .video-frame__video_wrapper {
@@ -491,15 +498,15 @@ footer {
     height: 40vh;
 
     // HACK: Fix for headings not wrapping properly
-    &>* {
-      width: 50%
+    & > * {
+      width: 50%;
     }
 
     @media (max-width: 640px) {
       flex-wrap: nowrap;
       height: unset;
 
-      &>* {
+      & > * {
         width: auto;
       }
 
@@ -528,10 +535,9 @@ footer {
 
   .ling-details-section__properties {
     list-style: none;
-    padding-left: 0.4em
+    padding-left: 0.4em;
   }
 }
-
 
 .keyword-disambig {
   display: flex;
@@ -542,14 +548,13 @@ footer {
   gap: 0em 2em;
 
   .keyword-disambig__keyword:not([data-published]):after {
-    content: '*';
+    content: "*";
     font-size: 1.3em;
     text-decoration: none;
     /* slight kerning adjustment */
     margin-left: -0.2em;
-  } 
+  }
 }
-
 
 .flash {
   position: fixed;
@@ -559,7 +564,8 @@ footer {
   padding: 0.75rem;
   margin-right: 0.5rem;
   border-radius: 0.5rem;
-  box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width))
+    var(--tw-ring-color);
   width: 20rem;
 
   background-color: white;
@@ -579,16 +585,18 @@ footer {
   }
 
   .flash__info {
-    --ring-color: #10B981;
-    color: #065F46;
-    background-color: #ECFDF5;
+    --ring-color: #10b981;
+    color: #065f46;
+    background-color: #ecfdf5;
   }
 
   .flash__error {
-    --ring-color: #EC4899;
+    --ring-color: #ec4899;
     color: #831843;
-    background-color: #FDF2F8;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    background-color: #fdf2f8;
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06);
   }
 }
 
@@ -610,7 +618,9 @@ footer {
       --transform-scale-y: 1;
     }
 
-    transform: translateX(var(--transform-scale-x)) translateY(var(--transform-scale-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y));
+    transform: translateX(var(--transform-scale-x))
+      translateY(var(--transform-scale-y)) scaleX(var(--transform-scale-x))
+      scaleY(var(--transform-scale-y));
   }
 
   &--end {
@@ -618,15 +628,16 @@ footer {
     opacity: 0;
 
     @media (min-width: 640px) {
-      --transform-scale-x: .95;
-      --transform-scale-y: .95;
+      --transform-scale-x: 0.95;
+      --transform-scale-y: 0.95;
       --transform-translate-y: 0;
     }
 
-    transform: translateX(var(--transform-scale-x)) translateY(var(--transform-scale-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y));
+    transform: translateX(var(--transform-scale-x))
+      translateY(var(--transform-scale-y)) scaleX(var(--transform-scale-x))
+      scaleY(var(--transform-scale-y));
   }
 }
-
 
 .transition__show {
   &--start {
@@ -642,13 +653,14 @@ footer {
     opacity: 0;
 
     @media (min-width: 640px) {
-      --transform-scale-x: .95;
-      --transform-scale-y: .95;
+      --transform-scale-x: 0.95;
+      --transform-scale-y: 0.95;
       --transform-translate-y: 0;
     }
 
-    transform: translateX(var(--transform-scale-x)) translateY(var(--transform-scale-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y));
-
+    transform: translateX(var(--transform-scale-x))
+      translateY(var(--transform-scale-y)) scaleX(var(--transform-scale-x))
+      scaleY(var(--transform-scale-y));
   }
 
   &--end {
@@ -683,7 +695,6 @@ footer {
     height: 32px;
     width: 32px;
   }
-
 }
 
 .animate-spin {

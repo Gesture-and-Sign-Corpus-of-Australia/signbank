@@ -13,7 +13,8 @@ defmodule SignbankWeb.SignLive.BasicView do
 
   @impl true
   def handle_params(%{"id" => id_gloss} = params, _, socket) do
-    search_query = Map.get(params, "q")
+    search_term = Map.get(params, "q")
+    n = Map.get(params, "n")
 
     case Dictionary.get_sign_by_id_gloss(id_gloss, socket.assigns.current_user) do
       nil ->
@@ -27,10 +28,10 @@ defmodule SignbankWeb.SignLive.BasicView do
           assign(
             socket,
             :search_results,
-            if is_nil(search_query) do
+            if is_nil(search_term) do
               []
             else
-              {:ok, search_results} = Dictionary.get_sign_by_keyword!(search_query)
+              {:ok, search_results} = Dictionary.get_sign_by_keyword!(search_term)
               search_results
             end
           )
@@ -39,7 +40,7 @@ defmodule SignbankWeb.SignLive.BasicView do
          socket
          |> assign(:page_title, page_title(socket.assigns.live_action))
          |> assign(:sign, sign)
-         |> assign(:search_query, search_query)}
+         |> assign(:search_term, search_term)}
     end
   end
 

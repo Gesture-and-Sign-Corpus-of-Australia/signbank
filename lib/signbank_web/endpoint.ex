@@ -50,5 +50,8 @@ defmodule SignbankWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
+
+  plug SignbankWeb.Plugs.RewriteURL
+
   plug SignbankWeb.Router
 end

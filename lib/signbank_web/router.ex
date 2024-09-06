@@ -34,7 +34,7 @@ defmodule SignbankWeb.Router do
 
     live "/dictionary", SignLive.Index, :index
 
-    live "/advanced-search", SignLive.Index, :index
+    live "/dictionary/search", SignLive.Search, :show
 
     live "/dictionary/sign/:id", SignLive.BasicView, :show
     live "/dictionary/sign/:id/linguistic", SignLive.LinguisticView, :show

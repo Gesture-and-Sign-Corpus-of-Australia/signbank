@@ -2,16 +2,16 @@
   <.entry_nav class="level-left" sign={@sign} current_user={@current_user} />
 
   <div class="level-right">
-    <%!-- <p :if={@search_query != nil and not Enum.empty?(@search_results)}> --%>
-    <div :if={@search_query != nil and not Enum.empty?(@search_results)} class="search-matches">
-      <div>Matches for the word <i><%= @search_query %></i>:</div>
+    <%!-- <p :if={@search_term != nil and not Enum.empty?(@search_results)}> --%>
+    <div :if={@search_term != nil and not Enum.empty?(@search_results)} class="search-matches">
+      <div>Matches for the word <i><%= @search_term %></i>:</div>
       <div class="field has-addons">
         <%= for {result, index} <- Enum.with_index(Enum.sort_by(@search_results, fn %{id_gloss: id_gloss} -> id_gloss end, :asc), 1) do %>
           <div class="control">
             <.link
               id={"search_result_#{result.id_gloss}"}
               class={"button zzentry-page__search_result #{if @sign.id_gloss == result.id_gloss do "entry-page__search_result--current" end}"}
-              patch={~p"/dictionary/sign/#{result.id_gloss}?q=#{@search_query}"}
+              patch={~p"/dictionary/sign/#{result.id_gloss}?q=#{@search_term}"}
               phx-click={JS.push_focus()}
             >
               <%= index %>

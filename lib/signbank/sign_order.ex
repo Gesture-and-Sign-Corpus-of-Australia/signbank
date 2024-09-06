@@ -38,8 +38,8 @@ defmodule Signbank.SignOrder do
               |> over(:sign_order),
               :position
             ),
-          previous: selected_as(lag(s.id) |> over(:sign_order), :previous),
-          next: selected_as(lead(s.id) |> over(:sign_order), :next)
+          previous: selected_as(s.id |> lag() |> over(:sign_order), :previous),
+          next: selected_as(s.id |> lead() |> over(:sign_order), :next)
         }
 
     if editor? do

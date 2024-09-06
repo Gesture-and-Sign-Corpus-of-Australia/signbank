@@ -49,7 +49,6 @@ defmodule Signbank.Dictionary.Sign do
       references: :id
 
     has_many :definitions, Dictionary.Definition
-    has_many :suggest_signs, Dictionary.SuggestedSign
 
     # TODO: uncomment this after adding %Relation{}
     # has_many :relations, Dictionary.Relation, foreign_key: :sign_a_id
