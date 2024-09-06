@@ -57,6 +57,17 @@ defmodule Signbank.Dictionary do
     dynamic([s], ^queryable and like(field(s, ^field), ^"#{val}%"))
   end
 
+  def query_from_filter(
+        %SignbankWeb.Search.SearchForm.Filter{
+          field: field,
+          op: :regex,
+          value: val
+        },
+        queryable
+      ) do
+    dynamic([s], ^queryable and fragment("? ~ ?", field(s, ^field), ^val))
+  end
+
   def query_from_filter(_, queryable) do
     dynamic([s], ^queryable)
   end

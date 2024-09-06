@@ -146,6 +146,17 @@ footer {
   display: flex;
 }
 
+table tr [phx-click] {
+  cursor: pointer;
+}
+table tr:has([phx-click]) {
+  cursor: pointer;
+
+  &:hover {
+    background: #efefef;
+  }
+}
+
 .zzznavbar {
   $text-color: var(--signbank-yellow);
   $background-color: var(--signbank-purple);

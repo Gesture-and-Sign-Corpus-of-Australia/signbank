@@ -140,7 +140,12 @@ defmodule SignbankWeb.SignLive.Search do
       </:actions>
     </.simple_form>
 
-    <.table :if={Enum.count(@page.entries) > 0} id="results" rows={@page.entries}>
+    <.table
+      :if={Enum.count(@page.entries) > 0}
+      id="results"
+      rows={@page.entries}
+      row_click={fn sign -> JS.navigate(~p"/dictionary/sign/#{sign.id_gloss}") end}
+    >
       <:col :let={sign} label="ID gloss"><%= sign.id_gloss %></:col>
       <:col :let={sign} label="Annotation ID gloss"><%= sign.id_gloss_annotation %></:col>
     </.table>
