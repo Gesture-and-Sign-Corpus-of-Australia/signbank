@@ -66,7 +66,7 @@
 
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">
-          About
+          <%= SignbankWeb.Gettext.gettext("About") %>
         </a>
 
         <div class="navbar-dropdown is-right">
@@ -81,6 +81,10 @@
           </.link>
         </div>
       </div>
+
+      <.link class="navbar-item" href={~p"/dictionary/search"}>
+        <%= SignbankWeb.Gettext.gettext("Advanced Search") %>
+      </.link>
     </div>
   </nav>
   <main>

@@ -27,37 +27,11 @@ defmodule SignbankWeb.SignLive.Search do
         <%!-- value --%
       </div>--%>
       <.filter_controls f_filter={@f_filter} />
-      <div class="control">
-        <.button
-          disabled={@last_filter}
-          type="button"
-          phx-click="delete-filter"
-          phx-value-index={@f_filter.index}
-        >
+      <div :if={!@last_filter} class="control">
+        <.button type="button" phx-click="delete-filter" phx-value-index={@f_filter.index}>
           Delete
         </.button>
       </div>
-      <%!-- <.input
-        field={@f_filter[:field]}
-        type="select"
-        options={["Pick a field": nil] ++ @fields}
-        data-value={0}
-      />
-      <.filter_controls f_filter={@f_filter} />
-      <input
-        type="hidden"
-        name={Phoenix.HTML.Form.input_name(@f_filter, :delete)}
-        value={to_string(Phoenix.HTML.Form.input_value(@f_filter, :delete))}
-      />
-      <.button
-        disabled={@last_filter}
-        type="button"
-        phx-click="delete-filter"
-        phx-value-index={@f_filter.index}
-      >
-        Delete
-      </.button>
-      --%>
     </div>
     """
   end
@@ -137,14 +111,7 @@ defmodule SignbankWeb.SignLive.Search do
 
         nil ->
           ~H"""
-          <.input
-            field={@f_filter[:op]}
-            type="text"
-            value="can't currently"
-            label="Operator"
-            disabled={true}
-          />
-          <.input field={@f_filter[:value]} type="text" value="handle this" label="Value" disabled={true} />
+
           """
       end
     end
@@ -163,7 +130,9 @@ defmodule SignbankWeb.SignLive.Search do
             f_filter={f_filter}
           />
         </.inputs_for>
-        <.button type="button" phx-click="add-filter">Add</.button>
+        <.button type="button" phx-click="add-filter">
+          <%= gettext("Add filter") %>
+        </.button>
       </fieldset>
 
       <:actions>

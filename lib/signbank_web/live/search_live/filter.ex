@@ -35,10 +35,12 @@ defmodule SignbankWeb.Search.SearchForm do
 
   @doc false
   def filter_changeset(filter, params) do
+    fields = [:field, :op, :value]
+
     changeset =
       filter
-      |> cast(params, [:field, :op, :value])
-      |> validate_required([:field, :op, :value])
+      |> cast(params, fields)
+      |> validate_required(fields)
 
     if get_change(changeset, :delete) do
       %{changeset | action: :delete}
