@@ -102,7 +102,7 @@ jobs:
           echo "artifact_name=signbank-${{ env.VERSION }}" >> "$GITHUB_OUTPUT"
           echo "artifact_filename=signbank-${{ env.VERSION }}.tar.gz" >> "$GITHUB_OUTPUT"
       - name: Archive build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: signbank-${{ env.VERSION }}
           path: _build/prod/signbank-${{ env.VERSION }}.tar.gz
