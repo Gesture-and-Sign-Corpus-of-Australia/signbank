@@ -1,9 +1,10 @@
 defmodule SignbankWeb.Plugs.RewriteURL do
-  @defmodule """
+  @moduledoc """
   Rewrites legacy django-based Signbank URLs to the new format.
 
   TODO: list specific rewrites
   """
+
   use SignbankWeb, :verified_routes
 
   import Plug.Conn

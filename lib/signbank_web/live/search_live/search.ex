@@ -216,9 +216,6 @@ defmodule SignbankWeb.SignLive.Search do
       socket.assigns.base
       |> SearchForm.changeset(params)
       |> struct!(action: :validate)
-      |> dbg()
-
-    dbg(to_form(changeset))
 
     {:noreply, assign(socket, form: to_form(changeset))}
   end
