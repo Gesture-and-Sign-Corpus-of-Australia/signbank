@@ -6,6 +6,11 @@ $purple: #413c58;
 $yellow: #fff3c3;
 $gray: lightgrey;
 
+$citation_border: #2c55c7; /* TODO: make navy or similar */
+$variant_border: #79b8fb; /* TODO: make sky blue */
+$english_entry_border: #f3a712;
+$se_only_border: #d23d32;
+
 $footer-height: 4.5rem;
 
 @use "bulma/utilities" with (
@@ -80,8 +85,8 @@ body {
 html {
   box-sizing: border-box;
 
-  --signbank-yellow: #fff3c3;
-  --signbank-purple: #413c58;
+  --signbank-yellow: #{$yellow};
+  --signbank-purple: #{$purple};
 }
 
 *,
@@ -421,18 +426,22 @@ table tr:has([phx-click]) {
 
   &.citation {
     background-color: #3374ff; /* TODO: make navy or similar */
+    background-color: $citation_border;
   }
 
   &.variant {
     background-color: #709dff; /* TODO: make sky blue */
+    background-color: $variant_border;
   }
 
   &.english_entry {
     background-color: #f3a712;
+    background-color: $english_entry_border;
   }
 
   &.se_only {
     background-color: #d23d32;
+    background-color: $se_only_border;
   }
 
   .video-frame__video_wrapper {

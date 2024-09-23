@@ -101,7 +101,7 @@
         </a>
       </div>
       <div id="vocab-section" class="panel-block">
-        <div>
+        <div :if={SignbankWeb.MapComponents.show_map?(@sign.regions)}>
           <h3 class="is-size-6 has-text-weight-semibold">Dialects</h3>
           <%= if Enum.any?(@sign.regions) do %>
             <.australia_map selected={@sign.regions} />
@@ -118,7 +118,7 @@
               ) %>
             </li>
             <li>Marginal/minority: <%= bool_to_word(@sign.lexis_marginal_or_minority) %></li>
-            <li>Obselete: <%= bool_to_word(@sign.lexis_obsolete) %></li>
+            <li>Obsolete: <%= bool_to_word(@sign.lexis_obsolete) %></li>
             <li>Anglican/state school: <%= bool_to_word(@sign.school_anglican_or_state) %></li>
             <li>
               Catholic school: <%= bool_to_word(@sign.school_catholic) %>
@@ -147,8 +147,12 @@
         <div>
           <h3 class="is-size-6 has-text-weight-semibold">Other</h3>
           <ul class="ling-details-section__properties">
-            <li aria-details="something">Iconicity: <%= @sign.iconicity %></li>
-            <li>Popular explanation: <%= @sign.popular_explanation %></li>
+            <li>
+              Iconicity: <%= @sign.iconicity || gettext("unknown") %>
+            </li>
+            <li :if={@sign.popular_explanation}>
+              Popular explanation: <%= @sign.popular_explanation %>
+            </li>
 
             <%!-- as yet unimplemented:
           <li>Corpus attested: </li>
@@ -242,7 +246,8 @@
             ) %>
           </li>
           <li>
-            Location side: <%= @sign.phonology.location_rightside_or_leftside %>
+            Location side: <%= @sign.phonology.location_rightside_or_leftside ||
+              gettext("unknown") %>
           </li>
           <%!-- TODO: refactor this hack into some kind of require_editor() fn, this approach will get annoying the more things we need to hide from unauthed users --%>
           <li :if={
@@ -291,22 +296,22 @@
             </li>
 
             <%= with contact <- list_flags(%{
-            gettext("start") => @sign.phonology.contact_start,
-            gettext("end") => @sign.phonology.contact_end,
-            gettext("during") => @sign.phonology.contact_during,
-            gettext("location") => @sign.phonology.contact_location,
-            gettext("hands") => @sign.phonology.contact_hands,
-            gettext("body") => @sign.phonology.contact_body,
-          }) do %>
+              gettext("start") => @sign.phonology.contact_start,
+              gettext("end") => @sign.phonology.contact_end,
+              gettext("during") => @sign.phonology.contact_during,
+              gettext("location") => @sign.phonology.contact_location,
+              gettext("hands") => @sign.phonology.contact_hands,
+              gettext("body") => @sign.phonology.contact_body,
+            }) do %>
               <li>Contact: <%= contact %></li>
             <% end %>
 
             <%= with changes <- list_flags(%{
-            gettext("handshape") => @sign.phonology.change_handshape,
-            gettext("open") => @sign.phonology.change_open,
-            gettext("close") => @sign.phonology.change_close,
-            gettext("orientation") => @sign.phonology.change_orientation,
-          }) do %>
+              gettext("handshape") => @sign.phonology.change_handshape,
+              gettext("open") => @sign.phonology.change_open,
+              gettext("close") => @sign.phonology.change_close,
+              gettext("orientation") => @sign.phonology.change_orientation,
+            }) do %>
               <li>
                 Changes <small>(dominant hand)</small>: <%= changes %>
               </li>
@@ -319,13 +324,13 @@
             Small hand movements <small>(dominant hand)</small>
           </h3>
           <%= for {label, value} <- %{
-          gettext("forearm rotates") => @sign.phonology.movement_forearm_rotation,
-          gettext("wrist nods") => @sign.phonology.movement_wrist_nod,
-          gettext("fingers straightens") => @sign.phonology.movement_fingers_straighten,
-          gettext("fingers wiggle") => @sign.phonology.movement_fingers_wiggle,
-          gettext("fingers crumble") => @sign.phonology.movement_fingers_crumble,
-          gettext("fingers bend") => @sign.phonology.movement_fingers_bend,
-        } do %>
+            gettext("forearm rotates") => @sign.phonology.movement_forearm_rotation,
+            gettext("wrist nods") => @sign.phonology.movement_wrist_nod,
+            gettext("fingers straightens") => @sign.phonology.movement_fingers_straighten,
+            gettext("fingers wiggle") => @sign.phonology.movement_fingers_wiggle,
+            gettext("fingers crumble") => @sign.phonology.movement_fingers_crumble,
+            gettext("fingers bend") => @sign.phonology.movement_fingers_bend,
+          } do %>
             <div>
               <input disabled type="checkbox" id={label} name={label} checked={value} />
               <label for={label}><%= label %></label>

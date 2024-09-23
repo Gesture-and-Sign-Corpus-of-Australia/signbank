@@ -37,7 +37,7 @@ defmodule SignbankWeb.MapComponents do
     end)
   end
 
-  defp show_map?(selected) do
+  def show_map?(selected) do
     Enum.any?(
       selected,
       fn

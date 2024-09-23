@@ -889,9 +889,9 @@ defmodule SignbankWeb.CoreComponents do
       <.link
         :if={!@linguistic_view}
         class="button"
-        patch={~p"/dictionary/sign/#{@sign.id_gloss}/linguistic"}
+        patch={~p"/dictionary/sign/#{@sign.id_gloss}/detail"}
       >
-        <%= SignbankWeb.Gettext.gettext("Go to linguistics view") %>
+        <%= SignbankWeb.Gettext.gettext("Go to detailed view") %>
       </.link>
     </div>
     """
