@@ -18,7 +18,7 @@ defmodule SignbankWeb.CoreComponents do
   use Phoenix.Component
   use Phoenix.VerifiedRoutes, endpoint: SignbankWeb.Endpoint, router: SignbankWeb.Router
 
-  import SignbankWeb.Gettext
+  use Gettext, backend: Signbank.Gettext
 
   alias Phoenix.LiveView.JS
   alias Signbank.Accounts
@@ -700,9 +700,9 @@ defmodule SignbankWeb.CoreComponents do
     # with our gettext backend as first argument. Translations are
     # available in the errors.po file (as we use the "errors" domain).
     if count = opts[:count] do
-      Gettext.dngettext(SignbankWeb.Gettext, "errors", msg, msg, count, opts)
+      Gettext.dngettext(Signbank.Gettext, "errors", msg, msg, count, opts)
     else
-      Gettext.dgettext(SignbankWeb.Gettext, "errors", msg, opts)
+      Gettext.dgettext(Signbank.Gettext, "errors", msg, opts)
     end
   end
 
@@ -743,20 +743,20 @@ defmodule SignbankWeb.CoreComponents do
     end)
   end
 
-  defp definition_role_to_string(:general), do: SignbankWeb.Gettext.gettext("General Definition")
-  defp definition_role_to_string(:auslan), do: SignbankWeb.Gettext.gettext("Definition in Auslan")
-  defp definition_role_to_string(:noun), do: SignbankWeb.Gettext.gettext("As a Noun")
-  defp definition_role_to_string(:verb), do: SignbankWeb.Gettext.gettext("As a Verb or Adjective")
-  defp definition_role_to_string(:modifier), do: SignbankWeb.Gettext.gettext("As Modifier")
-  defp definition_role_to_string(:augment), do: SignbankWeb.Gettext.gettext("Augmented meaning")
+  defp definition_role_to_string(:general), do: gettext("General Definition")
+  defp definition_role_to_string(:auslan), do: gettext("Definition in Auslan")
+  defp definition_role_to_string(:noun), do: gettext("As a Noun")
+  defp definition_role_to_string(:verb), do: gettext("As a Verb or Adjective")
+  defp definition_role_to_string(:modifier), do: gettext("As Modifier")
+  defp definition_role_to_string(:augment), do: gettext("Augmented meaning")
 
   defp definition_role_to_string(:pointing_sign),
-    do: SignbankWeb.Gettext.gettext("As a Pointing Sign")
+    do: gettext("As a Pointing Sign")
 
-  defp definition_role_to_string(:question), do: SignbankWeb.Gettext.gettext("As a question")
-  defp definition_role_to_string(:interactive), do: SignbankWeb.Gettext.gettext("Interactive")
-  defp definition_role_to_string(:note), do: SignbankWeb.Gettext.gettext("Note")
-  defp definition_role_to_string(:editor_note), do: SignbankWeb.Gettext.gettext("Editor note")
+  defp definition_role_to_string(:question), do: gettext("As a question")
+  defp definition_role_to_string(:interactive), do: gettext("Interactive")
+  defp definition_role_to_string(:note), do: gettext("Note")
+  defp definition_role_to_string(:editor_note), do: gettext("Editor note")
 
   attr :type, :atom, values: [:basic, :linguistic], required: true
   attr :sign, Dictionary.Sign, required: true
@@ -913,14 +913,14 @@ defmodule SignbankWeb.CoreComponents do
       </div>
 
       <.link :if={@linguistic_view} class="button" patch={~p"/dictionary/sign/#{@sign.id_gloss}"}>
-        <%= SignbankWeb.Gettext.gettext("Go to basic view") %>
+        <%= gettext("Go to basic view") %>
       </.link>
       <.link
         :if={!@linguistic_view}
         class="button"
         patch={~p"/dictionary/sign/#{@sign.id_gloss}/detail"}
       >
-        <%= SignbankWeb.Gettext.gettext("Go to detailed view") %>
+        <%= gettext("Go to detailed view") %>
       </.link>
     </div>
     """

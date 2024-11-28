@@ -24,13 +24,12 @@ config :signbank, SignbankWeb.Endpoint,
   debug_errors: true,
   secret_key_base: "wP7Q8pHFKJKfyl4kGdNwuYKh6YSe/0D25lSTbpRDnENCLsdN+lLMQBV99kN2fhLt",
   watchers: [
-    node: ["build.js", "--watch", cd: Path.expand("../assets", __DIR__)],
+    esbuild: {Esbuild, :install_and_run, [:signbank, ~w(--sourcemap=inline --watch)]},
     sass: {
       DartSass,
       :install_and_run,
       [:default, ~w(--embed-source-map --source-map-urls=absolute --watch)]
     }
-    # esbuild: {Esbuild, :install_and_run, [:signbank, ~w(--sourcemap=inline --watch)]}
   ]
 
 # ## SSL Support

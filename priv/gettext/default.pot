@@ -11,293 +11,1600 @@
 msgid ""
 msgstr ""
 
-#: lib/signbank_web/components/core_components.ex:484
+#: lib/signbank_web/components/core_components.ex:525
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/form_component.ex:25
+#: lib/signbank_web/live/entry_live/form_component.ex:23
 #, elixir-autogen, elixir-format
 msgid "Annotation ID gloss"
 msgstr ""
 
-#: lib/signbank_web/components/core_components.ex:161
+#: lib/signbank_web/components/core_components.ex:168
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr ""
 
-#: lib/signbank_web/components/core_components.ex:152
+#: lib/signbank_web/components/core_components.ex:159
 #, elixir-autogen, elixir-format
 msgid "Error!"
 msgstr ""
 
-#: lib/signbank_web/components/core_components.ex:173
+#: lib/signbank_web/components/core_components.ex:180
 #, elixir-autogen, elixir-format
 msgid "Hang in there while we get back on track"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/form_component.ex:24
+#: lib/signbank_web/live/entry_live/form_component.ex:22
+#: lib/signbank_web/live/search_live/search.ex:290
 #, elixir-autogen, elixir-format
 msgid "ID gloss"
 msgstr ""
 
-#: lib/signbank_web/components/core_components.ex:168
+#: lib/signbank_web/components/core_components.ex:175
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr ""
 
-#: lib/signbank_web/components/core_components.ex:151
+#: lib/signbank_web/components/core_components.ex:158
 #, elixir-autogen, elixir-format
 msgid "Success!"
 msgstr ""
 
-#: lib/signbank_web/components/core_components.ex:156
+#: lib/signbank_web/components/core_components.ex:163
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr ""
 
-#: lib/signbank_web/components/core_components.ex:76
-#: lib/signbank_web/components/core_components.ex:131
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:291
+#: lib/signbank_web/components/core_components.ex:83
+#: lib/signbank_web/components/core_components.ex:138
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:323
 #, elixir-autogen, elixir-format
 msgid "close"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/basic_view.ex:22
-#: lib/signbank_web/live/entry_live/index.ex:27
-#: lib/signbank_web/live/entry_live/linguistic_view.ex:22
+#: lib/signbank_web/live/entry_live/basic_view.ex:49
+#: lib/signbank_web/live/entry_live/linguistic_view.ex:31
 #, elixir-autogen, elixir-format
 msgid "Edit sign"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/index.ex:39
+#: lib/signbank_web/live/entry_live/index.ex:63
 #, elixir-autogen, elixir-format
 msgid "List of entries"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/index.ex:33
-#: lib/signbank_web/live/entry_live/index.html.heex:7
+#: lib/signbank_web/live/entry_live/index.ex:57
 #, elixir-autogen, elixir-format
 msgid "New sign"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/form_component.ex:46
+#: lib/signbank_web/live/entry_live/form_component.ex:44
 #, elixir-autogen, elixir-format
 msgid "Save sign"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/basic_view.ex:21
-#: lib/signbank_web/live/entry_live/linguistic_view.ex:21
+#: lib/signbank_web/live/entry_live/basic_view.ex:48
+#: lib/signbank_web/live/entry_live/linguistic_view.ex:30
 #, elixir-autogen, elixir-format
 msgid "Show sign"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/form_component.ex:46
+#: lib/signbank_web/live/entry_live/form_component.ex:44
 #, elixir-autogen, elixir-format
 msgid "Saving..."
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/form_component.ex:35
+#: lib/signbank_web/live/entry_live/form_component.ex:33
 #, elixir-autogen, elixir-format
 msgid "Variant of"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:324
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:360
 #, elixir-autogen, elixir-format
 msgid "alternating"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:325
+#: lib/signbank/dictionary/phonology/direction.ex:16
+#: lib/signbank/dictionary/phonology/finger_hand_orientation.ex:15
+#: lib/signbank/dictionary/phonology/palm_orientation.ex:11
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:361
 #, elixir-autogen, elixir-format
 msgid "away"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:283
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:315
 #, elixir-autogen, elixir-format
 msgid "body"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:327
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:363
 #, elixir-autogen, elixir-format
 msgid "cross"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:321
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:357
 #, elixir-autogen, elixir-format
 msgid "dominant hand only"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:280
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:313
 #, elixir-autogen, elixir-format
 msgid "during"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:279
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:312
 #, elixir-autogen, elixir-format
 msgid "end"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:309
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:343
 #, elixir-autogen, elixir-format
 msgid "fingers bend"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:308
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:342
 #, elixir-autogen, elixir-format
 msgid "fingers crumble"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:306
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:340
 #, elixir-autogen, elixir-format
 msgid "fingers straightens"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:307
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:341
 #, elixir-autogen, elixir-format
 msgid "fingers wiggle"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:304
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:338
 #, elixir-autogen, elixir-format
 msgid "forearm rotates"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:282
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:314
 #, elixir-autogen, elixir-format
 msgid "hands"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:289
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:321
 #, elixir-autogen, elixir-format
 msgid "handshape"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:281
-#, elixir-autogen, elixir-format
-msgid "location"
-msgstr ""
-
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:290
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:322
 #, elixir-autogen, elixir-format
 msgid "open"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:292
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:324
 #, elixir-autogen, elixir-format
 msgid "orientation"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:323
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:359
 #, elixir-autogen, elixir-format
 msgid "parallel"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:278
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:311
 #, elixir-autogen, elixir-format
 msgid "start"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:322
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:358
 #, elixir-autogen, elixir-format
 msgid "symmetrical"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:326
+#: lib/signbank/dictionary/phonology/direction.ex:17
+#: lib/signbank/dictionary/phonology/finger_hand_orientation.ex:19
+#: lib/signbank/dictionary/phonology/palm_orientation.ex:9
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:362
 #, elixir-autogen, elixir-format
 msgid "towards"
 msgstr ""
 
-#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:305
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:339
 #, elixir-autogen, elixir-format
 msgid "wrist nods"
 msgstr ""
 
-#: lib/signbank_web/components/core_components.ex:702
+#: lib/signbank_web/components/core_components.ex:750
 #, elixir-autogen, elixir-format
 msgid "As Modifier"
 msgstr ""
 
-#: lib/signbank_web/components/core_components.ex:700
+#: lib/signbank_web/components/core_components.ex:748
 #, elixir-autogen, elixir-format
 msgid "As a Noun"
 msgstr ""
 
-#: lib/signbank_web/components/core_components.ex:705
+#: lib/signbank_web/components/core_components.ex:754
 #, elixir-autogen, elixir-format
 msgid "As a Pointing Sign"
 msgstr ""
 
-#: lib/signbank_web/components/core_components.ex:701
+#: lib/signbank_web/components/core_components.ex:749
 #, elixir-autogen, elixir-format
 msgid "As a Verb or Adjective"
 msgstr ""
 
-#: lib/signbank_web/components/core_components.ex:706
+#: lib/signbank_web/components/core_components.ex:756
 #, elixir-autogen, elixir-format
 msgid "As a question"
 msgstr ""
 
-#: lib/signbank_web/components/core_components.ex:704
-#, elixir-autogen, elixir-format
-msgid "Augment"
-msgstr ""
-
-#: lib/signbank_web/components/core_components.ex:699
-#, elixir-autogen, elixir-format
-msgid "Auslan Definition"
-msgstr ""
-
-#: lib/signbank_web/components/core_components.ex:698
+#: lib/signbank_web/components/core_components.ex:746
 #, elixir-autogen, elixir-format
 msgid "General Definition"
 msgstr ""
 
-#: lib/signbank_web/components/core_components.ex:707
+#: lib/signbank_web/components/core_components.ex:757
 #, elixir-autogen, elixir-format
 msgid "Interactive"
 msgstr ""
 
-#: lib/signbank_web/components/core_components.ex:709
+#: lib/signbank_web/components/core_components.ex:758
 #, elixir-autogen, elixir-format
 msgid "Note"
 msgstr ""
 
-#: lib/signbank_web/components/core_components.ex:710
-#, elixir-autogen, elixir-format
-msgid "Private note"
-msgstr ""
-
-#: lib/signbank_web/components/layouts/app.html.heex:12
-#, elixir-autogen, elixir-format
-msgid "About Auslan"
-msgstr ""
-
-#: lib/signbank_web/components/layouts/app.html.heex:19
-#, elixir-autogen, elixir-format
-msgid "Dictionary"
-msgstr ""
-
-#: lib/signbank_web/components/layouts/app.html.heex:17
+#: lib/signbank_web/components/layouts/app.html.heex:80
 #, elixir-autogen, elixir-format
 msgid "Grammar"
 msgstr ""
 
-#: lib/signbank_web/components/layouts/app.html.heex:11
-#, elixir-autogen, elixir-format
-msgid "Home"
-msgstr ""
-
-#: lib/signbank_web/live/entry_live/form_component.ex:28
+#: lib/signbank_web/live/entry_live/form_component.ex:26
 #, elixir-autogen, elixir-format
 msgid "Keywords"
 msgstr ""
 
-#: lib/signbank_web/components/layouts/app.html.heex:13
+#: lib/signbank_web/components/layouts/app.html.heex:69
 #, elixir-autogen, elixir-format
 msgid "Research"
 msgstr ""
 
-#: lib/signbank_web/components/layouts/app.html.heex:15
+#: lib/signbank_web/components/layouts/app.html.heex:77
 #, elixir-autogen, elixir-format
 msgid "Vocabulary"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:907
+#: lib/signbank_web/live/search_live/search.ex:293
+#, elixir-autogen, elixir-format
+msgid "ASL gloss"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:901
+#, elixir-autogen, elixir-format
+msgid "ASL recent loan sign"
+msgstr ""
+
+#: lib/signbank_web/components/layouts/app.html.heex:87
+#, elixir-autogen, elixir-format
+msgid "About"
+msgstr ""
+
+#: lib/signbank_web/components/layouts/app.html.heex:98
+#, elixir-autogen, elixir-format
+msgid "Acknowledgements"
+msgstr ""
+
+#: lib/signbank_web/live/search_live/search.ex:138
+#, elixir-autogen, elixir-format
+msgid "Add filter"
+msgstr ""
+
+#: lib/signbank_web/components/layouts/app.html.heex:104
+#, elixir-autogen, elixir-format
+msgid "Advanced Search"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:852
+#, elixir-autogen, elixir-format
+msgid "Anglican/state school"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:751
+#, elixir-autogen, elixir-format
+msgid "Augmented meaning"
+msgstr ""
+
+#: lib/signbank/dictionary/region.ex:29
+#, elixir-autogen, elixir-format
+msgid "Australia-wide"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:895
+#: lib/signbank_web/live/search_live/search.ex:294
+#, elixir-autogen, elixir-format
+msgid "BSL gloss"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:889
+#, elixir-autogen, elixir-format
+msgid "BSL recent loan sign"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:986
+#, elixir-autogen, elixir-format
+msgid "Begin directional sign"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:1016
+#, elixir-autogen, elixir-format
+msgid "Body locating sign"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:862
+#, elixir-autogen, elixir-format
+msgid "Catholic school"
+msgstr ""
+
+#: lib/signbank_web/components/layouts/app.html.heex:92
+#, elixir-autogen, elixir-format
+msgid "Community"
+msgstr ""
+
+#: lib/signbank_web/components/layouts/app.html.heex:74
+#, elixir-autogen, elixir-format
+msgid "Corpus"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:1205
+#, elixir-autogen, elixir-format
+msgid "Corpus attested"
+msgstr ""
+
+#: lib/signbank_web/live/search_live/search.ex:292
+#, elixir-autogen, elixir-format
+msgid "Crude"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:872
+#, elixir-autogen, elixir-format
+msgid "Crude & offensive"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:747
+#, elixir-autogen, elixir-format
+msgid "Definition in Auslan"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:976
+#, elixir-autogen, elixir-format
+msgid "Directional"
+msgstr ""
+
+#: lib/signbank_web/live/search_live/search.ex:302
+#, elixir-autogen, elixir-format
+msgid "Doubtful or unsure"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:759
+#, elixir-autogen, elixir-format
+msgid "Editor note"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:1149
+#, elixir-autogen, elixir-format
+msgid "Editorial doubtful or unsure"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:1144
+#, elixir-autogen, elixir-format
+msgid "Editorial vocabulary/dictionary"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:996
+#, elixir-autogen, elixir-format
+msgid "End directional sign"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:207
+#, elixir-autogen, elixir-format
+msgid "Final dom finger hand ori"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:85
+#, elixir-autogen, elixir-format
+msgid "Final dom hand"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:315
+#, elixir-autogen, elixir-format
+msgid "Final dom interact handpart"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:261
+#, elixir-autogen, elixir-format
+msgid "Final dom palm ori"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:162
+#, elixir-autogen, elixir-format
+msgid "Final primary loc"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:229
+#, elixir-autogen, elixir-format
+msgid "Final sub finger hand ori"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:123
+#, elixir-autogen, elixir-format
+msgid "Final sub hand"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:337
+#, elixir-autogen, elixir-format
+msgid "Final sub interact handpart"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:283
+#, elixir-autogen, elixir-format
+msgid "Final sub palm ori"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:916
+#, elixir-autogen, elixir-format
+msgid "Go to basic view"
+msgstr ""
+
+#: lib/signbank_web/components/core_components.ex:923
+#, elixir-autogen, elixir-format
+msgid "Go to detailed view"
+msgstr ""
+
+#: lib/signbank_web/components/layouts/app.html.heex:95
+#, elixir-autogen, elixir-format
+msgid "History"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:941
+#: lib/signbank_web/live/search_live/search.ex:295
+#, elixir-autogen, elixir-format
+msgid "Iconicity"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:196
+#, elixir-autogen, elixir-format
+msgid "Initial dom finger hand ori"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:66
+#, elixir-autogen, elixir-format
+msgid "Initial dom hand"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:304
+#, elixir-autogen, elixir-format
+msgid "Initial dom interact handpart"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:250
+#, elixir-autogen, elixir-format
+msgid "Initial dom palm ori"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:152
+#, elixir-autogen, elixir-format
+msgid "Initial primary loc"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:218
+#, elixir-autogen, elixir-format
+msgid "Initial sub finger hand ori"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:104
+#, elixir-autogen, elixir-format
+msgid "Initial sub hand"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:326
+#, elixir-autogen, elixir-format
+msgid "Initial sub interact handpart"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:272
+#, elixir-autogen, elixir-format
+msgid "Initial sub palm ori"
+msgstr ""
+
+#: lib/signbank_web/live/search_live/search.ex:297
+#, elixir-autogen, elixir-format
+msgid "Is ASL loan"
+msgstr ""
+
+#: lib/signbank_web/live/search_live/search.ex:298
+#, elixir-autogen, elixir-format
+msgid "Is BSL loan"
+msgstr ""
+
+#: lib/signbank_web/live/search_live/search.ex:301
+#, elixir-autogen, elixir-format
+msgid "Is Signed English based on Auslan"
+msgstr ""
+
+#: lib/signbank_web/live/search_live/search.ex:300
+#, elixir-autogen, elixir-format
+msgid "Is Signed English only"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:172
+#, elixir-autogen, elixir-format
+msgid "Loc rightside or leftside"
+msgstr ""
+
+#: lib/signbank_web/live/search_live/search.ex:305
+#, elixir-autogen, elixir-format
+msgid "Marginal or minority"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:836
+#, elixir-autogen, elixir-format
+msgid "Marginal/minority"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:1031
+#, elixir-autogen, elixir-format
+msgid "Morphology: fingerspelling"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:1081
+#, elixir-autogen, elixir-format
+msgid "Morphology: sign combinations"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:971
+#, elixir-autogen, elixir-format
+msgid "Morphology: space & movement"
+msgstr ""
+
+#: lib/signbank/dictionary/region.ex:32
+#, elixir-autogen, elixir-format
+msgid "New South Wales"
+msgstr ""
+
+#: lib/signbank/dictionary/region.ex:26
+#, elixir-autogen, elixir-format
+msgid "No region"
+msgstr ""
+
+#: lib/signbank/dictionary/region.ex:30
+#, elixir-autogen, elixir-format
+msgid "Northern dialect"
+msgstr ""
+
+#: lib/signbank/dictionary/region.ex:28
+#, elixir-autogen, elixir-format
+msgid "Not applicable"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:846
+#: lib/signbank_web/live/search_live/search.ex:306
+#, elixir-autogen, elixir-format
+msgid "Obsolete"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:1006
+#, elixir-autogen, elixir-format
+msgid "Orientating sign"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:416
+#, elixir-autogen, elixir-format
+msgid "Phonology: changes (dominant hand)"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:354
+#, elixir-autogen, elixir-format
+msgid "Phonology: contact"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:635
+#, elixir-autogen, elixir-format
+msgid "Phonology: large movements (dom hand)"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:550
+#, elixir-autogen, elixir-format
+msgid "Phonology: large movements (interaction of hands) — 2 hand signs only"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:188
+#, elixir-autogen, elixir-format
+msgid "Phonology: orientation of finger side of hand (i.e., the metacarpus)"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:722
+#, elixir-autogen, elixir-format
+msgid "Phonology: other"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:472
+#, elixir-autogen, elixir-format
+msgid "Phonology: small hand movements (dominant hand)"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:691
+#, elixir-autogen, elixir-format
+msgid "Phonology: transcription"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:951
+#: lib/signbank_web/live/search_live/search.ex:296
+#, elixir-autogen, elixir-format
+msgid "Popular explanation"
+msgstr ""
+
+#: lib/signbank_web/live/search_live/search.ex:303
+#, elixir-autogen, elixir-format
+msgid "Problematic"
+msgstr ""
+
+#: lib/signbank_web/live/search_live/search.ex:304
+#, elixir-autogen, elixir-format
+msgid "Problematic video"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:1175
+#, elixir-autogen, elixir-format
+msgid "Proposed new sign"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:1169
+#: lib/signbank_web/live/search_live/search.ex:291
+#, elixir-autogen, elixir-format
+msgid "Published"
+msgstr ""
+
+#: lib/signbank/dictionary/region.ex:31
+#, elixir-autogen, elixir-format
+msgid "Queensland"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:1195
+#, elixir-autogen, elixir-format
+msgid "Redo video"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:809
+#, elixir-autogen, elixir-format
+msgid "Regions"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:923
+#, elixir-autogen, elixir-format
+msgid "SE Gloss"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:913
+#, elixir-autogen, elixir-format
+msgid "SE based on Auslan"
+msgstr ""
+
+#: lib/signbank_web/live/search_live/search.ex:208
+#, elixir-autogen, elixir-format
+msgid "Search signs"
+msgstr ""
+
+#: lib/signbank_web/components/layouts/app.html.heex:34
+#, elixir-autogen, elixir-format
+msgid "Search..."
+msgstr ""
+
+#: lib/signbank_web/live/search_live/search.ex:299
+#, elixir-autogen, elixir-format
+msgid "Signed English gloss"
+msgstr ""
+
+#: lib/signbank/dictionary/region.ex:36
+#, elixir-autogen, elixir-format
+msgid "South Australia"
+msgstr ""
+
+#: lib/signbank/dictionary/region.ex:33
+#, elixir-autogen, elixir-format
+msgid "Southern Dialect"
+msgstr ""
+
+#: lib/signbank/dictionary/region.ex:37
+#, elixir-autogen, elixir-format
+msgid "Tasmania"
+msgstr ""
+
+#: lib/signbank_web/live/search_live/search.ex:307
+#, elixir-autogen, elixir-format
+msgid "Technical or specialist jargon"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:826
+#, elixir-autogen, elixir-format
+msgid "Technical/specialist jargon"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/basic_view.html.heex:33
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:11
+#, elixir-autogen, elixir-format
+msgid "This sign has two or more completely separate meanings. Click Next and Previous to see the other ones."
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/basic_view.html.heex:28
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:6
+#, elixir-autogen, elixir-format
+msgid "This sign has two or more completely separate meanings. Click Next to see the other ones."
+msgstr ""
+
+#: lib/signbank_web/live/search_live/search.ex:289
+#, elixir-autogen, elixir-format
+msgid "Type"
+msgstr ""
+
+#: lib/signbank/dictionary/region.ex:27
+#, elixir-autogen, elixir-format
+msgid "Unknown"
+msgstr ""
+
+#: lib/signbank/dictionary/region.ex:34
+#, elixir-autogen, elixir-format
+msgid "Victoria"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:936
+#, elixir-autogen, elixir-format
+msgid "Vocabulary: Iconicity & folklore"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:747
+#, elixir-autogen, elixir-format
+msgid "Vocabulary: dictionary entry type (box colour = frame colour)"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:884
+#, elixir-autogen, elixir-format
+msgid "Vocabulary: other SLs"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:821
+#, elixir-autogen, elixir-format
+msgid "Vocabulary: usage by other factors"
+msgstr ""
+
+#: lib/signbank/dictionary/region.ex:35
+#, elixir-autogen, elixir-format
+msgid "Western Australia"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:46
+#, elixir-autogen, elixir-format
+msgid "ambivalent"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:48
+#, elixir-autogen, elixir-format
+msgid "animal"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:49
+#, elixir-autogen, elixir-format
+msgid "animal closed"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/path.ex:12
+#, elixir-autogen, elixir-format
+msgid "arc"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/finger_hand_orientation.ex:18
+#, elixir-autogen, elixir-format
+msgid "away down"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/finger_hand_orientation.ex:16
+#, elixir-autogen, elixir-format
+msgid "away left"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/finger_hand_orientation.ex:17
+#, elixir-autogen, elixir-format
+msgid "away right"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handpart.ex:10
+#, elixir-autogen, elixir-format
+msgid "back"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:30
+#, elixir-autogen, elixir-format
+msgid "bad"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:34
+#, elixir-autogen, elixir-format
+msgid "bad bent"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:25
+#, elixir-autogen, elixir-format
+msgid "ball"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:26
+#, elixir-autogen, elixir-format
+msgid "ball bent"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:28
+#, elixir-autogen, elixir-format
+msgid "below waist"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:1098
+#, elixir-autogen, elixir-format
+msgid "blend_of"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:32
+#, elixir-autogen, elixir-format
+msgid "buckle"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:1110
+#, elixir-autogen, elixir-format
+msgid "calque_of"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:17
+#, elixir-autogen, elixir-format
+msgid "cheek"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:13
+#, elixir-autogen, elixir-format
+msgid "cheekbone"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:23
+#, elixir-autogen, elixir-format
+msgid "chest"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:19
+#, elixir-autogen, elixir-format
+msgid "chin"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/path.ex:16
+#, elixir-autogen, elixir-format
+msgid "circular"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:1092
+#, elixir-autogen, elixir-format
+msgid "compound_of"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:28
+#, elixir-autogen, elixir-format
+msgid "cup"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:32
+#, elixir-autogen, elixir-format
+msgid "cup flush"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:31
+#, elixir-autogen, elixir-format
+msgid "cup thumb"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/path.ex:13
+#, elixir-autogen, elixir-format
+msgid "curved"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/path.ex:11
+#, elixir-autogen, elixir-format
+msgid "diagonal"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/direction.ex:11
+#: lib/signbank/dictionary/phonology/finger_hand_orientation.ex:20
+#: lib/signbank/dictionary/phonology/palm_orientation.ex:13
+#, elixir-autogen, elixir-format
+msgid "down"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:43
+#, elixir-autogen, elixir-format
+msgid "duck"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:16
+#, elixir-autogen, elixir-format
+msgid "ear or side head"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:1190
+#, elixir-autogen, elixir-format
+msgid "editorial video"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:1159
+#, elixir-autogen, elixir-format
+msgid "editorial_problematic"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:36
+#, elixir-autogen, elixir-format
+msgid "eight"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:38
+#, elixir-autogen, elixir-format
+msgid "eight curved"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handpart.ex:16
+#: lib/signbank/dictionary/phonology/location.ex:30
+#, elixir-autogen, elixir-format
+msgid "elbow"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:12
+#, elixir-autogen, elixir-format
+msgid "eye"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handpart.ex:13
+#, elixir-autogen, elixir-format
+msgid "fingertips"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:38
+#, elixir-autogen, elixir-format
+msgid "fist"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:39
+#, elixir-autogen, elixir-format
+msgid "fist A"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:26
+#, elixir-autogen, elixir-format
+msgid "flat"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:27
+#, elixir-autogen, elixir-format
+msgid "flat B"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:29
+#, elixir-autogen, elixir-format
+msgid "flat B angled"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:28
+#, elixir-autogen, elixir-format
+msgid "flat angled"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handpart.ex:15
+#, elixir-autogen, elixir-format
+msgid "forearm"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:10
+#, elixir-autogen, elixir-format
+msgid "forehead"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:23
+#, elixir-autogen, elixir-format
+msgid "four"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:24
+#, elixir-autogen, elixir-format
+msgid "four curved"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:29
+#, elixir-autogen, elixir-format
+msgid "good"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:33
+#, elixir-autogen, elixir-format
+msgid "good bent"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:31
+#, elixir-autogen, elixir-format
+msgid "gun"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:35
+#, elixir-autogen, elixir-format
+msgid "gun bent"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:22
+#, elixir-autogen, elixir-format
+msgid "high neutral space"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:13
+#, elixir-autogen, elixir-format
+msgid "hook"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:17
+#, elixir-autogen, elixir-format
+msgid "hook bent"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:1104
+#, elixir-autogen, elixir-format
+msgid "idiom_of"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:1086
+#, elixir-autogen, elixir-format
+msgid "initialization_of"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:1056
+#, elixir-autogen, elixir-format
+msgid "is_abbreviation"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:1046
+#, elixir-autogen, elixir-format
+msgid "is_alphabet"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:1036
+#, elixir-autogen, elixir-format
+msgid "is_fingerspelled_word"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:1066
+#, elixir-autogen, elixir-format
+msgid "is_initialism"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:15
+#, elixir-autogen, elixir-format
+msgid "kneel"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/direction.ex:13
+#: lib/signbank/dictionary/phonology/finger_hand_orientation.ex:14
+#: lib/signbank/dictionary/phonology/palm_orientation.ex:10
+#, elixir-autogen, elixir-format
+msgid "left"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/side.ex:10
+#, elixir-autogen, elixir-format
+msgid "left to rightside"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/side.ex:9
+#, elixir-autogen, elixir-format
+msgid "leftside"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:33
+#, elixir-autogen, elixir-format
+msgid "letter C"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:36
+#, elixir-autogen, elixir-format
+msgid "letter C open"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:22
+#, elixir-autogen, elixir-format
+msgid "letter M"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:18
+#, elixir-autogen, elixir-format
+msgid "letter N"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:21
+#, elixir-autogen, elixir-format
+msgid "letter n"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:47
+#, elixir-autogen, elixir-format
+msgid "love"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:26
+#, elixir-autogen, elixir-format
+msgid "low neutral space"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:44
+#, elixir-autogen, elixir-format
+msgid "middle"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:21
+#, elixir-autogen, elixir-format
+msgid "mother"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:18
+#, elixir-autogen, elixir-format
+msgid "mouth or lips"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/edit.html.heex:1116
+#, elixir-autogen, elixir-format
+msgid "multi_sign_expression"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/repetition_type.ex:15
+#, elixir-autogen, elixir-format
+msgid "multiple diff locs"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/repetition_type.ex:12
+#, elixir-autogen, elixir-format
+msgid "multiple same loc"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:20
+#, elixir-autogen, elixir-format
+msgid "neck"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:24
+#, elixir-autogen, elixir-format
+msgid "neutral space"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:37
+#, elixir-autogen, elixir-format
+msgid "nine"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.ex:69
+#, elixir-autogen, elixir-format
+msgid "no"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/direction.ex:9
+#: lib/signbank/dictionary/phonology/path.ex:9
+#: lib/signbank/dictionary/phonology/repetition_type.ex:9
+#, elixir-autogen, elixir-format
+msgid "none"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:14
+#, elixir-autogen, elixir-format
+msgid "nose"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:11
+#, elixir-autogen, elixir-format
+msgid "okay"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:13
+#, elixir-autogen, elixir-format
+msgid "okay F"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:12
+#, elixir-autogen, elixir-format
+msgid "okay flat"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/repetition_type.ex:13
+#, elixir-autogen, elixir-format
+msgid "one diff locs"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/repetition_type.ex:10
+#, elixir-autogen, elixir-format
+msgid "one same loc"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handpart.ex:9
+#: lib/signbank/dictionary/phonology/location.ex:35
+#, elixir-autogen, elixir-format
+msgid "palm"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:16
+#, elixir-autogen, elixir-format
+msgid "perth"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:12
+#, elixir-autogen, elixir-format
+msgid "point"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:14
+#, elixir-autogen, elixir-format
+msgid "point D"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:15
+#, elixir-autogen, elixir-format
+msgid "point angled"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:16
+#, elixir-autogen, elixir-format
+msgid "point angled thumb"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:31
+#, elixir-autogen, elixir-format
+msgid "pronated forearm"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:33
+#, elixir-autogen, elixir-format
+msgid "pronated wrist"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:49
+#, elixir-autogen, elixir-format
+msgid "queer"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handpart.ex:11
+#, elixir-autogen, elixir-format
+msgid "radial"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:9
+#, elixir-autogen, elixir-format
+msgid "relaxed"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/direction.ex:14
+#: lib/signbank/dictionary/phonology/finger_hand_orientation.ex:21
+#: lib/signbank/dictionary/phonology/palm_orientation.ex:14
+#, elixir-autogen, elixir-format
+msgid "right"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/side.ex:11
+#, elixir-autogen, elixir-format
+msgid "right to leftside"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/side.ex:8
+#, elixir-autogen, elixir-format
+msgid "rightside"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:10
+#, elixir-autogen, elixir-format
+msgid "round"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:11
+#, elixir-autogen, elixir-format
+msgid "round E"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:9
+#, elixir-autogen, elixir-format
+msgid "round flat"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:10
+#, elixir-autogen, elixir-format
+msgid "round flick"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:45
+#, elixir-autogen, elixir-format
+msgid "rude"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:42
+#, elixir-autogen, elixir-format
+msgid "salt"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:47
+#, elixir-autogen, elixir-format
+msgid "salt closed"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:48
+#, elixir-autogen, elixir-format
+msgid "salt flick"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:35
+#, elixir-autogen, elixir-format
+msgid "seven (old)"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:21
+#, elixir-autogen, elixir-format
+msgid "shoulder"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/direction.ex:15
+#, elixir-autogen, elixir-format
+msgid "side to side"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:34
+#, elixir-autogen, elixir-format
+msgid "small"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:37
+#, elixir-autogen, elixir-format
+msgid "small open"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:39
+#, elixir-autogen, elixir-format
+msgid "soon"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:41
+#, elixir-autogen, elixir-format
+msgid "soon closed"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:40
+#, elixir-autogen, elixir-format
+msgid "soon flick"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/path.ex:17
+#, elixir-autogen, elixir-format
+msgid "spiral"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:17
+#, elixir-autogen, elixir-format
+msgid "spoon"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:20
+#, elixir-autogen, elixir-format
+msgid "spoon curved"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:19
+#, elixir-autogen, elixir-format
+msgid "spoon thumb"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:24
+#, elixir-autogen, elixir-format
+msgid "spread"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:25
+#, elixir-autogen, elixir-format
+msgid "spread angled"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:25
+#, elixir-autogen, elixir-format
+msgid "stomach"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/path.ex:10
+#, elixir-autogen, elixir-format
+msgid "straight"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:32
+#, elixir-autogen, elixir-format
+msgid "supinated forearm"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:34
+#, elixir-autogen, elixir-format
+msgid "supinated wrist"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:11
+#, elixir-autogen, elixir-format
+msgid "temple"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:40
+#, elixir-autogen, elixir-format
+msgid "ten"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:43
+#, elixir-autogen, elixir-format
+msgid "ten flat"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:42
+#, elixir-autogen, elixir-format
+msgid "ten tip"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:44
+#, elixir-autogen, elixir-format
+msgid "ten tip open"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:27
+#, elixir-autogen, elixir-format
+msgid "thick"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:30
+#, elixir-autogen, elixir-format
+msgid "thick open"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:20
+#, elixir-autogen, elixir-format
+msgid "three"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:23
+#, elixir-autogen, elixir-format
+msgid "three bent"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:22
+#, elixir-autogen, elixir-format
+msgid "three curved"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/direction.ex:18
+#, elixir-autogen, elixir-format
+msgid "to and fro"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:9
+#, elixir-autogen, elixir-format
+msgid "top head"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:14
+#, elixir-autogen, elixir-format
+msgid "two"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:18
+#, elixir-autogen, elixir-format
+msgid "two angle"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/repetition_type.ex:14
+#, elixir-autogen, elixir-format
+msgid "two diff locs"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/repetition_type.ex:11
+#, elixir-autogen, elixir-format
+msgid "two same loc"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handpart.ex:12
+#, elixir-autogen, elixir-format
+msgid "ulnar"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.ex:70
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:151
+#: lib/signbank_web/live/entry_live/linguistic_view.html.heex:261
+#, elixir-autogen, elixir-format
+msgid "unknown"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/direction.ex:10
+#: lib/signbank/dictionary/phonology/finger_hand_orientation.ex:10
+#: lib/signbank/dictionary/phonology/palm_orientation.ex:12
+#, elixir-autogen, elixir-format
+msgid "up"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/direction.ex:12
+#, elixir-autogen, elixir-format
+msgid "up and down"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/finger_hand_orientation.ex:12
+#, elixir-autogen, elixir-format
+msgid "up away"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/finger_hand_orientation.ex:9
+#, elixir-autogen, elixir-format
+msgid "up left"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/finger_hand_orientation.ex:11
+#, elixir-autogen, elixir-format
+msgid "up right"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/finger_hand_orientation.ex:13
+#, elixir-autogen, elixir-format
+msgid "up towards"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:29
+#, elixir-autogen, elixir-format
+msgid "upper arm"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:27
+#, elixir-autogen, elixir-format
+msgid "waist"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/path.ex:14
+#, elixir-autogen, elixir-format
+msgid "wavy"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/location.ex:15
+#, elixir-autogen, elixir-format
+msgid "whole face"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:19
+#, elixir-autogen, elixir-format
+msgid "wish"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handpart.ex:14
+#, elixir-autogen, elixir-format
+msgid "wrist"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape.ex:41
+#, elixir-autogen, elixir-format
+msgid "write"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:45
+#, elixir-autogen, elixir-format
+msgid "write flat"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/handshape_allophone.ex:46
+#, elixir-autogen, elixir-format
+msgid "write flick"
+msgstr ""
+
+#: lib/signbank_web/live/entry_live/linguistic_view.ex:68
+#, elixir-autogen, elixir-format
+msgid "yes"
+msgstr ""
+
+#: lib/signbank/dictionary/phonology/path.ex:15
+#, elixir-autogen, elixir-format
+msgid "zig zag"
 msgstr ""

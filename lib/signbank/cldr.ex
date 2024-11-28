@@ -9,7 +9,7 @@ defmodule Signbank.Cldr do
   use Cldr,
     default_locale: "en",
     locales: ["en"],
-    gettext: SignbankWeb.Gettext,
+    gettext: Signbank.Gettext,
     otp_app: :signbank,
     providers: [Cldr.Number, Cldr.List],
     generate_docs: true,

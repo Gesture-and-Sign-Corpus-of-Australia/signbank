@@ -4,7 +4,7 @@ defmodule Signbank.Dictionary.Phonology.FingerHandOrientation do
   TODO: give linguistic explanation as well
   """
 
-  import SignbankWeb.Gettext
+  use Gettext, backend: Signbank.Gettext
 
   def to_string(:up_left), do: gettext("up left")
   def to_string(:up), do: gettext("up")

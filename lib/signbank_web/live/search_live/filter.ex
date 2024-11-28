@@ -47,6 +47,5 @@ defmodule SignbankWeb.Search.SearchForm do
     else
       changeset
     end
-    |> IO.inspect()
   end
 end

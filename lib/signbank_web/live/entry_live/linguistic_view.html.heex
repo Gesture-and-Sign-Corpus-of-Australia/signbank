@@ -3,12 +3,12 @@
 </nav>
 <div :if={@sign.sense_number} class="level">
   <p :if={@sign.sense_number == 1}>
-    <%= SignbankWeb.Gettext.gettext(
+    <%= gettext(
       "This sign has two or more completely separate meanings. Click Next to see the other ones."
     ) %>
   </p>
   <p :if={@sign.sense_number > 1}>
-    <%= SignbankWeb.Gettext.gettext(
+    <%= gettext(
       "This sign has two or more completely separate meanings. Click Next and Previous to see the other ones."
     ) %>
   </p>
@@ -37,7 +37,7 @@
       ] do %>
         <tr>
           <th>
-            <%= Gettext.gettext(SignbankWeb.Gettext, Atom.to_string(field)) %>
+            <%= Gettext.gettext(Signbank.Gettext, Atom.to_string(field)) %>
           </th>
           <td>
             <%= with value <- Map.get(@sign, field) do %>
@@ -52,7 +52,7 @@
       <% end %>
       <tr :if={@current_user && Map.get(@current_user, :role) in [:tech, :editor]}>
         <th>
-          <%= Gettext.gettext(SignbankWeb.Gettext, "published") %>
+          <%= Gettext.gettext(Signbank.Gettext, "published") %>
         </th>
         <td><%= @sign.published %></td>
       </tr>

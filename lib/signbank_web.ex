@@ -44,7 +44,7 @@ defmodule SignbankWeb do
         layouts: [html: SignbankWeb.Layouts]
 
       import Plug.Conn
-      import SignbankWeb.Gettext
+      use Gettext, backend: Signbank.Gettext
 
       unquote(verified_routes())
     end
@@ -87,8 +87,7 @@ defmodule SignbankWeb do
       # Core UI components and translation
       import SignbankWeb.CoreComponents
       import SignbankWeb.MapComponents
-      import SignbankWeb.Gettext
-      import LiveSvelte
+      use Gettext, backend: Signbank.Gettext
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS

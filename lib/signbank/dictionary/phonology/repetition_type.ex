@@ -4,7 +4,7 @@ defmodule Signbank.Dictionary.Phonology.RepetitionType do
   TODO: give linguistic explanation as well
   """
 
-  import SignbankWeb.Gettext
+  use Gettext, backend: Signbank.Gettext
 
   def to_string(:none), do: gettext("none")
   def to_string(:one_same_loc), do: gettext("one same loc")

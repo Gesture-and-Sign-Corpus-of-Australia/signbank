@@ -4,7 +4,7 @@ defmodule Signbank.Dictionary.Phonology.Path do
   TODO: give linguistic explanation as well
   """
 
-  import SignbankWeb.Gettext
+  use Gettext, backend: Signbank.Gettext
 
   def to_string(:none), do: gettext("none")
   def to_string(:straight), do: gettext("straight")

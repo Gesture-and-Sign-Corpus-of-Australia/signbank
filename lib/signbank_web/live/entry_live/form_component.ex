@@ -1,6 +1,5 @@
 defmodule SignbankWeb.SignLive.FormComponent do
   use SignbankWeb, :live_component
-  import SignbankWeb.Gettext
 
   alias Signbank.Dictionary
 

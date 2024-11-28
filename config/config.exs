@@ -31,6 +31,15 @@ config :signbank, SignbankWeb.Endpoint,
 # at the `config/runtime.exs`.
 config :signbank, Signbank.Mailer, adapter: Swoosh.Adapters.Local
 
+config :esbuild,
+  version: "0.17.11",
+  signbank: [
+    args:
+      ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
+    cd: Path.expand("../assets", __DIR__),
+    env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
+  ]
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

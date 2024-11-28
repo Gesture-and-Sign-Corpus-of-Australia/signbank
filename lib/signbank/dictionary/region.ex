@@ -3,8 +3,9 @@ defmodule Signbank.Dictionary.SignRegion do
   A single region for a sign.
   """
   use Ecto.Schema
+  use Gettext, backend: Signbank.Gettext
+
   import Ecto.Changeset
-  import SignbankWeb.Gettext
 
   @regions [
     :no_region,

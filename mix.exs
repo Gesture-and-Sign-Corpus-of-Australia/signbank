@@ -42,23 +42,23 @@ defmodule Signbank.MixProject do
       {:bcrypt_elixir, "~> 3.0"},
       {:phoenix, "~> 1.7.11"},
       {:phoenix_ecto, "~> 4.4"},
-      {:ecto_sql, "~> 3.10"},
+      {:ecto_sql, "~> 3.12"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 4.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 0.20.2"},
       {:floki, ">= 0.30.0"},
       {:phoenix_live_dashboard, "~> 0.8.3"},
+      {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
       # Email sending
       {:swoosh, "~> 1.5"},
       {:finch, "~> 0.13"},
-      {:telemetry_metrics, "~> 0.6"},
+      {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.2"},
-      {:live_svelte, "~> 0.13.0"},
       # Static code analysis
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       # Static code analysis
@@ -70,16 +70,16 @@ defmodule Signbank.MixProject do
       # SCSS compilation
       {:dart_sass, "~> 0.6", runtime: Mix.env() == :dev},
       # Pagination
-      {:scrivener_ecto, "~> 2.7"},
+      {:scrivener_ecto, "~> 3.1"},
       # Locale data (for localisation)
-      {:ex_cldr, "~> 2.38"},
+      {:ex_cldr, "~> 2.40"},
       {:ex_cldr_lists, "~> 2.11"},
       {:heroicons, "~> 0.5.5"},
       # Enables monitoring Ecto from the dashboard
       {:ecto_psql_extras, "~> 0.7"},
       {:csv, "~> 3.2"},
       {:saxy, "~> 1.5"},
-      {:meeseeks, "~> 0.17.0"},
+      {:meeseeks, "~> 0.17.0"}
     ]
   end
 
@@ -95,10 +95,11 @@ defmodule Signbank.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.setup": ["cmd --cd assets npm install"],
+      "assets.setup": ["esbuild.install --if-mising"],
+      "assets.build": ["esbuild signbank"],
       "assets.deploy": [
         "assets.setup",
-        "cmd --cd assets node build.js --deploy",
+        "esbuild signbank --minify",
         "sass default --no-source-map --style=compressed",
         "phx.digest"
       ]

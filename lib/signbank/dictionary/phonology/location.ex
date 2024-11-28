@@ -4,7 +4,7 @@ defmodule Signbank.Dictionary.Phonology.Location do
   TODO: give linguistic explanation as well
   """
 
-  import SignbankWeb.Gettext
+  use Gettext, backend: Signbank.Gettext
 
   def to_string(:top_head), do: gettext("top head")
   def to_string(:forehead), do: gettext("forehead")

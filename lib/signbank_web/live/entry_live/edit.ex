@@ -109,10 +109,10 @@ defmodule SignbankWeb.SignLive.Edit do
     {:noreply, socket}
   end
 
-  defp presign_upload(entry, %{assigns: %{uploads: uploads}} = socket) do
-    meta = SimpleS3Upload.meta(entry, uploads)
-    {:ok, meta, socket}
-  end
+  # defp presign_upload(entry, %{assigns: %{uploads: uploads}} = socket) do
+  #   meta = SimpleS3Upload.meta(entry, uploads)
+  #   {:ok, meta, socket}
+  # end
 
   def definition(assigns) do
     # TODO: refactor delete to go through cast_assocs's `sort_param` to match how sorting works

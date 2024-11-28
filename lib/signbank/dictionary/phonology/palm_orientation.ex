@@ -4,7 +4,7 @@ defmodule Signbank.Dictionary.Phonology.PalmOrientation do
   TODO: give linguistic explanation as well
   """
 
-  import SignbankWeb.Gettext
+  use Gettext, backend: Signbank.Gettext
 
   def to_string(:towards), do: gettext("towards")
   def to_string(:left), do: gettext("left")

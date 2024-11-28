@@ -1,6 +1,5 @@
 defmodule SignbankWeb.SignLive.LinguisticView do
   use SignbankWeb, :live_view
-  import SignbankWeb.Gettext
   alias Signbank.Dictionary
 
   on_mount {SignbankWeb.UserAuth, :mount_current_user}
@@ -66,7 +65,7 @@ defmodule SignbankWeb.SignLive.LinguisticView do
     end
   end
 
-  defp bool_to_word(true), do: SignbankWeb.Gettext.gettext("yes")
-  defp bool_to_word(false), do: SignbankWeb.Gettext.gettext("no")
-  defp bool_to_word(_), do: SignbankWeb.Gettext.gettext("unknown")
+  defp bool_to_word(true), do: gettext("yes")
+  defp bool_to_word(false), do: gettext("no")
+  defp bool_to_word(_), do: gettext("unknown")
 end

@@ -8,7 +8,6 @@ defmodule Signbank.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      {NodeJS.Supervisor, [path: LiveSvelte.SSR.NodeJS.server_path(), pool_size: 4]},
       SignbankWeb.Telemetry,
       Signbank.Repo,
       {DNSCluster, query: Application.get_env(:signbank, :dns_cluster_query) || :ignore},

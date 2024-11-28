@@ -1,7 +1,5 @@
 defmodule SignbankWeb.SignLive.BasicView do
   use SignbankWeb, :live_view
-
-  import SignbankWeb.Gettext
   alias Signbank.Dictionary
 
   on_mount {SignbankWeb.UserAuth, :mount_current_user}

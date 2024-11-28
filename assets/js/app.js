@@ -54,6 +54,7 @@ let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("
 let liveSocket = new LiveSocket("/live", Socket, {
   uploaders: Uploaders,
   hooks: Hooks,
+  livePollFallbackMs: 2500,
   params: { _csrf_token: csrfToken }
 })
 

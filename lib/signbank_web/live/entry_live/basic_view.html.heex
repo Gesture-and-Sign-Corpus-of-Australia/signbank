@@ -25,12 +25,12 @@
 
 <div :if={@sign.sense_number} class="level">
   <p :if={@sign.sense_number == 1}>
-    <%= SignbankWeb.Gettext.gettext(
+    <%= gettext(
       "This sign has two or more completely separate meanings. Click Next to see the other ones."
     ) %>
   </p>
   <p :if={@sign.sense_number > 1}>
-    <%= SignbankWeb.Gettext.gettext(
+    <%= gettext(
       "This sign has two or more completely separate meanings. Click Next and Previous to see the other ones."
     ) %>
   </p>

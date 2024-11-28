@@ -31,12 +31,7 @@
         <form action="/dictionary" method="GET">
           <div class="field has-addons">
             <div class="control has-icons-right">
-              <input
-                class="input"
-                type="text"
-                name="q"
-                placeholder={SignbankWeb.Gettext.gettext("Search...")}
-              />
+              <input class="input" type="text" name="q" placeholder={gettext("Search...")} />
               <%!-- <input id="search-handshape-filter" type="hidden" name="handshape" value="" /> --%>
             </div>
             <div class="control">
@@ -71,42 +66,42 @@
       </div>
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">
-          <%= SignbankWeb.Gettext.gettext("Research") %>
+          <%= gettext("Research") %>
         </a>
 
         <div class="navbar-dropdown is-right">
           <.link class="navbar-item" href={~p"/research/corpus"}>
-            <%= SignbankWeb.Gettext.gettext("Corpus") %>
+            <%= gettext("Corpus") %>
           </.link>
           <.link class="navbar-item" href={~p"/research/vocabulary"}>
-            <%= SignbankWeb.Gettext.gettext("Vocabulary") %>
+            <%= gettext("Vocabulary") %>
           </.link>
           <.link class="navbar-item" href={~p"/about/grammar"}>
-            <%= SignbankWeb.Gettext.gettext("Grammar") %>
+            <%= gettext("Grammar") %>
           </.link>
         </div>
       </div>
 
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">
-          <%= SignbankWeb.Gettext.gettext("About") %>
+          <%= gettext("About") %>
         </a>
 
         <div class="navbar-dropdown is-right">
           <.link class="navbar-item" href={~p"/about/community"}>
-            <%= SignbankWeb.Gettext.gettext("Community") %>
+            <%= gettext("Community") %>
           </.link>
           <.link class="navbar-item" href={~p"/about/history"}>
-            <%= SignbankWeb.Gettext.gettext("History") %>
+            <%= gettext("History") %>
           </.link>
           <.link class="navbar-item" href={~p"/about/acknowledgements"}>
-            <%= SignbankWeb.Gettext.gettext("Acknowledgements") %>
+            <%= gettext("Acknowledgements") %>
           </.link>
         </div>
       </div>
 
       <.link class="navbar-item" href={~p"/dictionary/search"}>
-        <%= SignbankWeb.Gettext.gettext("Advanced Search") %>
+        <%= gettext("Advanced Search") %>
       </.link>
     </div>
   </nav>

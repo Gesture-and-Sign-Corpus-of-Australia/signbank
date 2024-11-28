@@ -1,8 +1,6 @@
 defmodule SignbankWeb.SignLive.Search do
   use SignbankWeb, :live_view
 
-  import SignbankWeb.Gettext
-
   alias Signbank.Dictionary
   alias SignbankWeb.Search.SearchForm
 

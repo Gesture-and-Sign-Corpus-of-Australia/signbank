@@ -3,7 +3,7 @@ defmodule Signbank.Dictionary.Phonology.Side do
   Provides helper methods for `side` phonology fields
   TODO: give linguistic explanation as well
   """
-  import SignbankWeb.Gettext
+  use Gettext, backend: Signbank.Gettext
 
   def to_string(:rightside), do: gettext("rightside")
   def to_string(:leftside), do: gettext("leftside")

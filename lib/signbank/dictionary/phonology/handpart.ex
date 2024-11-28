@@ -4,7 +4,7 @@ defmodule Signbank.Dictionary.Phonology.Handpart do
   TODO: give linguistic explanation as well
   """
 
-  import SignbankWeb.Gettext
+  use Gettext, backend: Signbank.Gettext
 
   def to_string(:palm), do: gettext("palm")
   def to_string(:back), do: gettext("back")

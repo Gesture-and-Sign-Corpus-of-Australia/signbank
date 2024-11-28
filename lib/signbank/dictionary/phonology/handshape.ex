@@ -4,7 +4,7 @@ defmodule Signbank.Dictionary.Phonology.Handshape do
   TODO: give linguistic explanation as well
   """
 
-  import SignbankWeb.Gettext
+  use Gettext, backend: Signbank.Gettext
 
   def to_string(:relaxed), do: gettext("relaxed")
   def to_string(:round), do: gettext("round")
