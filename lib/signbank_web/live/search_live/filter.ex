@@ -19,7 +19,7 @@ defmodule SignbankWeb.Search.SearchForm do
           :regex
         ]
 
-      field :value, :string
+      field :value, :string, default: nil
       field :delete, :boolean, virtual: true
     end
   end
@@ -47,5 +47,6 @@ defmodule SignbankWeb.Search.SearchForm do
     else
       changeset
     end
+    |> IO.inspect()
   end
 end

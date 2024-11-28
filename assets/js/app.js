@@ -21,10 +21,12 @@ import "phoenix_html"
 import { Socket } from "phoenix"
 import { LiveSocket } from "phoenix_live_view"
 import topbar from "../vendor/topbar"
-import { getHooks } from "live_svelte"
-import * as Components from "../svelte/**/*.svelte"
+import {InitSorting} from "./init_sorting"
 
 let Uploaders = {}
+let Hooks = {}
+
+Hooks.InitSorting = InitSorting
 
 Uploaders.S3 = function (entries, onViewError) {
   entries.forEach(entry => {
@@ -51,9 +53,33 @@ Uploaders.S3 = function (entries, onViewError) {
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
   uploaders: Uploaders,
-  hooks: getHooks(Components),
+  hooks: Hooks,
   params: { _csrf_token: csrfToken }
 })
+
+window.addHandshapeFilter = (value) => {
+  const searchForm = document.querySelector('.navbar form[action="/dictionary"]');
+  const id = "search-handshape-filter";
+  let el = document.getElementById(id);
+  if (el) {
+    if (value) {
+      el.value = value
+      el.name = "handshape"
+    } else {
+      el.remove()
+    }
+  } else {
+    el = document.createElement("input", {
+      id,
+      value,
+      type: "hidden",
+      name: "handshape",
+    })
+    searchForm.appendChild(el)
+  }
+  // <input id="search-handshape-filter" type="hidden" name="handshape" value="" />
+
+}
 
 // Show progress bar on live navigation and form submits
 topbar.config({ barColors: { 0: "#29d" }, shadowColor: "rgba(0, 0, 0, .3)" })

@@ -13,11 +13,11 @@ defmodule SignbankWeb.Plugs.RewriteURL do
   def init(default), do: default
 
   def call(%Plug.Conn{request_path: path} = conn, _) do
-    if String.starts_with?(conn.request_path, "/dictionary/words") do
+    if String.starts_with?(path, "/dictionary/words") do
       %{"q" => q, "n" => n} =
         Regex.named_captures(
           ~r/\/dictionary\/words\/(?<q>[\w ]+)-(?<n>\d+)\.html/,
-          URI.decode(conn.request_path)
+          URI.decode(path)
         )
 
       conn

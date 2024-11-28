@@ -1,4 +1,5 @@
 @charset "utf-8";
+@use 'sass:color';
 
 $base-font-size: 16px;
 
@@ -6,26 +7,26 @@ $purple: #413c58;
 $yellow: #fff3c3;
 $gray: lightgrey;
 
-$citation_border: #2c55c7; /* TODO: make navy or similar */
-$variant_border: #79b8fb; /* TODO: make sky blue */
+/* TODO: make navy or similar */
+$citation_border: #2c55c7;
+/* TODO: make sky blue */
+$variant_border: #79b8fb;
 $english_entry_border: #f3a712;
 $se_only_border: #d23d32;
 
-$footer-height: 4.5rem;
+$footer-height: 5.3rem;
 
-@use "bulma/utilities" with (
-  $family-primary: "akkinson-hyperlegible, sans-serif",
-  $primary: $purple
+$color_dominant_hand: #9db5f7;
+$color_subordinate_hand: #aed784;
+
+@use "bulma/utilities" with ($family-primary: "akkinson-hyperlegible, sans-serif",
+  $primary: $purple);
+
+@use "bulma/components" with ($navbar-burger-color: $yellow,
+  // $navbar-tab-active-background-color: $gray,
 );
 
-@use "bulma/components" with (
-    $navbar-burger-color: $yellow,
-    // $navbar-tab-active-background-color: $gray,
-  );
-
-@use "bulma/form" with (
-  $input-shadow: none
-);
+@use "bulma/form" with ($input-shadow: none);
 
 /*! bulma.io v1.0.2 | MIT License | github.com/jgthms/bulma */
 @use "bulma";
@@ -33,6 +34,35 @@ $footer-height: 4.5rem;
 @use "region_map.scss";
 @use "fonts.scss";
 @use "modal.scss";
+
+
+
+
+
+
+
+[data-drag-handle] {
+  height: 20px;
+  width: 20px;
+  color: green;
+  cursor: pointer;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+[data-drag-handle]:active {
+  cursor: ns-resize;
+}
+.bg-yellow-100 {
+  background: palegoldenrod;
+}
+
+.shadow-2xl {
+  box-shadow: black 20px 20px;
+}
+
+
+
+
 
 input[type="checkbox"],
 input[type="radio"] {
@@ -73,6 +103,7 @@ $gaps: (
 .button .icon:last-child {
   padding-left: 0.5em;
 }
+
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -109,18 +140,24 @@ main {
 }
 
 footer {
+  $footer-bg: #cacfd6;
   position: absolute;
   bottom: 0;
   width: 100%;
   height: $footer-height;
   padding: 1rem 2rem;
-  background-color: #cacfd6; // TODO: move colors somewhere better
+  background-color: $footer-bg; // TODO: move colors somewhere better
   text-align: right;
 
   .app_version {
     text-align: center;
     font-size: 0.8em;
     margin: 0;
+  }
+
+  .admin_login {
+    color: inherit;
+    font-size: 0.8em;
   }
 }
 
@@ -160,62 +197,6 @@ table tr:has([phx-click]) {
 
   &:hover {
     background: #efefef;
-  }
-}
-
-.zzznavbar {
-  $text-color: var(--signbank-yellow);
-  $background-color: var(--signbank-purple);
-  background-color: $background-color;
-  color: $text-color;
-
-  nav {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: end;
-    gap: 1rem;
-    padding: 2rem;
-    padding-top: 0;
-
-    .menu_and_search {
-      display: flex;
-      gap: 1rem;
-      flex-direction: column;
-      align-items: end;
-
-      .menu_and_search__submenu {
-        position: absolute;
-      }
-    }
-
-    #logo {
-      max-width: 35vw;
-      margin-bottom: max(-2%, -22px);
-
-      img {
-        max-width: inherit;
-      }
-    }
-
-    ul {
-      margin: 0;
-      padding: 0;
-      min-width: max-content;
-      display: flex;
-      gap: 1em;
-      flex-direction: row;
-      align-items: end;
-      justify-content: space-between;
-
-      font-size: 1.2rem;
-      list-style: none;
-
-      a {
-        text-decoration: none;
-        color: inherit;
-      }
-    }
   }
 }
 
@@ -271,33 +252,6 @@ table tr:has([phx-click]) {
 
 .definitions .definition__senses {
   li:only-child {
-    list-style: none;
-  }
-}
-.zzdefinitions .definition {
-  border: 1px darkgray solid;
-  padding: 0.5em;
-  border-radius: 3px;
-
-  .definition__role {
-    font-size: 1.2em;
-  }
-
-  .definition__senses li > div {
-    display: flex;
-    gap: 1em;
-
-    p {
-      margin: 0;
-      padding: 0;
-    }
-  }
-
-  .definition__senses li:not(:first-child) {
-    padding-top: 1em;
-  }
-
-  .definition__senses li:only-child {
     list-style: none;
   }
 }
@@ -397,14 +351,7 @@ table tr:has([phx-click]) {
     align-items: center;
     height: 2.5em;
     border-radius: 0;
-    // border: 1px solid black;
-    // color: black;
-    // background-color: rgb(233, 233, 237);
     cursor: pointer;
-
-    &:hover {
-      // background-color: rgb(198, 198, 201);
-    }
   }
 
   #next_variant {
@@ -425,22 +372,18 @@ table tr:has([phx-click]) {
   border-radius: 2px;
 
   &.citation {
-    background-color: #3374ff; /* TODO: make navy or similar */
     background-color: $citation_border;
   }
 
   &.variant {
-    background-color: #709dff; /* TODO: make sky blue */
     background-color: $variant_border;
   }
 
   &.english_entry {
-    background-color: #f3a712;
     background-color: $english_entry_border;
   }
 
   &.se_only {
-    background-color: #d23d32;
     background-color: $se_only_border;
   }
 
@@ -465,7 +408,6 @@ table tr:has([phx-click]) {
     position: absolute;
     font-size: 1.1em;
     margin: 0.4rem;
-    // margin-bottom: 0.5em;
     padding: 0.3em;
     background-color: transparentize($color: white, $amount: 0.05);
     border: 1px black solid;
@@ -474,89 +416,6 @@ table tr:has([phx-click]) {
 
   video {
     width: 100%;
-  }
-}
-
-.ling-details-section {
-  $padding: 1.5em;
-  padding: $padding;
-  border: 1px gray solid;
-  border-bottom: none;
-
-  summary {
-    /* indicates summaries are clickable */
-    cursor: pointer;
-    background-color: lightgray;
-    margin: calc($padding * -1);
-    padding: $padding;
-
-    /* Remove summary marker for Firefox */
-    list-style-type: none;
-
-    /* Remove summary marker for Chrome */
-    &::-webkit-details-marker {
-      display: none;
-    }
-
-    /* I don't know if any rendering engines currently understand this, but remove marker if they do*/
-    &::marker {
-      display: none;
-    }
-
-    h2 {
-      margin: 0;
-      font-size: larger;
-    }
-  }
-
-  .ling-details-section__body {
-    margin-top: $padding;
-    /* TODO: on portrait screens we just want a single column */
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    min-height: 34em;
-    height: 40vh;
-
-    // HACK: Fix for headings not wrapping properly
-    & > * {
-      width: 50%;
-    }
-
-    @media (max-width: 640px) {
-      flex-wrap: nowrap;
-      height: unset;
-
-      & > * {
-        width: auto;
-      }
-
-      .entry-page__column {
-        width: 100%;
-      }
-    }
-  }
-
-  /* round out the corners of the first and last sections, with no space between
-      them it ends up looking like an accordion element */
-  &:first-of-type {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-
-    margin-top: 1em;
-  }
-
-  &:last-of-type {
-    border-bottom: 1px gray solid;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-
-    margin-bottom: 1em;
-  }
-
-  .ling-details-section__properties {
-    list-style: none;
-    padding-left: 0.4em;
   }
 }
 
@@ -570,6 +429,7 @@ table tr:has([phx-click]) {
 
   .keyword-disambig__keyword:not([data-published]):after {
     content: "*";
+
     font-size: 1.3em;
     text-decoration: none;
     /* slight kerning adjustment */
@@ -579,14 +439,14 @@ table tr:has([phx-click]) {
 
 .flash {
   position: fixed;
-  top: 0.5rem;
+  bottom: 0.5rem;
   right: 0.5rem;
   z-index: 50;
   padding: 0.75rem;
   margin-right: 0.5rem;
   border-radius: 0.5rem;
-  box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width))
-    var(--tw-ring-color);
+  border: 1px solid gray;
+  box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
   width: 20rem;
 
   background-color: white;
@@ -639,9 +499,7 @@ table tr:has([phx-click]) {
       --transform-scale-y: 1;
     }
 
-    transform: translateX(var(--transform-scale-x))
-      translateY(var(--transform-scale-y)) scaleX(var(--transform-scale-x))
-      scaleY(var(--transform-scale-y));
+    transform: translateX(var(--transform-scale-x)) translateY(var(--transform-scale-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y));
   }
 
   &--end {
@@ -654,9 +512,7 @@ table tr:has([phx-click]) {
       --transform-translate-y: 0;
     }
 
-    transform: translateX(var(--transform-scale-x))
-      translateY(var(--transform-scale-y)) scaleX(var(--transform-scale-x))
-      scaleY(var(--transform-scale-y));
+    transform: translateX(var(--transform-scale-x)) translateY(var(--transform-scale-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y));
   }
 }
 
@@ -679,9 +535,7 @@ table tr:has([phx-click]) {
       --transform-translate-y: 0;
     }
 
-    transform: translateX(var(--transform-scale-x))
-      translateY(var(--transform-scale-y)) scaleX(var(--transform-scale-x))
-      scaleY(var(--transform-scale-y));
+    transform: translateX(var(--transform-scale-x)) translateY(var(--transform-scale-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y));
   }
 
   &--end {
@@ -736,4 +590,99 @@ table tr:has([phx-click]) {
   font-family: hamnosys;
   font-size: 1.8em;
   vertical-align: text-top;
+}
+
+.edit_sections {
+  &,
+  // fix for bulma CSS
+  input {
+    font-size: 12px;
+  }
+
+  display: grid;
+  gap: 10px;
+  // TODO: this layout doesn't work as intended, but I think copying the FM Pro layout 1:1 is going to be almost impossible
+  grid-template-rows: 1fr 2fr 1fr;
+  grid-template-areas:
+  "phonology phonology vocabulary morphology"
+  "phonology phonology definitions definitions"
+  "editorial editorial editorial grammatical_function";
+
+  $sections: (
+    "phonology": #c9ecfc,
+    "vocabulary": #fcf0cf,
+    "morphology": #f4be72,
+    "grammatical_function": #fffc8c,
+    "definitions": #00000000
+  );
+
+  @each $name, $color in $sections {
+    ##{$name}_section {
+      --section_color: #{$color};
+      grid-area: #{$name};
+      
+      table+table {
+        margin-top: 10px;
+      }
+    }
+  }
+
+  #editorial_section {
+    thead {
+      border: 4px solid #ec602c;
+    }
+  }
+
+  table {
+    width: 310px;
+
+    td {
+      text-align: right;
+    }
+  }
+
+  &>div {
+    border: 4px solid var(--section_color);
+    padding: 10px;
+
+    thead {
+      background: var(--section_color);
+    }
+  }
+
+  input,
+  select {
+    background: var(--section_color);
+  }
+
+  .dominant_hand_field {
+    background: $color_dominant_hand;
+    &.allophone_field {
+      background: color.scale($color_dominant_hand, $lightness: -30%)
+    }
+  }
+
+  .subordinate_hand_field {
+    background: $color_subordinate_hand;
+    &.allophone_field {
+      background: color.scale($color_subordinate_hand, $lightness: -30%)
+    }
+  }
+}
+
+
+.handshape.handshape__letter_c {
+  width: 209px;
+  height: 209px;
+  background: url(/images/spritesheet.png) -0px -0px;
+}
+.handshape.handshape__point {
+  width: 209px;
+  height: 209px;
+  background: url(/images/spritesheet.png) -418px -0px;
+}
+.handshape.handshape__flat {
+  width: 209px;
+  height: 209px;
+  background: url(/images/spritesheet.png) -4180px -0px;
 }

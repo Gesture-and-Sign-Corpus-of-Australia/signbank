@@ -5,12 +5,12 @@ defmodule Signbank.Dictionary.Morphology do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @primary_key false
   embedded_schema do
     field :directional, :boolean
     field :beginning_directional, :boolean
     field :end_directional, :boolean
     field :orientating, :boolean
-    field :locating_and_directional, :boolean
     field :body_locating, :boolean
 
     field :is_initialism, :boolean

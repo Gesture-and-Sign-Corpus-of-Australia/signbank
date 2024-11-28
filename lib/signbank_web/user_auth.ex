@@ -82,6 +82,7 @@ defmodule SignbankWeb.UserAuth do
 
     conn
     |> renew_session()
+    |> maybe_store_return_to()
     |> delete_resp_cookie(@remember_me_cookie)
     |> redirect(to: ~p"/")
   end

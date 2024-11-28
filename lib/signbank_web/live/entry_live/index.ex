@@ -20,6 +20,7 @@ defmodule SignbankWeb.SignLive.Index do
 
     search_term = Map.get(params, "q")
     n = Map.get(params, "n")
+    # handshape = String.to_existing_atom(Map.get(params, "handshape", :))
 
     # TODO: we need to use `n` to get to a specific match number, but right now we can't
     # see other matches and they're not sorted properly anyway
@@ -45,11 +46,11 @@ defmodule SignbankWeb.SignLive.Index do
     end
   end
 
-  defp apply_action(socket, :edit, %{"id" => id}) do
-    socket
-    |> assign(:page_title, gettext("Edit sign"))
-    |> assign(:sign, Dictionary.get_sign_by_id_gloss!(id))
-  end
+  # defp apply_action(socket, :edit, %{"id" => id}) do
+  #   socket
+  #   |> assign(:page_title, gettext("Edit sign"))
+  #   |> assign(:sign, Dictionary.get_sign_by_id_gloss!(id))
+  # end
 
   defp apply_action(socket, :new, _params) do
     socket

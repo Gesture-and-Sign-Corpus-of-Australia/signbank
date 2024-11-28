@@ -1,11 +1,14 @@
 defmodule SignbankWeb.SignLive.Search do
   use SignbankWeb, :live_view
 
+  import SignbankWeb.Gettext
+
   alias Signbank.Dictionary
   alias SignbankWeb.Search.SearchForm
 
   on_mount {SignbankWeb.UserAuth, :mount_current_user}
 
+  # TODO: generate filters from a static config object instead of schema introspection
   def filter(assigns) do
     assigns =
       assign(assigns, :deleted, Phoenix.HTML.Form.input_value(assigns.f_filter, :delete) == true)
@@ -95,7 +98,11 @@ defmodule SignbankWeb.SignLive.Search do
         :boolean ->
           ~H"""
           <.filter_control type="static" field={@f_filter[:op]} value={:equal_to} display="=" />
-          <.filter_control type="select" field={@f_filter[:value]} options={[false, true]} />
+          <.filter_control
+            type="select"
+            field={@f_filter[:value]}
+            options={[undefined: :undefined, false: false, true: true]}
+          />
           """
 
         {:parameterized, Ecto.Enum,
@@ -111,7 +118,6 @@ defmodule SignbankWeb.SignLive.Search do
 
         nil ->
           ~H"""
-
           """
       end
     end
@@ -280,27 +286,29 @@ defmodule SignbankWeb.SignLive.Search do
 
     changeset = SearchForm.changeset(base, %{})
 
-    filterable_fields = [
-      :type,
-      :id_gloss,
-      :published,
-      :crude,
-      :asl_gloss,
-      :bsl_gloss,
-      :iconicity,
-      :popular_explanation,
-      :is_asl_loan,
-      :is_bsl_loan,
-      :signed_english_gloss,
-      :is_signed_english_only,
-      :is_signed_english_based_on_auslan,
-      :editorial_doubtful_or_unsure,
-      :editorial_problematic,
-      :editorial_problematic_video,
-      :lexis_marginal_or_minority,
-      :lexis_obsolete,
-      :lexis_technical_or_specialist_jargon
-    ]
+    filterable_fields =
+      [
+        type: gettext("Type"),
+        id_gloss: gettext("ID gloss"),
+        published: gettext("Published"),
+        crude: gettext("Crude"),
+        asl_gloss: gettext("ASL gloss"),
+        bsl_gloss: gettext("BSL gloss"),
+        iconicity: gettext("Iconicity"),
+        popular_explanation: gettext("Popular explanation"),
+        is_asl_loan: gettext("Is ASL loan"),
+        is_bsl_loan: gettext("Is BSL loan"),
+        signed_english_gloss: gettext("Signed English gloss"),
+        is_signed_english_only: gettext("Is Signed English only"),
+        is_signed_english_based_on_auslan: gettext("Is Signed English based on Auslan"),
+        editorial_doubtful_or_unsure: gettext("Doubtful or unsure"),
+        editorial_problematic: gettext("Problematic"),
+        editorial_problematic_video: gettext("Problematic video"),
+        lexis_marginal_or_minority: gettext("Marginal or minority"),
+        lexis_obsolete: gettext("Obsolete"),
+        lexis_technical_or_specialist_jargon: gettext("Technical or specialist jargon")
+      ]
+      |> Enum.map(fn {k, v} -> {v, k} end)
 
     assign(socket,
       fields: filterable_fields,

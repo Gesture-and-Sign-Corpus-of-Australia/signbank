@@ -6,6 +6,9 @@ defmodule Signbank.Dictionary.Sign do
   import Ecto.Changeset
   alias Signbank.Dictionary
 
+  @iconicity_values [:opaque, :obscure, :translucent, :transparent]
+  def iconicity_values, do: @iconicity_values
+
   schema "signs" do
     field :type, Ecto.Enum, values: [:citation, :variant]
     field :id_gloss, :string
@@ -24,8 +27,8 @@ defmodule Signbank.Dictionary.Sign do
     # TODO: uncomment this after adding %Tag{}/SignTag
     # many_to_many :tags, Dictionary.Tag, join_through: Dictionary.SignTag
 
-    embeds_one :phonology, Dictionary.Phonology
-    embeds_one :morphology, Dictionary.Morphology
+    embeds_one :phonology, Dictionary.Phonology, on_replace: :delete
+    embeds_one :morphology, Dictionary.Morphology, on_replace: :delete
 
     # TODO: revisit this, it's not a foreign key in the database, I don't know how bad that is
     belongs_to :active_video, Dictionary.SignVideo,
@@ -33,7 +36,7 @@ defmodule Signbank.Dictionary.Sign do
       references: :id
 
     has_many :videos, Dictionary.SignVideo
-    has_many :regions, Dictionary.SignRegion
+    has_many :regions, Dictionary.SignRegion, on_replace: :delete
 
     field :suggested_signs_description, :string
     has_many :suggested_signs, Dictionary.SuggestedSign
@@ -48,7 +51,9 @@ defmodule Signbank.Dictionary.Sign do
       foreign_key: :variant_of_id,
       references: :id
 
-    has_many :definitions, Dictionary.Definition
+    has_many :definitions, Dictionary.Definition,
+      preload_order: [asc: :pos],
+      on_replace: :delete
 
     # TODO: uncomment this after adding %Relation{}
     # has_many :relations, Dictionary.Relation, foreign_key: :sign_a_id
@@ -60,7 +65,7 @@ defmodule Signbank.Dictionary.Sign do
 
     field :asl_gloss, :string
     field :bsl_gloss, :string
-    field :iconicity, Ecto.Enum, values: [:opaque, :obscure, :translucent, :transparent]
+    field :iconicity, Ecto.Enum, values: @iconicity_values
     field :popular_explanation, :string
     field :is_asl_loan, :boolean
     field :is_bsl_loan, :boolean
@@ -133,6 +138,36 @@ defmodule Signbank.Dictionary.Sign do
     |> assoc_constraint(:citation)
     # |> assoc_constraint(:active_video_id)
     |> cast_assoc(:videos)
+    |> cast_assoc(
+      :definitions,
+      with: &Dictionary.Definition.changeset/3,
+      sort_param: :definitions_position
+    )
+    |> put_regions(sign, attrs)
+  end
+
+  defp put_regions(changeset, sign, attrs) do
+    case Map.get(attrs, "regions", []) do
+      [] ->
+        changeset
+
+      region_names ->
+        regions =
+          region_names
+          |> Enum.filter(&(&1 != ""))
+          |> match_region_names_to_existing(sign)
+
+        put_assoc(changeset, :regions, regions)
+    end
+  end
+
+  defp match_region_names_to_existing(region_names, sign) do
+    Enum.map(region_names, fn region_name ->
+      # Dictionary.SignRegion.changeset(%Dictionary.SignRegion{}, %{sign_id: sign.id, region: region_name})
+      new_region = Ecto.build_assoc(sign, :regions, %{region: region_name})
+
+      Enum.find(sign.regions, new_region, &(&1.region == region_name))
+    end)
   end
 
   defp validate_sign_type(changeset) do
@@ -142,9 +177,7 @@ defmodule Signbank.Dictionary.Sign do
       :variant ->
         changeset
         |> guard_field_exists(:variant_of_id, "must be set when type is variant")
-
-      # TODO: uncomment this
-      # |> guard_field_not_exists(:definitions, "variant cannot have definitions")
+        |> guard_field_not_exists(:definitions, "variant cannot have definitions")
 
       :citation ->
         changeset

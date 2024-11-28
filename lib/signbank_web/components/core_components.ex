@@ -1,3 +1,4 @@
+# credo:disable-for-this-file Credo.Check.Refactor.ModuleDependencies
 defmodule SignbankWeb.CoreComponents do
   @moduledoc """
   Provides core UI components.
@@ -279,10 +280,12 @@ defmodule SignbankWeb.CoreComponents do
   attr :name, :any
   attr :label, :string, default: nil
   attr :value, :any
+  attr :class, :string, default: nil
 
   attr :type, :string,
     default: "text",
-    values: ~w(checkbox color date datetime-local email file hidden month number password
+    values:
+      ~w(checkbox checkgroup color date datetime-local email file hidden month number password
                range radio search select tel text textarea time url week)
 
   attr :field, Phoenix.HTML.FormField,
@@ -345,7 +348,7 @@ defmodule SignbankWeb.CoreComponents do
       <div class="field">
         <.label for={@id}><%= @label %></.label>
         <div class="select">
-          <select id={@id} name={@name} multiple={@multiple} {@rest}>
+          <select id={@id} class={@class} name={@name} multiple={@multiple} {@rest}>
             <option :if={@prompt} value=""><%= @prompt %></option>
             <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
           </select>
@@ -392,7 +395,8 @@ defmodule SignbankWeb.CoreComponents do
               "input",
               "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
               @errors == [] && "",
-              @errors != [] && "is-danger"
+              @errors != [] && "is-danger",
+              @class
             ]}
             {@rest}
           />
@@ -401,6 +405,30 @@ defmodule SignbankWeb.CoreComponents do
       </div>
     </div>
     """
+  end
+
+  @doc """
+  Generate a checkbox group for multi-select.
+  """
+  attr :id, :any
+  attr :name, :any
+  attr :label, :string, default: nil
+
+  attr :field, Phoenix.HTML.FormField,
+    doc: "a form field struct retrieved from the form, for example: @form[:email]"
+
+  attr :errors, :list
+  attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
+  attr :rest, :global, include: ~w(disabled form readonly)
+  attr :class, :string, default: nil
+
+  def checkgroup(assigns) do
+    new_assigns =
+      assigns
+      |> assign(:multiple, true)
+      |> assign(:type, "checkgroup")
+
+    input(new_assigns)
   end
 
   @doc """
@@ -732,7 +760,7 @@ defmodule SignbankWeb.CoreComponents do
 
   attr :type, :atom, values: [:basic, :linguistic], required: true
   attr :sign, Dictionary.Sign, required: true
-  attr :user, User, required: false
+  attr :user, Accounts.User, required: false
 
   def definitions(assigns) do
     filter_unpublished = fn def ->
@@ -821,6 +849,7 @@ defmodule SignbankWeb.CoreComponents do
   attr :class, :string, required: false
   attr :sign, Dictionary.Sign, required: false
   attr :linguistic_view, :boolean, required: false, default: false
+  attr :current_user, User, required: false
 
   def entry_nav(assigns) do
     %{previous: previous, position: position, next: next} =
@@ -835,7 +864,7 @@ defmodule SignbankWeb.CoreComponents do
             nil
 
           [%Dictionary.Sign{id_gloss: id_gloss}, true] ->
-            ~p"/dictionary/sign/#{id_gloss}/linguistic"
+            ~p"/dictionary/sign/#{id_gloss}/detail"
 
           [%Dictionary.Sign{id_gloss: id_gloss}, _] ->
             ~p"/dictionary/sign/#{id_gloss}"
@@ -848,7 +877,7 @@ defmodule SignbankWeb.CoreComponents do
             nil
 
           [%Dictionary.Sign{id_gloss: id_gloss}, true] ->
-            ~p"/dictionary/sign/#{id_gloss}/linguistic"
+            ~p"/dictionary/sign/#{id_gloss}/detail"
 
           [%Dictionary.Sign{id_gloss: id_gloss}, _] ->
             ~p"/dictionary/sign/#{id_gloss}"

@@ -14,7 +14,9 @@ defmodule SignbankWeb.SignLive.BasicView do
   @impl true
   def handle_params(%{"id" => id_gloss} = params, _, socket) do
     search_term = Map.get(params, "q")
-    n = Map.get(params, "n")
+
+    # TODO: I don't remember where this comes from atm, good sign to rename whatever `n` is meant to be
+    # n = Map.get(params, "n")
 
     case Dictionary.get_sign_by_id_gloss(id_gloss, socket.assigns.current_user) do
       nil ->

@@ -153,7 +153,59 @@ defmodule Signbank.Dictionary.Phonology do
     :forearm,
     :elbow
   ]
+  @sides [
+    :rightside,
+    :leftside,
+    :left_to_rightside,
+    :right_to_leftside
+  ]
+  @directions [
+    :none,
+    :up,
+    :down,
+    :up_and_down,
+    :left,
+    :right,
+    :side_to_side,
+    :away,
+    :towards,
+    :to_and_fro
+  ]
+  @paths [
+    :none,
+    :straight,
+    :diagonal,
+    :arc,
+    :curved,
+    :wavy,
+    :zig_zag,
+    :circular,
+    :spiral
+  ]
+  @repetition_types [
+    :none,
+    :one_same_loc,
+    :two_same_loc,
+    :multiple_same_loc,
+    :one_diff_locs,
+    :two_diff_locs,
+    :multiple_diff_locs
+  ]
+  @handednesses [:one, :two, :double]
 
+  def palm_orientations, do: @palm_orientations
+  def finger_hand_orientations, do: @finger_hand_orientations
+  def locations, do: @locations
+  def handshape_allophones, do: @handshape_allophones
+  def handshapes, do: @handshapes
+  def handparts, do: @handparts
+  def sides, do: @sides
+  def directions, do: @directions
+  def paths, do: @paths
+  def repetition_types, do: @repetition_types
+  def handednesses, do: @handednesses
+
+  @primary_key false
   embedded_schema do
     field :dominant_initial_handshape, Ecto.Enum, values: @handshapes
     field :dominant_initial_handshape_allophone, Ecto.Enum, values: @handshape_allophones
@@ -185,13 +237,7 @@ defmodule Signbank.Dictionary.Phonology do
     field :initial_primary_location, Ecto.Enum, values: @locations
     field :final_primary_location, Ecto.Enum, values: @locations
 
-    field :location_rightside_or_leftside, Ecto.Enum,
-      values: [
-        :rightside,
-        :leftside,
-        :left_to_rightside,
-        :right_to_leftside
-      ]
+    field :location_rightside_or_leftside, Ecto.Enum, values: @sides
 
     field :movement_dominant_hand_only, :boolean
     field :movement_symmetrical, :boolean
@@ -201,32 +247,9 @@ defmodule Signbank.Dictionary.Phonology do
     field :movement_approaching, :boolean
     field :movement_cross, :boolean
 
-    field :movement_direction, Ecto.Enum,
-      values: [
-        :none,
-        :up,
-        :down,
-        :up_and_down,
-        :left,
-        :right,
-        :side_to_side,
-        :away,
-        :towards,
-        :to_and_fro
-      ]
+    field :movement_direction, Ecto.Enum, values: @directions
 
-    field :movement_path, Ecto.Enum,
-      values: [
-        :none,
-        :straight,
-        :diagonal,
-        :arc,
-        :curved,
-        :wavy,
-        :zig_zag,
-        :circular,
-        :spiral
-      ]
+    field :movement_path, Ecto.Enum, values: @paths
 
     field :movement_repeated, :boolean
     field :movement_forearm_rotation, :boolean
@@ -244,51 +267,48 @@ defmodule Signbank.Dictionary.Phonology do
     field :contact_start, :boolean
     field :contact_end, :boolean
     field :contact_during, :boolean
-    field :contact_location, :boolean
     field :contact_body, :boolean
     field :contact_hands, :boolean
 
     field :hamnosys, :string
     field :hamnosys_variant_analysis, :string
 
-    # TODO: change to enum
-    field :handedness, Ecto.Enum, values: [:one, :two, :double]
-    # TODO: change to enum
-    field :repetition_type, Ecto.Enum,
-      values: [
-        :none,
-        :one_same_loc,
-        :two_same_loc,
-        :multiple_same_loc,
-        :one_diff_locs,
-        :two_diff_locs,
-        :multiple_diff_locs
-      ]
+    field :handedness, Ecto.Enum, values: @handednesses
+    field :repetition_type, Ecto.Enum, values: @repetition_types
   end
 
   def changeset(phonology, attrs) do
     phonology
     |> cast(attrs, [
       :dominant_initial_handshape,
+      :dominant_initial_handshape_allophone,
       :dominant_final_handshape,
+      :dominant_final_handshape_allophone,
       :dominant_initial_interacting_handpart,
       :dominant_final_interacting_handpart,
       :dominant_initial_finger_hand_orientation,
       :dominant_final_finger_hand_orientation,
+      :dominant_initial_palm_orientation,
+      :dominant_final_palm_orientation,
       :subordinate_initial_handshape,
+      :subordinate_initial_handshape_allophone,
       :subordinate_final_handshape,
+      :subordinate_final_handshape_allophone,
       :subordinate_initial_interacting_handpart,
       :subordinate_final_interacting_handpart,
       :subordinate_initial_finger_hand_orientation,
       :subordinate_final_finger_hand_orientation,
+      :subordinate_initial_palm_orientation,
+      :subordinate_final_palm_orientation,
       :initial_primary_location,
       :final_primary_location,
+      :location_rightside_or_leftside,
       :movement_dominant_hand_only,
       :movement_symmetrical,
       :movement_parallel,
       :movement_alternating,
-      :movement_approaching,
       :movement_separating,
+      :movement_approaching,
       :movement_cross,
       :movement_direction,
       :movement_path,
@@ -306,12 +326,12 @@ defmodule Signbank.Dictionary.Phonology do
       :contact_start,
       :contact_end,
       :contact_during,
-      :contact_location,
-      :handedness,
+      :contact_body,
+      :contact_hands,
       :hamnosys,
       :hamnosys_variant_analysis,
-      :repetition_type,
-      :location_rightside_or_leftside
+      :handedness,
+      :repetition_type
     ])
   end
 end

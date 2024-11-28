@@ -31,23 +31,22 @@
             Log out
           </.link>
         </li>
-      <% else %>
-        <li>
-          <.link href={~p"/users/register"}>
-            Register
-          </.link>
-        </li>
-        <li>
-          <.link href={~p"/users/log_in"}>
-            Log in
-          </.link>
-        </li>
       <% end %>
     </ul>
     <div id="page-container">
       <%= @inner_content %>
       <footer>
-        This Signbank is licensed under <a href="http://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons BY-NC-ND 4.0</a>.
+        <div class="level">
+          <.link
+            class={["admin_login level-left", if(@current_user, do: "is-invisible")]}
+            href={~p"/users/log_in"}
+          >
+            Admin login
+          </.link>
+          <p>
+            This Signbank is licensed under <a href="http://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons BY-NC-ND 4.0</a>.
+          </p>
+        </div>
         <p class="app_version">
           Signbank v<%= Application.spec(:signbank, :vsn) %>
         </p>

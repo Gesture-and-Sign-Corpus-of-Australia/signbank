@@ -37,10 +37,33 @@
                 name="q"
                 placeholder={SignbankWeb.Gettext.gettext("Search...")}
               />
+              <%!-- <input id="search-handshape-filter" type="hidden" name="handshape" value="" /> --%>
             </div>
             <div class="control">
               <button class="button">
                 <Heroicons.magnifying_glass class="icon--medium zzicon--small" />
+              </button>
+              <button type="button" class="dropdown is-right is-hoverable">
+                <Heroicons.chevron_down class="icon--medium dropdown-trigger zzicon--small" />
+                <div class="dropdown-menu" role="menu">
+                  <div class="dropdown-content">
+                    <%= for handshape <- [:point, :letter_c, :flat] do %>
+                      <a
+                        href="#"
+                        class=""
+                        onclick={"(()=>{window.addHandshapeFilter('#{handshape}')})();return false"}
+                      >
+                        <div class={~w(handshape handshape__#{handshape})} />
+                      </a>
+                    <% end %>
+                    <%!-- <a href="#" class="dropdown-item">  </a>
+                    <a class="dropdown-item"> Other dropdown item </a>
+                    <a href="#" class="dropdown-item is-active"> Active dropdown item </a>
+                    <a href="#" class="dropdown-item"> Other dropdown item </a>
+                    <hr class="dropdown-divider" />
+                    <a href="#" class="dropdown-item"> With a divider </a> --%>
+                  </div>
+                </div>
               </button>
             </div>
           </div>

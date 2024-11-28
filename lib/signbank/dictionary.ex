@@ -24,51 +24,56 @@ defmodule Signbank.Dictionary do
 
   defp sort_order, do: @default_order
 
-  def query_from_filter(
-        %SignbankWeb.Search.SearchForm.Filter{
-          field: field,
-          op: :equal_to,
-          value: val
-        },
-        queryable
-      ) do
-    dynamic([s], ^queryable and field(s, ^field) == ^val)
+  defp query_from_filter(
+         %SignbankWeb.Search.SearchForm.Filter{
+           field: field,
+           op: :equal_to,
+           value: val
+         },
+         queryable
+       ) do
+    # HACK: this is ugly but its the best I got right now
+    if val == "undefined" do
+      dynamic([s], ^queryable and is_nil(field(s, ^field)))
+    else
+      dynamic([s], ^queryable and field(s, ^field) == ^val)
+    end
   end
 
-  def query_from_filter(
-        %SignbankWeb.Search.SearchForm.Filter{
-          field: field,
-          op: :contains,
-          value: val
-        },
-        queryable
-      ) do
-    dynamic([s], ^queryable and like(field(s, ^field), ^"%#{val}%"))
+  defp query_from_filter(
+         %SignbankWeb.Search.SearchForm.Filter{
+           field: field,
+           op: :contains,
+           value: val
+         },
+         queryable
+       ) do
+    dynamic([s], ^queryable and like(field(s, ^field), fragment("%?%", ^val)))
   end
 
-  def query_from_filter(
-        %SignbankWeb.Search.SearchForm.Filter{
-          field: field,
-          op: :starts_with,
-          value: val
-        },
-        queryable
-      ) do
-    dynamic([s], ^queryable and like(field(s, ^field), ^"#{val}%"))
+  defp query_from_filter(
+         %SignbankWeb.Search.SearchForm.Filter{
+           field: field,
+           op: :starts_with,
+           value: val
+         },
+         queryable
+       ) do
+    dynamic([s], ^queryable and like(field(s, ^field), fragment("?%", ^val)))
   end
 
-  def query_from_filter(
-        %SignbankWeb.Search.SearchForm.Filter{
-          field: field,
-          op: :regex,
-          value: val
-        },
-        queryable
-      ) do
+  defp query_from_filter(
+         %SignbankWeb.Search.SearchForm.Filter{
+           field: field,
+           op: :regex,
+           value: val
+         },
+         queryable
+       ) do
     dynamic([s], ^queryable and fragment("? ~ ?", field(s, ^field), ^val))
   end
 
-  def query_from_filter(_, queryable) do
+  defp query_from_filter(_, queryable) do
     dynamic([s], ^queryable)
   end
 
@@ -92,10 +97,10 @@ defmodule Signbank.Dictionary do
         ]
 
     query =
-      if user && Map.get(user, :role) in [:tech, :editor] do
-        base_query
-      else
+      if is_nil(user) or Map.get(user, :role) not in [:tech, :editor] do
         from s in base_query, where: s.published == true
+      else
+        base_query
       end
 
     where =
@@ -112,16 +117,6 @@ defmodule Signbank.Dictionary do
       %{page: page}
     )
   end
-
-  %{
-    "0" => %{"_persistent_id" => "0", "field" => "bsl_gloss"},
-    "1" => %{
-      "_persistent_id" => "1",
-      "field" => "published",
-      "op" => "equal_to",
-      "value" => "true"
-    }
-  }
 
   @doc """
   Gets a single sign.
@@ -393,6 +388,22 @@ defmodule Signbank.Dictionary do
     sign
     |> Sign.changeset(attrs)
     |> Repo.update()
+  end
+
+  def update_regions(_, nil), do: []
+  def update_regions(%{regions: nil}, updated_regions), do: update_regions([], updated_regions)
+
+  def update_regions(sign, updated_regions) do
+    updated_regions
+    |> Enum.map(fn
+      "" ->
+        nil
+
+      region_name ->
+        sign.regions
+        |> Enum.find(%{sign_id: sign.id, region: region_name}, &(&1.region == region_name))
+    end)
+    |> Enum.filter(fn x -> x != nil end)
   end
 
   @doc """

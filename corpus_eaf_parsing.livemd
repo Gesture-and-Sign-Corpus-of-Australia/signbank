@@ -1,0 +1,158 @@
+# Auslan Corpus EAF parsing
+
+```elixir
+# Mix.install([
+#   {:saxy, "~> 1.5"},
+#   {:meeseeks, "~> 0.17.0"}
+# ])
+```
+
+## Section
+
+```elixir
+alias Signbank.Dictionary
+import Meeseeks.CSS
+import Saxy.XML
+```
+
+```elixir
+if :ets.info(:corpus_index) != :undefined do
+  :ets.delete(:corpus_index)
+end
+# contents should be {annotation_id, eaf_filename, [start_ms, end_ms]}
+:ets.new(:corpus_index, [:bag, :public, :named_table])
+
+```
+
+```elixir
+import Meeseeks.CSS
+
+
+defmodule CorpusStats do
+  @eafs_path "/Users/rsmi0037/Data/ a-Latest eafs/"
+  @eafs @eafs_path
+  |> File.ls!()
+  |> Enum.filter(&(String.ends_with?(&1, "eaf")))
+
+  @tiers_of_interest ["LH-IDgloss", "RH-IDgloss"]
+  @annotation_selector @tiers_of_interest
+    |> Enum.map(fn
+      tier_name -> "[TIER_ID=\"#{tier_name}\"] ALIGNABLE_ANNOTATION"
+    end)
+  |> Enum.join(",")
+  |> css()
+
+  def annotation_selector, do: @annotation_selector
+
+  def eafs, do: @eafs
+
+  def get_example_for_sign(%Dictionary.Sign{} = sign) do
+    :ets.lookup(:corpus_index, sign.id_gloss_annotation)
+
+  end
+
+  def get_timecode(timeslots, timecode_id) do
+    timecode = Enum.find(timeslots, &(&1.id == timecode_id)).value
+    String.to_integer(timecode)
+  end
+
+  def process_eaf(eaf) do
+    contents = File.read!(@eafs_path <> eaf)
+      |> Meeseeks.parse(:xml)
+
+    timeslots = for timeslot <- Meeseeks.all(contents, css("TIME_SLOT")) do
+      %{id: Meeseeks.attr(timeslot, "TIME_SLOT_ID"), value: Meeseeks.attr(timeslot, "TIME_VALUE")}
+    end
+
+    for annotation <- Meeseeks.all(contents, @annotation_selector) do
+      # title = Meeseeks.one(annotation, css(".title a"))
+      text = Meeseeks.text(annotation)
+      start_time = get_timecode(timeslots, Meeseeks.attr(annotation, "TIME_SLOT_REF1"))
+      end_time = get_timecode(timeslots, Meeseeks.attr(annotation, "TIME_SLOT_REF2"))
+
+      # only add annotation ids, ignore free text translations etc
+      :ets.insert(:corpus_index, {text, eaf, [start_time, end_time]})
+    end
+    |> Enum.count()
+    # TODO: handle failures and return {:ok, num_of_hits}
+  end
+
+  def process_eaf_without_saving(eaf) do
+    contents = File.read!(@eafs_path <> eaf)
+      |> Meeseeks.parse(:xml)
+
+    timeslots = for timeslot <- Meeseeks.all(contents, css("TIME_SLOT")) do
+      %{id: Meeseeks.attr(timeslot, "TIME_SLOT_ID"), value: Meeseeks.attr(timeslot, "TIME_VALUE")}
+    end
+
+    for annotation <- Meeseeks.all(contents, @annotation_selector) do
+      # title = Meeseeks.one(annotation, css(".title a"))
+      %{
+        text: Meeseeks.text(annotation),
+        start_time: get_timecode(timeslots, Meeseeks.attr(annotation, "TIME_SLOT_REF1")),
+        end_time: get_timecode(timeslots, Meeseeks.attr(annotation, "TIME_SLOT_REF2")),
+      }
+    end
+  end
+
+  def async_process_eaf(eaf) do
+    caller = self()
+  
+    spawn(fn ->
+      send(caller, {:result, process_eaf(eaf)})
+    end)
+  end
+
+  
+  def async_process_eafs do
+    for eaf <- @eafs do
+      async_process_eaf(eaf)
+    end
+  end
+
+  def process_eafs do
+    CorpusStats.eafs()
+    |> Task.async_stream(fn i ->
+      CorpusStats.process_eaf(i)
+    end)
+    |> Stream.run()
+  end
+end
+```
+
+```elixir
+if :ets.info(:corpus_index) != :undefined do
+  :ets.delete(:corpus_index)
+end
+# contents should be {annotation_id, eaf_filename, [start_ms, end_ms]}
+:ets.new(:corpus_index, [:bag, :public, :named_table])
+
+CorpusStats.eafs()
+|> Stream.map(fn i ->
+  CorpusStats.process_eaf(i)
+end)
+|> Enum.to_list()
+```
+
+```elixir
+import IEx.Helpers, only: [flush: 0]
+flush()
+```
+
+```elixir
+# CorpusStats.process_eaf(CorpusStats.eafs() |> Enum.at(1))
+CorpusStats.async_process_eafs()
+```
+
+```elixir
+:ets.match(:corpus_index, {:"$1", :_, :_})
+|> Enum.uniq()
+
+```
+
+```elixir
+:ets.lookup(:corpus_index, "DSS(G):THINØ")
+# |> Enum.random()
+{:ok, sign} = Dictionary.get_sign_by_keyword!("home")
+CorpusStats.get_example_for_sign(sign |> Enum.at(0))
+```

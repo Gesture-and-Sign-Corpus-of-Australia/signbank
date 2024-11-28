@@ -40,7 +40,7 @@ defmodule SignbankWeb.SignLive.LinguisticView do
     end
   end
 
-  defp generate_initial_final_text(initial, final) when initial == final or final == nil,
+  defp generate_initial_final_text(initial, final) when initial == final or final in ["", nil],
     do: "#{initial}"
 
   defp generate_initial_final_text(initial, final), do: "#{initial} → #{final}"

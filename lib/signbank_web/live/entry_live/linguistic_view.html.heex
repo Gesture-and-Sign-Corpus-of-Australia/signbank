@@ -207,11 +207,6 @@
             </li>
             <li>Orientating: <%= bool_to_word(@sign.morphology.orientating) %></li>
             <li>
-              Locating and directional: <%= bool_to_word(
-                @sign.morphology.locating_and_directional
-              ) %>
-            </li>
-            <li>
               Body locating: <%= bool_to_word(@sign.morphology.body_locating) %>
             </li>
           </ul>
@@ -229,25 +224,42 @@
         <ul>
           <li>
             Dominant handshape: <%= generate_initial_final_text(
-              @sign.phonology.dominant_initial_handshape,
-              @sign.phonology.dominant_final_handshape
+              Signbank.Dictionary.Phonology.Handshape.to_string(
+                @sign.phonology.dominant_initial_handshape
+              ),
+              Signbank.Dictionary.Phonology.Handshape.to_string(
+                @sign.phonology.dominant_final_handshape
+              )
             ) %>
           </li>
           <li>
             Subordinate handshape: <%= generate_initial_final_text(
-              @sign.phonology.subordinate_initial_handshape,
-              @sign.phonology.subordinate_final_handshape
+              Signbank.Dictionary.Phonology.Handshape.to_string(
+                @sign.phonology.subordinate_initial_handshape
+              ),
+              Signbank.Dictionary.Phonology.Handshape.to_string(
+                @sign.phonology.subordinate_final_handshape
+              )
             ) %>
           </li>
           <li>
             Primary location: <%= generate_initial_final_text(
-              @sign.phonology.initial_primary_location,
-              @sign.phonology.final_primary_location
+              Signbank.Dictionary.Phonology.Location.to_string(
+                @sign.phonology.initial_primary_location
+              ),
+              Signbank.Dictionary.Phonology.Location.to_string(
+                @sign.phonology.final_primary_location
+              )
             ) %>
           </li>
           <li>
-            Location side: <%= @sign.phonology.location_rightside_or_leftside ||
-              gettext("unknown") %>
+            Location side: <%= if not is_nil(@sign.phonology.location_rightside_or_leftside) do
+              Signbank.Dictionary.Phonology.Side.to_string(
+                @sign.phonology.location_rightside_or_leftside
+              )
+            else
+              gettext("unknown")
+            end %>
           </li>
           <%!-- TODO: refactor this hack into some kind of require_editor() fn, this approach will get annoying the more things we need to hide from unauthed users --%>
           <li :if={
@@ -299,7 +311,6 @@
               gettext("start") => @sign.phonology.contact_start,
               gettext("end") => @sign.phonology.contact_end,
               gettext("during") => @sign.phonology.contact_during,
-              gettext("location") => @sign.phonology.contact_location,
               gettext("hands") => @sign.phonology.contact_hands,
               gettext("body") => @sign.phonology.contact_body,
             }) do %>
@@ -393,7 +404,7 @@
           <li>
             <.link
               class="button"
-              href={~p"/dictionary/sign/#{variant.id_gloss}/linguistic?#{@params}"}
+              href={~p"/dictionary/sign/#{variant.id_gloss}/detail?#{@params}"}
             >
               <%= index %>
             </.link>
@@ -405,7 +416,7 @@
     <div :if={@sign.type == :variant}>
       <.link
         class="button"
-        href={~p"/dictionary/sign/#{@sign.citation.id_gloss}/linguistic?#{@params}"}
+        href={~p"/dictionary/sign/#{@sign.citation.id_gloss}/detail?#{@params}"}
       >
         Citation form
         <span class="icon is-small">
