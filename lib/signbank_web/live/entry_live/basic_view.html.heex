@@ -38,7 +38,23 @@
 <div class="columns">
   <div class="column">
     <.live_component module={VideoScroller} counter={0} id={@sign.id} sign={@sign} />
-    <p><strong>Keywords:</strong> <%= Enum.join(@sign.keywords || [], ", ") %></p>
+    <p>
+      <strong>Keywords:</strong>
+      <%= case @sign.keywords do %>
+        <% [] -> %>
+          <em>this entry has no keywords</em>
+        <% [keyword] -> %>
+          <span class={bold_matching_keyword(keyword, @search_term)}>
+            <%= keyword %>
+          </span>
+        <% keywords -> %>
+          <%= for {keyword, index} <- Enum.with_index(keywords, 1) do %>
+            <span class={bold_matching_keyword(keyword, @search_term)}>
+              <%= keyword %><%= if index < Enum.count(keywords), do: ", " %>
+            </span>
+          <% end %>
+      <% end %>
+    </p>
     <div :if={Enum.count(@sign.suggested_signs) > 0} style="margin-top: 0.5em">
       <h2 class="is-size-5">Suggested signs</h2>
       <p><%= @sign.suggested_signs_description %></p>

@@ -44,6 +44,14 @@ defmodule SignbankWeb.SignLive.BasicView do
     end
   end
 
+  def bold_matching_keyword(keyword, search_term) do
+    if keyword == search_term do
+      "has-text-weight-bold"
+    else
+      ""
+    end
+  end
+
   # TODO: fix the page title
   defp page_title(:show), do: gettext("Show sign")
   defp page_title(:edit), do: gettext("Edit sign")
