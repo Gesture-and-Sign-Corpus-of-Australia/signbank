@@ -95,7 +95,7 @@ defmodule Signbank.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.setup": ["esbuild.install --if-mising"],
+      "assets.setup": ["esbuild.install --if-missing"],
       "assets.build": ["esbuild signbank"],
       "assets.deploy": [
         "assets.setup",
