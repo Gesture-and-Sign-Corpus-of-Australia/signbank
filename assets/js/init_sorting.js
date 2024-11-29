@@ -1,4 +1,4 @@
-import Sortable from "sortablejs"
+import Sortable from "../vendor/sortable"
 
 export const InitSorting = {
   mounted() {
