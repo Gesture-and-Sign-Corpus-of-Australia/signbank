@@ -74,12 +74,16 @@ defmodule Signbank.MixProject do
       # Locale data (for localisation)
       {:ex_cldr, "~> 2.40"},
       {:ex_cldr_lists, "~> 2.11"},
+      # Icon components
       {:heroicons, "~> 0.5.5"},
       # Enables monitoring Ecto from the dashboard
       {:ecto_psql_extras, "~> 0.7"},
       {:csv, "~> 3.2"},
+      # XML parsing
       {:saxy, "~> 1.5"},
-      {:meeseeks, "~> 0.17.0"}
+      {:meeseeks, "~> 0.17.0"},
+      # Formats Ecto logs nicely in :dev
+      {:ecto_dev_logger, "~> 0.14"},
     ]
   end
 
