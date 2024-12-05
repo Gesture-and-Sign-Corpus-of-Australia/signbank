@@ -46,11 +46,20 @@ translations (with the requisite logic around splitting on ", " and adding it ba
   sign={@sign}
   patch={~p"/dictionary/sign/#{@sign.id_gloss}/edit"}
 /> --%>
-<.entry_nav class="level-left" sign={@sign} current_user={@current_user} />
+
+<nav class="level" style="position:sticky;top:15px;background-color:white;z-index:100;">
+  <.entry_nav class="level-left" sign={@sign} current_user={@current_user} />
+  <.link :if={@current_user && @current_user.role in [:tech, :editor]} class="button is-warning" disabled>
+    <%= gettext("Edit entry") %>
+  </.link>
+</nav>
 
 <.form for={@form} id="sign-form" phx-change="validate" phx-submit="save" class="sign_edit">
-  <button class="button" style="position:sticky;top:15px;">save</button>
+  <button class="button" style="position:sticky;top:15px;"><%= gettext("Save") %></button>
   <div class="edit_sections">
+    <div id="video_section">
+      This should be the edit video section
+    </div>
     <.inputs_for :let={phonology_f} field={@form[:phonology]}>
       <div id="phonology_section">
         <table>
