@@ -41,7 +41,7 @@ defmodule SignbankWeb.SignLive.FormComponent do
         <%!-- TODO: tags --%>
 
         <:actions>
-          <.button phx-disable-with={gettext("Saving...")}><%= gettext("Save sign") %></.button>
+          <.button phx-disable-with={gettext("Saving...")}>{gettext("Save sign")}</.button>
         </:actions>
       </.simple_form>
     </div>

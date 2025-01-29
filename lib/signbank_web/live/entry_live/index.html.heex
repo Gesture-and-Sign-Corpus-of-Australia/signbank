@@ -3,11 +3,11 @@
 <% else %>
   <%= if not Enum.empty?(@inexact_matches) do %>
     <div>
-      <%= Enum.count(@inexact_matches) %> close matches found <hr />
+      {Enum.count(@inexact_matches)} close matches found <hr />
       <ul class="keyword-disambig">
         <%= for [keyword, id_gloss, published] <- Enum.sort_by(@inexact_matches, fn s -> s |> Enum.at(0) |> String.downcase end) do %>
           <li class="keyword-disambig__keyword" data-published={published}>
-            <.link href={~p"/dictionary/sign/#{id_gloss}?q=#{keyword}"}><%= keyword %></.link>
+            <.link href={~p"/dictionary/sign/#{id_gloss}?q=#{keyword}"}>{keyword}</.link>
           </li>
         <% end %>
       </ul>

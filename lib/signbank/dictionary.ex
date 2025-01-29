@@ -24,6 +24,28 @@ defmodule Signbank.Dictionary do
 
   defp sort_order, do: @default_order
 
+  # sub_field is for fields inside a JSON column
+  defp query_from_filter(
+         %SignbankWeb.Search.SearchForm.Filter{
+           field: field,
+           sub_field: sub_field,
+           op: :equal_to,
+           value: val
+         },
+         queryable
+       )
+       when is_binary(sub_field) do
+    # HACK: this is ugly but its the best I got right now
+    if val == "unspecified" do
+      # fragment("metadata->'item'->'price' is not null"),
+      dynamic([s], ^queryable and fragment("?::json->>? is null", ^field, ^sub_field))
+      # dynamic([s], ^queryable and is_nil(field(s, ^field)))
+    else
+      dynamic([s], ^queryable and fragment("?->>? = ?", field(s, ^field), ^sub_field, ^val))
+      # dynamic([s], ^queryable and field(s, ^field) == ^val)
+    end
+  end
+
   defp query_from_filter(
          %SignbankWeb.Search.SearchForm.Filter{
            field: field,
@@ -33,7 +55,7 @@ defmodule Signbank.Dictionary do
          queryable
        ) do
     # HACK: this is ugly but its the best I got right now
-    if val == "undefined" do
+    if val == "unspecified" do
       dynamic([s], ^queryable and is_nil(field(s, ^field)))
     else
       dynamic([s], ^queryable and field(s, ^field) == ^val)
@@ -43,6 +65,7 @@ defmodule Signbank.Dictionary do
   defp query_from_filter(
          %SignbankWeb.Search.SearchForm.Filter{
            field: field,
+           #  sub_field: sub_field,
            op: :contains,
            value: val
          },
@@ -152,6 +175,8 @@ defmodule Signbank.Dictionary do
           variants: [videos: [], regions: []],
           regions: [],
           videos: [],
+          active_video: [],
+          relations: [],
           suggested_signs: [],
           active_video: []
         ],
@@ -387,6 +412,13 @@ defmodule Signbank.Dictionary do
   def update_sign(%Sign{} = sign, attrs) do
     sign
     |> Sign.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def set_active_video(%Sign{} = sign, id) do
+    sign
+    |> Ecto.Changeset.change()
+    |> Ecto.Changeset.put_change(:active_video_id, id)
     |> Repo.update()
   end
 

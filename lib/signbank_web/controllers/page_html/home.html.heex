@@ -1,13 +1,13 @@
 <link phx-track-static rel="stylesheet" href={~p"/assets/home.css"} />
 
-<form action="/dictionary" method="GET">
+<%!-- <form action="/dictionary" method="GET">
   <input type="text" name="q" placeholder="Search..." />
   <button type="submit" aria-label="Search">
     <Heroicons.magnifying_glass class="icon--small" />
   </button>
-</form>
+</form> --%>
 
-<ul class="homepage__quick-links">
+<%!-- <ul class="homepage__quick-links">
   <li>
     <img src="some-icon" alt="The alt text" />
     <span>Grammar</span>
@@ -16,36 +16,12 @@
     <img src="some-other-icon" alt="The alt text" />
     <span>Fingerspelling practice</span>
   </li>
-</ul>
+</ul> --%>
 
 <h2>
-  Welcome to <%= Application.fetch_env!(:signbank, :application_name) %>
+  Welcome to {Application.fetch_env!(:signbank, :application_name)}
 </h2>
 
-<%!-- TODO: move this text to a CRM/something editable without a programmer --%>
 <p>
-  Auslan Signbank is a language resources site for Auslan (Australian Sign Language).
-  Auslan is the language of the deaf community in Australia. Here you will find:
-</p>
-<ul>
-  <li>a dictionary</li>
-  <li>
-    ability to search for signs related to medical and health topics
-  </li>
-  <li>
-    ability to search for signs related to educational and teaching
-    topics
-  </li>
-  <li>
-    videos of deaf people using the listed Auslan signs
-  </li>
-  <li>
-    information on the deaf community in Australia
-  </li>
-  <li>links to Auslan classes</li>
-</ul>
-<p>
-  Auslan&mdash;deaf people, deaf students, sign language interpreters, students of
-  Auslan, or a parents of deaf children&mdash;are invited to provide feedback to help improve the dictionary, using the
-  links provided. Auslan is growing and changing all the time.
+  Homepage visual and auslan video (and large searchbar) to be put here
 </p>

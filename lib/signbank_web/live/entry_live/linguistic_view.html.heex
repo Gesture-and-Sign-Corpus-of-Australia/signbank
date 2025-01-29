@@ -1,16 +1,23 @@
 <nav class="level entry-page__switch_entry">
-  <.entry_nav class="level-left" sign={@sign} current_user={@current_user} linguistic_view={true} />
+  <.entry_nav class="level-left" sign={@sign} current_user={@current_user} view={:detail} />
+  <.link
+    :if={@current_user && @current_user.role in [:tech, :editor]}
+    class="button"
+    patch={~p"/dictionary/sign/#{@sign.id_gloss}/edit"}
+  >
+    {gettext("Edit entry")}
+  </.link>
 </nav>
 <div :if={@sign.sense_number} class="level">
   <p :if={@sign.sense_number == 1}>
-    <%= gettext(
+    {gettext(
       "This sign has two or more completely separate meanings. Click Next to see the other ones."
-    ) %>
+    )}
   </p>
   <p :if={@sign.sense_number > 1}>
-    <%= gettext(
+    {gettext(
       "This sign has two or more completely separate meanings. Click Next and Previous to see the other ones."
-    ) %>
+    )}
   </p>
 </div>
 
@@ -22,10 +29,10 @@
         <video controls muted autoplay width="600" id={"#{@sign.id}_video"}>
           <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{Enum.at(@sign.videos,0).url}"} />
         </video>
-        <p class="video-frame__sign-type"><%= video_frame_type(@sign) %></p>
+        <p class="video-frame__sign-type">{video_frame_type(@sign)}</p>
       </div>
     </div>
-    <p><strong>Keywords:</strong> <%= Enum.join(@sign.keywords || [], ", ") %></p>
+    <p><strong>Keywords:</strong> {Enum.join(@sign.keywords || [], ", ")}</p>
   </div>
 
   <div class="column is-flex is-flex-direction-column has-gap-large">
@@ -37,14 +44,14 @@
       ] do %>
         <tr>
           <th>
-            <%= Gettext.gettext(Signbank.Gettext, Atom.to_string(field)) %>
+            {Gettext.gettext(Signbank.Gettext, Atom.to_string(field))}
           </th>
           <td>
             <%= with value <- Map.get(@sign, field) do %>
               <%= if is_list(value) do %>
-                <%= Enum.join(value, ", ") %>
+                {Enum.join(value, ", ")}
               <% else %>
-                <%= value %>
+                {value}
               <% end %>
             <% end %>
           </td>
@@ -52,9 +59,9 @@
       <% end %>
       <tr :if={@current_user && Map.get(@current_user, :role) in [:tech, :editor]}>
         <th>
-          <%= Gettext.gettext(Signbank.Gettext, "published") %>
+          {Gettext.gettext(Signbank.Gettext, "published")}
         </th>
-        <td><%= @sign.published %></td>
+        <td>{@sign.published}</td>
       </tr>
     </table>
 
@@ -64,8 +71,8 @@
           id="vocab-tab"
           class="tab is-size-7 is-active has-text-black"
           phx-click={
-            JS.show(to: "#vocab-section")
-            |> JS.hide(to: ["#morph-section", "#phon-section"])
+            JS.hide(to: ".panel-block")
+            |> JS.show(to: "#vocab-section")
             |> JS.remove_class("is-active", to: ".tab")
             |> JS.add_class("is-active", to: "#vocab-tab")
           }
@@ -77,8 +84,8 @@
           id="morph-tab"
           class="tab is-size-7 has-text-black"
           phx-click={
-            JS.show(to: "#morph-section")
-            |> JS.hide(to: ["#phon-section", "#vocab-section"])
+            JS.hide(to: ".panel-block")
+            |> JS.show(to: "#morph-section")
             |> JS.remove_class("is-active", to: ".tab")
             |> JS.add_class("is-active", to: "#morph-tab")
           }
@@ -90,8 +97,8 @@
           id="phon-tab"
           class="tab is-size-7 has-text-black"
           phx-click={
-            JS.show(to: "#phon-section")
-            |> JS.hide(to: ["#morph-section", "#vocab-section"])
+            JS.hide(to: ".panel-block")
+            |> JS.show(to: "#phon-section")
             |> JS.remove_class("is-active", to: ".tab")
             |> JS.add_class("is-active", to: "#phon-tab")
           }
@@ -113,34 +120,34 @@
           <h3 class="is-size-6 has-text-weight-semibold">Usage by other factors</h3>
           <ul class="ling-details-section__properties">
             <li>
-              Technical or specialist jargon: <%= bool_to_word(
+              Technical or specialist jargon: {bool_to_word(
                 @sign.lexis_technical_or_specialist_jargon
-              ) %>
+              )}
             </li>
-            <li>Marginal/minority: <%= bool_to_word(@sign.lexis_marginal_or_minority) %></li>
-            <li>Obsolete: <%= bool_to_word(@sign.lexis_obsolete) %></li>
-            <li>Anglican/state school: <%= bool_to_word(@sign.school_anglican_or_state) %></li>
+            <li>Marginal/minority: {bool_to_word(@sign.lexis_marginal_or_minority)}</li>
+            <li>Obsolete: {bool_to_word(@sign.lexis_obsolete)}</li>
+            <li>Anglican/state school: {bool_to_word(@sign.school_anglican_or_state)}</li>
             <li>
-              Catholic school: <%= bool_to_word(@sign.school_catholic) %>
+              Catholic school: {bool_to_word(@sign.school_catholic)}
             </li>
-            <li>Crude?: <%= bool_to_word(@sign.crude) %></li>
+            <li>Crude?: {bool_to_word(@sign.crude)}</li>
           </ul>
         </div>
         <div>
           <h3 class="is-size-6 has-text-weight-semibold">Borrowings</h3>
           <ul class="ling-details-section__properties">
-            <li>ASL gloss: <%= if @sign.asl_gloss, do: @sign.asl_gloss, else: "N/A" %></li>
-            <li>ASL loan?: <%= bool_to_word(@sign.is_asl_loan) %></li>
-            <li>BSL gloss: <%= if @sign.bsl_gloss, do: @sign.bsl_gloss, else: "N/A" %></li>
-            <li>BSL loan?: <%= bool_to_word(@sign.is_bsl_loan) %></li>
+            <li>ASL gloss: {if @sign.asl_gloss, do: @sign.asl_gloss, else: "N/A"}</li>
+            <li>ASL loan?: {bool_to_word(@sign.is_asl_loan)}</li>
+            <li>BSL gloss: {if @sign.bsl_gloss, do: @sign.bsl_gloss, else: "N/A"}</li>
+            <li>BSL loan?: {bool_to_word(@sign.is_bsl_loan)}</li>
             <li>
-              Signed English gloss: <%= if @sign.signed_english_gloss,
+              Signed English gloss: {if @sign.signed_english_gloss,
                 do: @sign.signed_english_gloss,
-                else: "N/A" %>
+                else: "N/A"}
             </li>
             <li :if={@sign.signed_english_gloss}>
               <%!-- I have elected to show this only if there is an SE gloss, I believe it is confusing otherwise --%>
-              Signed English Only?: <%= bool_to_word(@sign.is_signed_english_only) %>
+              Signed English Only?: {bool_to_word(@sign.is_signed_english_only)}
             </li>
           </ul>
         </div>
@@ -148,10 +155,10 @@
           <h3 class="is-size-6 has-text-weight-semibold">Other</h3>
           <ul class="ling-details-section__properties">
             <li>
-              Iconicity: <%= @sign.iconicity || gettext("unknown") %>
+              Iconicity: {@sign.iconicity || gettext("unknown")}
             </li>
             <li :if={@sign.popular_explanation}>
-              Popular explanation: <%= @sign.popular_explanation %>
+              Popular explanation: {@sign.popular_explanation}
             </li>
 
             <%!-- as yet unimplemented:
@@ -163,28 +170,28 @@
       <div id="morph-section" class="panel-block" style="display: none;">
         <ul class="ling-details-section__properties">
           <li>
-            Blend of: <%= if @sign.morphology.blend_of,
+            Blend of: {if @sign.morphology.blend_of,
               do: "‘#{@sign.morphology.blend_of}’",
-              else: "N/A" %>
+              else: "N/A"}
           </li>
           <li>
-            Calque of: <%= if @sign.morphology.calque_of,
+            Calque of: {if @sign.morphology.calque_of,
               do: "‘#{@sign.morphology.calque_of}’",
-              else: "N/A" %>
+              else: "N/A"}
           </li>
           <li>
-            Compound of: <%= if @sign.morphology.compound_of,
+            Compound of: {if @sign.morphology.compound_of,
               do: "‘#{@sign.morphology.compound_of}’",
-              else: "N/A" %>
+              else: "N/A"}
           </li>
           <li>
-            Idiom of: <%= if @sign.morphology.idiom_of,
+            Idiom of: {if @sign.morphology.idiom_of,
               do: "‘#{@sign.morphology.idiom_of}’",
-              else: "N/A" %>
+              else: "N/A"}
           </li>
 
           <li>
-            This sign <%= if @sign.morphology.multi_sign_expression, do: "is", else: "is not" %> a multi-sign expression.
+            This sign {if @sign.morphology.multi_sign_expression, do: "is", else: "is not"} a multi-sign expression.
           </li>
           <%!-- TODO: refactor this hack into some kind of require_editor() fn, this approach will get annoying the more things we need to hide from unauthed users --%>
           <li :if={
@@ -192,80 +199,80 @@
               @current_user.role in [:tech, :editor]
           }>
             HamNoSys variant analysis:
-            <span class="hamnosys"><%= @sign.phonology.hamnosys_variant_analysis %></span>
+            <span class="hamnosys">{@sign.phonology.hamnosys_variant_analysis}</span>
           </li>
         </ul>
         <div>
           <h3 class="is-size-6 has-text-weight-semibold">Spatial</h3>
           <ul class="ling-details-section__properties">
-            <li>Directional: <%= bool_to_word(@sign.morphology.directional) %></li>
+            <li>Directional: {bool_to_word(@sign.morphology.directional)}</li>
             <li>
-              Begins directional: <%= bool_to_word(@sign.morphology.beginning_directional) %>
+              Begins directional: {bool_to_word(@sign.morphology.beginning_directional)}
             </li>
             <li>
-              Ends directional: <%= bool_to_word(@sign.morphology.end_directional) %>
+              Ends directional: {bool_to_word(@sign.morphology.end_directional)}
             </li>
-            <li>Orientating: <%= bool_to_word(@sign.morphology.orientating) %></li>
+            <li>Orientating: {bool_to_word(@sign.morphology.orientating)}</li>
             <li>
-              Body locating: <%= bool_to_word(@sign.morphology.body_locating) %>
+              Body locating: {bool_to_word(@sign.morphology.body_locating)}
             </li>
           </ul>
         </div>
         <div>
           <h3 class="is-size-6 has-text-weight-semibold">Lexical</h3>
           <ul class="ling-details-section__properties">
-            <li>Initialism: <%= bool_to_word(@sign.morphology.is_initialism) %></li>
-            <li>Alphabet: <%= bool_to_word(@sign.morphology.is_alphabet) %></li>
-            <li>Abbreviation: <%= bool_to_word(@sign.morphology.is_abbreviation) %></li>
+            <li>Initialism: {bool_to_word(@sign.morphology.is_initialism)}</li>
+            <li>Alphabet: {bool_to_word(@sign.morphology.is_alphabet)}</li>
+            <li>Abbreviation: {bool_to_word(@sign.morphology.is_abbreviation)}</li>
           </ul>
         </div>
       </div>
       <div id="phon-section" class="panel-block" style="display: none;">
         <ul>
           <li>
-            Dominant handshape: <%= generate_initial_final_text(
+            Dominant handshape: {generate_initial_final_text(
               Signbank.Dictionary.Phonology.Handshape.to_string(
                 @sign.phonology.dominant_initial_handshape
               ),
               Signbank.Dictionary.Phonology.Handshape.to_string(
                 @sign.phonology.dominant_final_handshape
               )
-            ) %>
+            )}
           </li>
           <li>
-            Subordinate handshape: <%= generate_initial_final_text(
+            Subordinate handshape: {generate_initial_final_text(
               Signbank.Dictionary.Phonology.Handshape.to_string(
                 @sign.phonology.subordinate_initial_handshape
               ),
               Signbank.Dictionary.Phonology.Handshape.to_string(
                 @sign.phonology.subordinate_final_handshape
               )
-            ) %>
+            )}
           </li>
           <li>
-            Primary location: <%= generate_initial_final_text(
+            Primary location: {generate_initial_final_text(
               Signbank.Dictionary.Phonology.Location.to_string(
                 @sign.phonology.initial_primary_location
               ),
               Signbank.Dictionary.Phonology.Location.to_string(
                 @sign.phonology.final_primary_location
               )
-            ) %>
+            )}
           </li>
           <li>
-            Location side: <%= if not is_nil(@sign.phonology.location_rightside_or_leftside) do
+            Location side: {if not is_nil(@sign.phonology.location_rightside_or_leftside) do
               Signbank.Dictionary.Phonology.Side.to_string(
                 @sign.phonology.location_rightside_or_leftside
               )
             else
               gettext("unknown")
-            end %>
+            end}
           </li>
           <%!-- TODO: refactor this hack into some kind of require_editor() fn, this approach will get annoying the more things we need to hide from unauthed users --%>
           <li :if={
             @sign.phonology.hamnosys && @current_user && @current_user.role in [:tech, :editor]
           }>
-            HamNoSys: <span class="hamnosys"><%= @sign.phonology.hamnosys %></span>
+            HamNoSys: <span class="hamnosys">{@sign.phonology.hamnosys}</span>
           </li>
         </ul>
         <div>
@@ -274,16 +281,16 @@
           </h3>
           <ul class="ling-details-section__properties">
             <li>
-              Dominant finger-hand orientation: <%= generate_initial_final_text(
+              Dominant finger-hand orientation: {generate_initial_final_text(
                 @sign.phonology.dominant_initial_finger_hand_orientation,
                 @sign.phonology.dominant_final_finger_hand_orientation
-              ) %>
+              )}
             </li>
             <li>
-              Subordinate finger-hand orientation: <%= generate_initial_final_text(
+              Subordinate finger-hand orientation: {generate_initial_final_text(
                 @sign.phonology.subordinate_initial_finger_hand_orientation,
                 @sign.phonology.subordinate_final_finger_hand_orientation
-              ) %>
+              )}
             </li>
           </ul>
         </div>
@@ -295,16 +302,16 @@
           </h3>
           <ul class="ling-details-section__properties">
             <li>
-              Dominant interacting handpart: <%= generate_initial_final_text(
+              Dominant interacting handpart: {generate_initial_final_text(
                 @sign.phonology.dominant_initial_interacting_handpart,
                 @sign.phonology.dominant_final_interacting_handpart
-              ) %>
+              )}
             </li>
             <li>
-              subordinate interacting handpart: <%= generate_initial_final_text(
+              subordinate interacting handpart: {generate_initial_final_text(
                 @sign.phonology.subordinate_initial_interacting_handpart,
                 @sign.phonology.subordinate_final_interacting_handpart
-              ) %>
+              )}
             </li>
 
             <%= with contact <- list_flags(%{
@@ -314,7 +321,7 @@
               gettext("hands") => @sign.phonology.contact_hands,
               gettext("body") => @sign.phonology.contact_body,
             }) do %>
-              <li>Contact: <%= contact %></li>
+              <li>Contact: {contact}</li>
             <% end %>
 
             <%= with changes <- list_flags(%{
@@ -324,7 +331,7 @@
               gettext("orientation") => @sign.phonology.change_orientation,
             }) do %>
               <li>
-                Changes <small>(dominant hand)</small>: <%= changes %>
+                Changes <small>(dominant hand)</small>: {changes}
               </li>
             <% end %>
           </ul>
@@ -344,7 +351,7 @@
           } do %>
             <div>
               <input disabled type="checkbox" id={label} name={label} checked={value} />
-              <label for={label}><%= label %></label>
+              <label for={label}>{label}</label>
             </div>
           <% end %>
         </div>
@@ -364,7 +371,7 @@
           } do %>
             <div>
               <input disabled type="checkbox" id={label} name={label} checked={value} />
-              <label for={label}><%= label %></label>
+              <label for={label}>{label}</label>
             </div>
           <% end %>
         </div>
@@ -375,16 +382,16 @@
           </h3>
           <ul class="ling-details-section__properties">
             <li :if={@sign.phonology.movement_direction}>
-              Direction: <%= @sign.phonology.movement_direction %>
+              Direction: {@sign.phonology.movement_direction}
             </li>
             <li :if={@sign.phonology.movement_path}>
-              Path: <%= @sign.phonology.movement_path %>
+              Path: {@sign.phonology.movement_path}
             </li>
             <li :if={@sign.phonology.movement_path}>
-              Repetition: <%= @sign.phonology.movement_repeated %>
+              Repetition: {@sign.phonology.movement_repeated}
             </li>
             <li>
-              Handedness: <%= @sign.phonology.handedness %>
+              Handedness: {@sign.phonology.handedness}
             </li>
           </ul>
         </div>
@@ -406,7 +413,7 @@
               class="button"
               href={~p"/dictionary/sign/#{variant.id_gloss}/detail?#{@params}"}
             >
-              <%= index %>
+              {index}
             </.link>
           </li>
         <% end %>

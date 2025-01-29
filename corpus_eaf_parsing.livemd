@@ -46,9 +46,11 @@ defmodule CorpusStats do
 
   def eafs, do: @eafs
 
+  def get_example_for_annotation_id_gloss(annotation_id_gloss) do
+    :ets.lookup(:corpus_index, annotation_id_gloss)
+  end
   def get_example_for_sign(%Dictionary.Sign{} = sign) do
     :ets.lookup(:corpus_index, sign.id_gloss_annotation)
-
   end
 
   def get_timecode(timeslots, timecode_id) do
@@ -154,5 +156,22 @@ CorpusStats.async_process_eafs()
 :ets.lookup(:corpus_index, "DSS(G):THINØ")
 # |> Enum.random()
 {:ok, sign} = Dictionary.get_sign_by_keyword!("home")
-CorpusStats.get_example_for_sign(sign |> Enum.at(0))
+example = CorpusStats.get_example_for_sign(sign |> Enum.at(0))
+|> Enum.at(0)
+{anno_id_gloss, filename, [start_ms, end_ms]} = example
+
+# ffmpeg -ss 30 -i input.wmv -c copy -t 10 output.wmv
+
+"ffmpeg -ss #{start_ms/1000-2.5} -i '/Users/rsmi0037/Data/\ a-Latest\ eafs/#{filename}' -c copy -t #{5} output.mp4"
+
+```
+
+```elixir
+{:ok, sign} = Dictionary.get_sign_by_keyword!("home")
+sign
+|> Enum.at(0)
+|> CorpusStats.get_example_for_sign()
+
+
+:ets.lookup(:corpus_index, "HOME")
 ```

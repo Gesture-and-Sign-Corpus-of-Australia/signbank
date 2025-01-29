@@ -99,7 +99,7 @@ defmodule SimpleS3Upload do
       sign_form_upload(
         key: s3_filepath,
         content_type: entry.client_type,
-        max_file_size: uploads.image.max_file_size,
+        max_file_size: uploads.video.max_file_size,
         expires_in: :timer.hours(1)
       )
 
@@ -112,12 +112,14 @@ defmodule SimpleS3Upload do
   end
 
   def s3_filepath(entry) do
-    "#{entry.uuid}.#{ext(entry)}"
+    ext = Path.extname(entry.client_name)
+    client_name = String.replace_suffix(entry.client_name, ext, "")
+    "#{entry.uuid}_#{client_name}.#{ext(entry)}"
   end
 
   def entry_url(entry) do
     # "http://#{bucket()}.s3.#{region()}.amazonaws.com/#{entry.uuid}.#{ext(entry)}"
-    "#{Application.fetch_env!(:signbank, :media_url)}/#{bucket()}/#{entry.uuid}.#{ext(entry)}"
+    "#{Application.fetch_env!(:signbank, :media_url)}/"++s3_filepath(entry)
   end
 
   def presign_entry(entry, socket) do
@@ -128,7 +130,7 @@ defmodule SimpleS3Upload do
       sign_form_upload(
         key: s3_filepath,
         content_type: entry.client_type,
-        max_file_size: uploads.image.max_file_size,
+        max_file_size: uploads.video.max_file_size,
         expires_in: :timer.hours(1)
       )
 

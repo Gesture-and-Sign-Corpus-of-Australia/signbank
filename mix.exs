@@ -41,12 +41,12 @@ defmodule Signbank.MixProject do
       # Basic Phoenix dependancies
       {:bcrypt_elixir, "~> 3.0"},
       {:phoenix, "~> 1.7.11"},
-      {:phoenix_ecto, "~> 4.4"},
+      {:phoenix_ecto, "~> 4.5"},
       {:ecto_sql, "~> 3.12"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 4.0"},
+      {:phoenix_html, "~> 4.2"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.20.2"},
+      {:phoenix_live_view, "~> 1.0"},
       {:floki, ">= 0.30.0"},
       {:phoenix_live_dashboard, "~> 0.8.3"},
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
@@ -84,6 +84,7 @@ defmodule Signbank.MixProject do
       {:meeseeks, "~> 0.17.0"},
       # Formats Ecto logs nicely in :dev
       {:ecto_dev_logger, "~> 0.14"},
+      {:lexical_credo, "~> 0.5.0", only: [:dev, :test]}
     ]
   end
 

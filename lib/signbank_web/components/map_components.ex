@@ -106,7 +106,7 @@ defmodule SignbankWeb.MapComponents do
       class={Enum.join([@class, "region_map_svg", generate_classes(@selected)], " ")}
     >
       <title>
-        A map of australia with <%= generate_alt_text(@selected) %> selected.
+        A map of australia with {generate_alt_text(@selected)} selected.
       </title>
       <g id="root" fill="#d3d3d3" stroke="black">
         <path

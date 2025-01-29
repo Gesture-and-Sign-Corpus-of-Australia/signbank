@@ -87,7 +87,7 @@ defmodule SignbankWeb.CoreComponents do
                 </button>
               </div>
               <div id={"#{@id}-content"}>
-                <%= render_slot(@inner_block) %>
+                {render_slot(@inner_block)}
               </div>
             </.focus_wrap>
           </div>
@@ -132,9 +132,9 @@ defmodule SignbankWeb.CoreComponents do
       <p :if={@title}>
         <Heroicons.information_circle :if={@kind == :info} class="icon--small" />
         <Heroicons.exclamation_circle :if={@kind == :error} class="icon--small" />
-        <%= @title %>
+        {@title}
       </p>
-      <p class="flash__message"><%= msg %></p>
+      <p class="flash__message">{msg}</p>
       <button type="button" class="group absolute top-1 right-1 p-2" aria-label={gettext("close")}>
         <Heroicons.x_mark class="icon--small" />
       </button>
@@ -165,7 +165,7 @@ defmodule SignbankWeb.CoreComponents do
         phx-connected={hide("#client-error")}
         hidden
       >
-        <%= gettext("Attempting to reconnect") %>
+        {gettext("Attempting to reconnect")}
         <Heroicons.arrow_path class="icon--mini animate-spin" />
       </.flash>
 
@@ -177,7 +177,7 @@ defmodule SignbankWeb.CoreComponents do
         phx-connected={hide("#server-error")}
         hidden
       >
-        <%= gettext("Hang in there while we get back on track") %>
+        {gettext("Hang in there while we get back on track")}
         <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
       </.flash>
     </div>
@@ -211,9 +211,9 @@ defmodule SignbankWeb.CoreComponents do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
       <div>
-        <%= render_slot(@inner_block, f) %>
+        {render_slot(@inner_block, f)}
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
-          <%= render_slot(action, f) %>
+          {render_slot(action, f)}
         </div>
       </div>
     </.form>
@@ -246,7 +246,7 @@ defmodule SignbankWeb.CoreComponents do
       ]}
       {@rest}
     >
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </button>
     """
   end
@@ -333,11 +333,11 @@ defmodule SignbankWeb.CoreComponents do
               class="checkbox"
               {@rest}
             />
-            <%= @label %>
+            {@label}
           </label>
         </div>
       </div>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
@@ -346,14 +346,14 @@ defmodule SignbankWeb.CoreComponents do
     ~H"""
     <div phx-feedback-for={@name}>
       <div class="field">
-        <.label for={@id}><%= @label %></.label>
+        <.label for={@id}>{@label}</.label>
         <div class="select">
           <select id={@id} class={@class} name={@name} multiple={@multiple} {@rest}>
-            <option :if={@prompt} value=""><%= @prompt %></option>
-            <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
+            <option :if={@prompt} value="">{@prompt}</option>
+            {Phoenix.HTML.Form.options_for_select(@options, @value)}
           </select>
         </div>
-        <.error :for={msg <- @errors}><%= msg %></.error>
+        <.error :for={msg <- @errors}>{msg}</.error>
       </div>
     </div>
     """
@@ -362,7 +362,7 @@ defmodule SignbankWeb.CoreComponents do
   def input(%{type: "textarea"} = assigns) do
     ~H"""
     <div phx-feedback-for={@name}>
-      <.label for={@id}><%= @label %></.label>
+      <.label for={@id}>{@label}</.label>
       <textarea
         id={@id}
         name={@name}
@@ -374,7 +374,7 @@ defmodule SignbankWeb.CoreComponents do
         ]}
         {@rest}
       ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
-      <.error :for={msg <- @errors}><%= msg %></.error>
+      <.error :for={msg <- @errors}>{msg}</.error>
     </div>
     """
   end
@@ -384,7 +384,7 @@ defmodule SignbankWeb.CoreComponents do
     ~H"""
     <div phx-feedback-for={@name}>
       <div class="field">
-        <.label for={@id}><%= @label %></.label>
+        <.label for={@id}>{@label}</.label>
         <div class="control">
           <input
             type={@type}
@@ -401,7 +401,7 @@ defmodule SignbankWeb.CoreComponents do
             {@rest}
           />
         </div>
-        <.error :for={msg <- @errors}><%= msg %></.error>
+        <.error :for={msg <- @errors}>{msg}</.error>
       </div>
     </div>
     """
@@ -440,7 +440,7 @@ defmodule SignbankWeb.CoreComponents do
   def label(assigns) do
     ~H"""
     <label for={@for} class="label">
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </label>
     """
   end
@@ -454,7 +454,7 @@ defmodule SignbankWeb.CoreComponents do
     ~H"""
     <p class="help is-danger phx-no-feedback:hidden">
       <.icon name="hero-exclamation-circle-mini" class="mt-0.5 h-5 w-5 flex-none" />
-      <%= render_slot(@inner_block) %>
+      {render_slot(@inner_block)}
     </p>
     """
   end
@@ -473,13 +473,13 @@ defmodule SignbankWeb.CoreComponents do
     <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
       <div>
         <h1 class="text-lg font-semibold leading-8 text-zinc-800">
-          <%= render_slot(@inner_block) %>
+          {render_slot(@inner_block)}
         </h1>
         <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
-          <%= render_slot(@subtitle) %>
+          {render_slot(@subtitle)}
         </p>
       </div>
-      <div class="flex-none"><%= render_slot(@actions) %></div>
+      <div class="flex-none">{render_slot(@actions)}</div>
     </header>
     """
   end
@@ -520,9 +520,9 @@ defmodule SignbankWeb.CoreComponents do
       <table class="table">
         <thead class="text-sm text-left leading-6 text-zinc-500">
           <tr>
-            <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal"><%= col[:label] %></th>
+            <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal">{col[:label]}</th>
             <th :if={@action != []} class="relative p-0 pb-4">
-              <span class="sr-only"><%= gettext("Actions") %></span>
+              <span class="sr-only">{gettext("Actions")}</span>
             </th>
           </tr>
         </thead>
@@ -540,7 +540,7 @@ defmodule SignbankWeb.CoreComponents do
               <div class="block py-4 pr-6">
                 <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
                 <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
-                  <%= render_slot(col, @row_item.(row)) %>
+                  {render_slot(col, @row_item.(row))}
                 </span>
               </div>
             </td>
@@ -551,7 +551,7 @@ defmodule SignbankWeb.CoreComponents do
                   :for={action <- @action}
                   class="relative ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
                 >
-                  <%= render_slot(action, @row_item.(row)) %>
+                  {render_slot(action, @row_item.(row))}
                 </span>
               </div>
             </td>
@@ -581,8 +581,8 @@ defmodule SignbankWeb.CoreComponents do
     <div class="mt-14">
       <dl class="-my-4 divide-y divide-zinc-100">
         <div :for={item <- @item} class="flex gap-4 py-4 text-sm leading-6 sm:gap-8">
-          <dt class="w-1/4 flex-none text-zinc-500"><%= item.title %></dt>
-          <dd class="text-zinc-700"><%= render_slot(item) %></dd>
+          <dt class="w-1/4 flex-none text-zinc-500">{item.title}</dt>
+          <dd class="text-zinc-700">{render_slot(item)}</dd>
         </div>
       </dl>
     </div>
@@ -607,7 +607,7 @@ defmodule SignbankWeb.CoreComponents do
         class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
       >
         <.icon name="hero-arrow-left-solid" class="h-3 w-3" />
-        <%= render_slot(@inner_block) %>
+        {render_slot(@inner_block)}
       </.link>
     </div>
     """
@@ -820,14 +820,14 @@ defmodule SignbankWeb.CoreComponents do
     <div class="definitions">
       <div :for={{role, group} <- @def_groups} class="box zzdefinition content">
         <div class="is-size-5">
-          <%= definition_role_to_string(role) %>
+          {definition_role_to_string(role)}
         </div>
         <ol class="definition__senses">
           <li :for={definition <- group}>
             <div>
               <Heroicons.eye_slash :if={not definition.published} class="icon--small" />
               <p>
-                <%= definition.text %>
+                {definition.text}
               </p>
               <video :if={definition.url} controls muted width="200">
                 <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{definition.url}"} />
@@ -848,7 +848,8 @@ defmodule SignbankWeb.CoreComponents do
 
   attr :class, :string, required: false
   attr :sign, Dictionary.Sign, required: false
-  attr :linguistic_view, :boolean, required: false, default: false
+  attr :view, :atom, values: [:basic, :detail, :edit], default: :basic, doc: "used to stay in the same view on navigation"
+
   attr :current_user, User, required: false
 
   def entry_nav(assigns) do
@@ -859,28 +860,34 @@ defmodule SignbankWeb.CoreComponents do
       assigns
       |> assign(
         :previous,
-        case [previous, assigns.linguistic_view] do
+        case [previous, assigns.view] do
           [nil, _] ->
             nil
 
-          [%Dictionary.Sign{id_gloss: id_gloss}, true] ->
+          [%Dictionary.Sign{id_gloss: id_gloss}, :basic] ->
+            ~p"/dictionary/sign/#{id_gloss}"
+
+          [%Dictionary.Sign{id_gloss: id_gloss}, :detail] ->
             ~p"/dictionary/sign/#{id_gloss}/detail"
 
-          [%Dictionary.Sign{id_gloss: id_gloss}, _] ->
-            ~p"/dictionary/sign/#{id_gloss}"
+          [%Dictionary.Sign{id_gloss: id_gloss}, :edit] ->
+            ~p"/dictionary/sign/#{id_gloss}/edit"
         end
       )
       |> assign(
         :next,
-        case [next, assigns.linguistic_view] do
+        case [next, assigns.view] do
           [nil, _] ->
             nil
 
-          [%Dictionary.Sign{id_gloss: id_gloss}, true] ->
+          [%Dictionary.Sign{id_gloss: id_gloss}, :basic] ->
+            ~p"/dictionary/sign/#{id_gloss}"
+
+          [%Dictionary.Sign{id_gloss: id_gloss}, :detail] ->
             ~p"/dictionary/sign/#{id_gloss}/detail"
 
-          [%Dictionary.Sign{id_gloss: id_gloss}, _] ->
-            ~p"/dictionary/sign/#{id_gloss}"
+          [%Dictionary.Sign{id_gloss: id_gloss}, :edit] ->
+            ~p"/dictionary/sign/#{id_gloss}/edit"
         end
       )
       |> assign(:position, position)
@@ -899,7 +906,7 @@ defmodule SignbankWeb.CoreComponents do
           Previous
         </.link>
         <div class="entry-page__dict_position">
-          Sign <%= @position %><br /> of <%= @sign_count %>
+          Sign {@position}<br /> of {@sign_count}
         </div>
         <.link
           id={"search_result_#{@sign.id_gloss}_next"}
@@ -912,15 +919,15 @@ defmodule SignbankWeb.CoreComponents do
         </.link>
       </div>
 
-      <.link :if={@linguistic_view} class="button" patch={~p"/dictionary/sign/#{@sign.id_gloss}"}>
-        <%= gettext("Go to basic view") %>
+      <.link :if={@view == :detail} class="button" patch={~p"/dictionary/sign/#{@sign.id_gloss}"}>
+        {gettext("Go to basic view")}
       </.link>
       <.link
-        :if={!@linguistic_view}
+        :if={@view != :detail}
         class="button"
         patch={~p"/dictionary/sign/#{@sign.id_gloss}/detail"}
       >
-        <%= gettext("Go to detailed view") %>
+        {gettext("Go to detailed view")}
       </.link>
     </div>
     """

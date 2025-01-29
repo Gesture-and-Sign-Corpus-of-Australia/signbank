@@ -99,12 +99,12 @@ defmodule VideoScroller do
           <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{Enum.at(@sign.videos,0).url}"} />
         </video>
         <div class="video-frame__sign-type">
-          <%= cond do
+          {cond do
             @sign.english_entry -> "fingerspelled"
             @sign.is_signed_english_only -> "Signed English-only"
             @sign.type == :citation -> "citation"
             @sign.type == :variant -> "variant"
-          end %>
+          end}
         </div>
         <.australia_map selected={@sign.regions} />
       </div>

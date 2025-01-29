@@ -21,6 +21,7 @@ defmodule Signbank.Application do
       SignbankWeb.Endpoint
     ]
 
+    Ecto.DevLogger.install(Signbank.Repo)
     choose_logger()
 
     # See https://hexdocs.pm/elixir/Supervisor.html

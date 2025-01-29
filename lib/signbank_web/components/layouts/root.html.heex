@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
     <.live_title suffix=" · Auslan Signbank">
-      <%= assigns[:page_title] || "Signbank" %>
+      {assigns[:page_title] || "Signbank"}
     </.live_title>
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
@@ -15,11 +15,11 @@
     <ul class="login-controls">
       <%= if @current_user do %>
         <li class="login-controls__current-user">
-          <%= @current_user.email %> <%= case @current_user.role do
+          {@current_user.email} {case @current_user.role do
             :editor -> "(Editor)"
             :tech -> "(Tech)"
             :none -> nil
-          end %>
+          end}
         </li>
         <li>
           <.link href={~p"/users/settings"}>
@@ -34,7 +34,7 @@
       <% end %>
     </ul>
     <div id="page-container">
-      <%= @inner_content %>
+      {@inner_content}
       <footer>
         <div class="level">
           <.link
@@ -48,7 +48,7 @@
           </p>
         </div>
         <p class="app_version">
-          Signbank v<%= Application.spec(:signbank, :vsn) %>
+          Signbank v{Application.spec(:signbank, :vsn)}
         </p>
       </footer>
     </div>

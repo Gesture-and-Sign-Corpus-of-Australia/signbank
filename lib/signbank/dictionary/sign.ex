@@ -35,7 +35,7 @@ defmodule Signbank.Dictionary.Sign do
       foreign_key: :active_video_id,
       references: :id
 
-    has_many :videos, Dictionary.SignVideo
+    has_many :videos, Dictionary.SignVideo, on_replace: :delete
     has_many :regions, Dictionary.SignRegion, on_replace: :delete
 
     field :suggested_signs_description, :string
@@ -56,7 +56,7 @@ defmodule Signbank.Dictionary.Sign do
       on_replace: :delete
 
     # TODO: uncomment this after adding %Relation{}
-    # has_many :relations, Dictionary.Relation, foreign_key: :sign_a_id
+    has_many :relations, Dictionary.SignRelation, foreign_key: :sign_a_id
 
     # This was WIP nothingness
     # many_to_many :relations, Dictionary.Sign,
@@ -67,6 +67,10 @@ defmodule Signbank.Dictionary.Sign do
     field :bsl_gloss, :string
     field :iconicity, Ecto.Enum, values: @iconicity_values
     field :popular_explanation, :string
+    # TODO: add these note fields
+    # field :augment_note, :string
+    # field :note, :string
+    # field :editor_note, :string
     field :is_asl_loan, :boolean
     field :is_bsl_loan, :boolean
     field :signed_english_gloss, :string
@@ -136,8 +140,14 @@ defmodule Signbank.Dictionary.Sign do
     |> foreign_key_constraint(:variants, name: :signs_variant_of_fkey)
     |> unique_constraint(:id_gloss)
     |> assoc_constraint(:citation)
-    # |> assoc_constraint(:active_video_id)
-    |> cast_assoc(:videos)
+    # |> assoc_constraint(:active_video)
+    # |> put_assoc(:active_video, attrs[:active_video])
+    |> cast_assoc(:active_video)
+    |> cast_assoc(
+      :videos,
+      with: &Dictionary.SignVideo.changeset/2,
+      drop_param: :videos_drop
+      )
     |> cast_assoc(
       :definitions,
       with: &Dictionary.Definition.changeset/3,

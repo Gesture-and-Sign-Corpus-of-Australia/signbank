@@ -47,18 +47,39 @@ translations (with the requisite logic around splitting on ", " and adding it ba
   patch={~p"/dictionary/sign/#{@sign.id_gloss}/edit"}
 /> --%>
 
-<nav class="level" style="position:sticky;top:15px;background-color:white;z-index:100;">
+<%!-- TODO: move this to CSS --%>
+<nav class="level" style="position:sticky;top:15px;background-color:white;border-bottom: 1px solid black;z-index:10;">
   <.entry_nav class="level-left" sign={@sign} current_user={@current_user} />
-  <.link :if={@current_user && @current_user.role in [:tech, :editor]} class="button is-warning" disabled>
-    <%= gettext("Edit entry") %>
+  <.link
+    :if={@current_user && @current_user.role in [:tech, :editor]}
+    class="button is-warning"
+    disabled
+  >
+    {gettext("Edit entry")}
   </.link>
 </nav>
 
 <.form for={@form} id="sign-form" phx-change="validate" phx-submit="save" class="sign_edit">
-  <button class="button" style="position:sticky;top:15px;"><%= gettext("Save") %></button>
   <div class="edit_sections">
     <div id="video_section">
-      This should be the edit video section
+      <.inputs_for :let={f_video} field={@form[:videos]}>
+        <.video f={f_video} active_video={@form[:active_video]} />
+        <%!-- <video controls="" muted="" autoplay="" width="600">
+          <source src={Path.join(Application.fetch_env!(:signbank, :media_url), f_videos[:url].value)} />
+        </video>
+        <.input type="hidden" field={f_videos[:url]} />
+        <button
+          type="button"
+          name="sign[videos_drop][]"
+          value={f_videos.index}
+          phx-click={JS.dispatch("change")}
+        >
+          <Heroicons.x_mark class="icon--small" />
+        </button> --%>
+      </.inputs_for>
+      <input type="hidden" name="sign[videos_drop][]" />
+
+      <.live_file_input upload={@uploads.video} />
     </div>
     <.inputs_for :let={phonology_f} field={@form[:phonology]}>
       <div id="phonology_section">
@@ -72,7 +93,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
           </thead>
           <tbody>
             <tr>
-              <th><%= gettext("Initial dom hand") %></th>
+              <th>{gettext("Initial dom hand")}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -91,7 +112,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Final dom hand") %></th>
+              <th>{gettext("Final dom hand")}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -110,7 +131,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Initial sub hand") %></th>
+              <th>{gettext("Initial sub hand")}</th>
               <td>
                 <.input
                   class="subordinate_hand_field"
@@ -129,7 +150,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Final sub hand") %></th>
+              <th>{gettext("Final sub hand")}</th>
               <td>
                 <.input
                   class="subordinate_hand_field"
@@ -158,7 +179,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
           </thead>
           <tbody>
             <tr>
-              <th><%= gettext("Initial primary loc") %></th>
+              <th>{gettext("Initial primary loc")}</th>
               <td>
                 <.input
                   type="select"
@@ -168,7 +189,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Final primary loc") %></th>
+              <th>{gettext("Final primary loc")}</th>
               <td>
                 <.input
                   type="select"
@@ -178,7 +199,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Loc rightside or leftside") %></th>
+              <th>{gettext("Loc rightside or leftside")}</th>
               <td>
                 <.input
                   type="select"
@@ -194,15 +215,13 @@ translations (with the requisite logic around splitting on ", " and adding it ba
           <thead>
             <tr>
               <th colspan="3">
-                <%= gettext(
-                  "Phonology: orientation of finger side of hand (i.e., the metacarpus)"
-                ) %>
+                {gettext("Phonology: orientation of finger side of hand (i.e., the metacarpus)")}
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th><%= gettext("Initial dom finger hand ori") %></th>
+              <th>{gettext("Initial dom finger hand ori")}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -213,7 +232,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Final dom finger hand ori") %></th>
+              <th>{gettext("Final dom finger hand ori")}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -224,7 +243,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Initial sub finger hand ori") %></th>
+              <th>{gettext("Initial sub finger hand ori")}</th>
               <td>
                 <.input
                   class="subordinate_hand_field"
@@ -235,7 +254,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Final sub finger hand ori") %></th>
+              <th>{gettext("Final sub finger hand ori")}</th>
               <td>
                 <.input
                   class="subordinate_hand_field"
@@ -256,7 +275,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
           </thead>
           <tbody>
             <tr>
-              <th><%= gettext("Initial dom palm ori") %></th>
+              <th>{gettext("Initial dom palm ori")}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -267,7 +286,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Final dom palm ori") %></th>
+              <th>{gettext("Final dom palm ori")}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -278,7 +297,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Initial sub palm ori") %></th>
+              <th>{gettext("Initial sub palm ori")}</th>
               <td>
                 <.input
                   class="subordinate_hand_field"
@@ -289,7 +308,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Final sub palm ori") %></th>
+              <th>{gettext("Final sub palm ori")}</th>
               <td>
                 <.input
                   class="subordinate_hand_field"
@@ -310,7 +329,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
           </thead>
           <tbody>
             <tr>
-              <th><%= gettext("Initial dom interact handpart") %></th>
+              <th>{gettext("Initial dom interact handpart")}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -321,7 +340,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Final dom interact handpart") %></th>
+              <th>{gettext("Final dom interact handpart")}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -332,7 +351,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Initial sub interact handpart") %></th>
+              <th>{gettext("Initial sub interact handpart")}</th>
               <td>
                 <.input
                   class="subordinate_hand_field"
@@ -343,7 +362,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Final sub interact handpart") %></th>
+              <th>{gettext("Final sub interact handpart")}</th>
               <td>
                 <.input
                   class="subordinate_hand_field"
@@ -360,13 +379,13 @@ translations (with the requisite logic around splitting on ", " and adding it ba
           <thead>
             <tr>
               <th colspan="3">
-                <%= gettext("Phonology: contact") %>
+                {gettext("Phonology: contact")}
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th><%= "contact start" %></th>
+              <th>{"contact start"}</th>
               <td>
                 <.input
                   type="select"
@@ -376,7 +395,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= "contact end" %></th>
+              <th>{"contact end"}</th>
               <td>
                 <.input
                   type="select"
@@ -386,7 +405,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= "contact during" %></th>
+              <th>{"contact during"}</th>
               <td>
                 <.input
                   type="select"
@@ -396,7 +415,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= "contact body" %></th>
+              <th>{"contact body"}</th>
               <td>
                 <.input
                   type="select"
@@ -406,7 +425,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= "contact hands" %></th>
+              <th>{"contact hands"}</th>
               <td>
                 <.input
                   type="select"
@@ -422,13 +441,13 @@ translations (with the requisite logic around splitting on ", " and adding it ba
           <thead>
             <tr>
               <th colspan="3">
-                <%= gettext("Phonology: changes (dominant hand)") %>
+                {gettext("Phonology: changes (dominant hand)")}
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th><%= "change handshape" %></th>
+              <th>{"change handshape"}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -439,7 +458,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= "change open" %></th>
+              <th>{"change open"}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -450,7 +469,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= "change close" %></th>
+              <th>{"change close"}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -461,7 +480,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= "change orientation" %></th>
+              <th>{"change orientation"}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -478,13 +497,13 @@ translations (with the requisite logic around splitting on ", " and adding it ba
           <thead>
             <tr>
               <th colspan="3">
-                <%= gettext("Phonology: small hand movements (dominant hand)") %>
+                {gettext("Phonology: small hand movements (dominant hand)")}
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th><%= "forearm rotation" %></th>
+              <th>{"forearm rotation"}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -495,7 +514,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= "wrist nod" %></th>
+              <th>{"wrist nod"}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -506,7 +525,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= "fingers bend" %></th>
+              <th>{"fingers bend"}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -517,7 +536,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= "fingers straighten" %></th>
+              <th>{"fingers straighten"}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -528,7 +547,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= "fingers wiggle" %></th>
+              <th>{"fingers wiggle"}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -539,7 +558,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= "fingers crumble" %></th>
+              <th>{"fingers crumble"}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -556,15 +575,13 @@ translations (with the requisite logic around splitting on ", " and adding it ba
           <thead>
             <tr>
               <th colspan="3">
-                <%= gettext(
-                  "Phonology: large movements (interaction of hands) — 2 hand signs only"
-                ) %>
+                {gettext("Phonology: large movements (interaction of hands) — 2 hand signs only")}
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th><%= "movement_dominant_hand_only" %></th>
+              <th>{"movement_dominant_hand_only"}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -575,7 +592,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= "movement_symmetrical" %></th>
+              <th>{"movement_symmetrical"}</th>
               <td>
                 <.input
                   type="select"
@@ -585,7 +602,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= "movement_parallel" %></th>
+              <th>{"movement_parallel"}</th>
               <td>
                 <.input
                   type="select"
@@ -595,7 +612,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= "movement_alternating" %></th>
+              <th>{"movement_alternating"}</th>
               <td>
                 <.input
                   type="select"
@@ -605,7 +622,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= "movement_separating" %></th>
+              <th>{"movement_separating"}</th>
               <td>
                 <.input
                   type="select"
@@ -615,7 +632,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= "movement_approaching" %></th>
+              <th>{"movement_approaching"}</th>
               <td>
                 <.input
                   type="select"
@@ -625,7 +642,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= "movement_cross" %></th>
+              <th>{"movement_cross"}</th>
               <td>
                 <.input
                   type="select"
@@ -641,13 +658,13 @@ translations (with the requisite logic around splitting on ", " and adding it ba
           <thead>
             <tr>
               <th colspan="3">
-                <%= gettext("Phonology: large movements (dom hand)") %>
+                {gettext("Phonology: large movements (dom hand)")}
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th><%= "movement_direction" %></th>
+              <th>{"movement_direction"}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -658,7 +675,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= "movement_path" %></th>
+              <th>{"movement_path"}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -669,7 +686,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= "movement_repeated" %></th>
+              <th>{"movement_repeated"}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -680,7 +697,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= "repetition_type" %></th>
+              <th>{"repetition_type"}</th>
               <td>
                 <.input
                   class="dominant_hand_field"
@@ -697,14 +714,14 @@ translations (with the requisite logic around splitting on ", " and adding it ba
           <thead>
             <tr>
               <th colspan="3">
-                <%= gettext("Phonology: transcription") %>
+                {gettext("Phonology: transcription")}
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <th>
-                <%= "hamnosys" %>
+                {"hamnosys"}
               </th>
               <td>
                 <.input class="hamnosys" type="text" field={phonology_f[:hamnosys]} />
@@ -712,7 +729,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
             </tr>
             <tr>
               <th>
-                <%= "hamnosys (variant analysis)" %>
+                {"hamnosys (variant analysis)"}
               </th>
               <td>
                 <.input
@@ -728,13 +745,13 @@ translations (with the requisite logic around splitting on ", " and adding it ba
         <table>
           <thead>
             <tr>
-              <th colspan="3"><%= gettext("Phonology: other") %></th>
+              <th colspan="3">{gettext("Phonology: other")}</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <th>
-                <%= "Handedness: one-hand, two-hands, or double-hands (same handshape on each)" %>
+                {"Handedness: one-hand, two-hands, or double-hands (same handshape on each)"}
               </th>
               <td>
                 <.input
@@ -753,25 +770,25 @@ translations (with the requisite logic around splitting on ", " and adding it ba
           <thead>
             <tr>
               <th colspan="2">
-                <%= gettext("Vocabulary: dictionary entry type (box colour = frame colour)") %>
+                {gettext("Vocabulary: dictionary entry type (box colour = frame colour)")}
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <%!-- TODO: use classes here instead --%>
-              <td style={"border: 4px solid #{cond do 
-            @sign.english_entry -> "#d23d32"
-            @sign.is_signed_english_only ->  "#f3a712"
-            @sign.type == :citation ->  "#2c55c7"
-            @sign.type == :variant -> "#79b8fb"
-        end}"}>
-                <%= cond do
+              <td style={"text-align: center; border: 4px solid #{cond do 
+                  @sign.english_entry -> "#d23d32"
+                  @sign.is_signed_english_only ->  "#f3a712"
+                  @sign.type == :citation ->  "#2c55c7"
+                  @sign.type == :variant -> "#79b8fb"
+              end};"}>
+                {cond do
                   @sign.english_entry -> "fingerspelled"
                   @sign.is_signed_english_only -> "Signed English-only"
                   @sign.type == :citation -> "citation"
                   @sign.type == :variant -> "variant"
-                end %>
+                end}
               </td>
             </tr>
           </tbody>
@@ -815,7 +832,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
             </tr> --%>
             <.regions_checkgroup
               field={@form[:regions]}
-              label={gettext("Regions")}
+              label={"" || gettext("Regions")}
               options={
                 Signbank.Dictionary.SignRegion.regions()
                 |> Enum.map(&{Signbank.Dictionary.SignRegion.region_to_string(&1), &1})
@@ -827,12 +844,12 @@ translations (with the requisite logic around splitting on ", " and adding it ba
         <table>
           <thead>
             <tr>
-              <th colspan="2"><%= gettext("Vocabulary: usage by other factors") %></th>
+              <th colspan="2">{gettext("Vocabulary: usage by other factors")}</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th><%= gettext("Technical/specialist jargon") %></th>
+              <th>{gettext("Technical/specialist jargon")}</th>
               <td>
                 <.input
                   type="select"
@@ -842,7 +859,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Marginal/minority") %></th>
+              <th>{gettext("Marginal/minority")}</th>
               <td>
                 <.input
                   type="select"
@@ -852,13 +869,13 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Obsolete") %></th>
+              <th>{gettext("Obsolete")}</th>
               <td>
                 <.input type="select" field={@form[:lexis_obsolete]} options={[nil, true, false]} />
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Anglican/state school") %></th>
+              <th>{gettext("Anglican/state school")}</th>
               <td>
                 <.input
                   type="select"
@@ -868,7 +885,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Catholic school") %></th>
+              <th>{gettext("Catholic school")}</th>
               <td>
                 <.input
                   type="select"
@@ -878,7 +895,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Crude & offensive") %></th>
+              <th>{gettext("Crude & offensive")}</th>
               <td>
                 <.input type="select" field={@form[:crude]} options={[nil, true, false]} />
               </td>
@@ -890,36 +907,36 @@ translations (with the requisite logic around splitting on ", " and adding it ba
         <table>
           <thead>
             <tr>
-              <th colspan="2"><%= gettext("Vocabulary: other SLs") %></th>
+              <th colspan="2">{gettext("Vocabulary: other SLs")}</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th><%= gettext("BSL recent loan sign") %></th>
+              <th>{gettext("BSL recent loan sign")}</th>
               <td>
                 <.input type="select" field={@form[:is_bsl_loan]} options={[nil, true, false]} />
               </td>
             </tr>
             <tr>
-              <th><%= gettext("BSL gloss") %></th>
+              <th>{gettext("BSL gloss")}</th>
               <td>
                 <.input type="text" field={@form[:bsl_gloss]} />
               </td>
             </tr>
             <tr>
-              <th><%= gettext("ASL recent loan sign") %></th>
+              <th>{gettext("ASL recent loan sign")}</th>
               <td>
                 <.input type="select" field={@form[:is_asl_loan]} options={[nil, true, false]} />
               </td>
             </tr>
             <tr>
-              <th><%= gettext("ASL gloss") %></th>
+              <th>{gettext("ASL gloss")}</th>
               <td>
                 <.input type="text" field={@form[:asl_gloss]} />
               </td>
             </tr>
             <tr>
-              <th><%= gettext("SE based on Auslan") %></th>
+              <th>{gettext("SE based on Auslan")}</th>
               <td>
                 <.input
                   type="select"
@@ -929,7 +946,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("SE Gloss") %></th>
+              <th>{gettext("SE Gloss")}</th>
               <td>
                 <.input type="text" field={@form[:signed_english_gloss]} />
               </td>
@@ -942,12 +959,12 @@ translations (with the requisite logic around splitting on ", " and adding it ba
         <table>
           <thead>
             <tr>
-              <th colspan="2"><%= gettext("Vocabulary: Iconicity & folklore") %></th>
+              <th colspan="2">{gettext("Vocabulary: Iconicity & folklore")}</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th><%= gettext("Iconicity") %></th>
+              <th>{gettext("Iconicity")}</th>
               <td>
                 <.input
                   type="select"
@@ -957,7 +974,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Popular explanation") %></th>
+              <th>{gettext("Popular explanation")}</th>
               <%!-- TODO: textareas need styling --%>
               <td>
                 <.input
@@ -977,12 +994,12 @@ translations (with the requisite logic around splitting on ", " and adding it ba
         <table>
           <thead>
             <tr>
-              <th colspan="2"><%= gettext("Morphology: space & movement") %></th>
+              <th colspan="2">{gettext("Morphology: space & movement")}</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th><%= gettext("Directional") %></th>
+              <th>{gettext("Directional")}</th>
               <td>
                 <.input
                   type="select"
@@ -992,7 +1009,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Begin directional sign") %></th>
+              <th>{gettext("Begin directional sign")}</th>
               <td>
                 <.input
                   type="select"
@@ -1002,7 +1019,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("End directional sign") %></th>
+              <th>{gettext("End directional sign")}</th>
               <td>
                 <.input
                   type="select"
@@ -1012,7 +1029,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Orientating sign") %></th>
+              <th>{gettext("Orientating sign")}</th>
               <td>
                 <.input
                   type="select"
@@ -1022,7 +1039,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("Body locating sign") %></th>
+              <th>{gettext("Body locating sign")}</th>
               <td>
                 <.input
                   type="select"
@@ -1037,12 +1054,12 @@ translations (with the requisite logic around splitting on ", " and adding it ba
         <table>
           <thead>
             <tr>
-              <th colspan="2"><%= gettext("Morphology: fingerspelling") %></th>
+              <th colspan="2">{gettext("Morphology: fingerspelling")}</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th><%= gettext("is_fingerspelled_word") %></th>
+              <th>{gettext("is_fingerspelled_word")}</th>
               <td>
                 <.input
                   type="select"
@@ -1052,7 +1069,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("is_alphabet") %></th>
+              <th>{gettext("is_alphabet")}</th>
               <td>
                 <.input
                   type="select"
@@ -1062,7 +1079,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("is_abbreviation") %></th>
+              <th>{gettext("is_abbreviation")}</th>
               <td>
                 <.input
                   type="select"
@@ -1072,7 +1089,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               </td>
             </tr>
             <tr>
-              <th><%= gettext("is_initialism") %></th>
+              <th>{gettext("is_initialism")}</th>
               <td>
                 <.input
                   type="select"
@@ -1087,42 +1104,42 @@ translations (with the requisite logic around splitting on ", " and adding it ba
         <table>
           <thead>
             <tr>
-              <th colspan="2"><%= gettext("Morphology: sign combinations") %></th>
+              <th colspan="2">{gettext("Morphology: sign combinations")}</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th><%= gettext("initialization_of") %></th>
+              <th>{gettext("initialization_of")}</th>
               <td>
                 <.input type="text" field={morphology_f[:initialization_of]} />
               </td>
             </tr>
             <tr>
-              <th><%= gettext("compound_of") %></th>
+              <th>{gettext("compound_of")}</th>
               <td>
                 <.input type="text" field={morphology_f[:compound_of]} />
               </td>
             </tr>
             <tr>
-              <th><%= gettext("blend_of") %></th>
+              <th>{gettext("blend_of")}</th>
               <td>
                 <.input type="text" field={morphology_f[:blend_of]} />
               </td>
             </tr>
             <tr>
-              <th><%= gettext("idiom_of") %></th>
+              <th>{gettext("idiom_of")}</th>
               <td>
                 <.input type="text" field={morphology_f[:idiom_of]} />
               </td>
             </tr>
             <tr>
-              <th><%= gettext("calque_of") %></th>
+              <th>{gettext("calque_of")}</th>
               <td>
                 <.input type="text" field={morphology_f[:calque_of]} />
               </td>
             </tr>
             <tr>
-              <th><%= gettext("multi_sign_expression") %></th>
+              <th>{gettext("multi_sign_expression")}</th>
               <%!-- TODO: textareas need styling --%>
               <td>
                 <.input type="textarea" field={morphology_f[:multi_sign_expression]} />
@@ -1143,19 +1160,42 @@ translations (with the requisite logic around splitting on ", " and adding it ba
     </div>
 
     <div id="grammatical_function_section">
-      <%!-- TODO: this section has no fields, its purely for information --%>
+      <table>
+        <thead>
+          <tr>
+            <th colspan="2">{gettext("Grammatical function/class")}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr  :for={[role, label] <- [
+            [:general, gettext("General Sign")],
+            [:noun, gettext("Noun (things)")],
+            [:verb, gettext("Verb & adjective (actions/processes/states))")],
+            [:questions, gettext("Question signs")],
+            [:pointing_sign, gettext("Pointing signs")],
+            [:interactive, gettext("Interactive & backchannel")],
+            [:modifier, gettext("Modifier (of verb, sentence, or another modifier)")],
+          ]}>
+            <th>{label}</th>
+            <td>
+              {Map.get(%{true: "✔", false: "✘"}, Enum.any?(@sign.definitions, &(&1.role == role)))}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
     </div>
 
     <div id="editorial_section">
       <table>
         <thead>
           <tr>
-            <th colspan="2"><%= gettext("Editorial vocabulary/dictionary") %></th>
+            <th colspan="2">{gettext("Editorial vocabulary/dictionary")}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <th><%= gettext("Editorial doubtful or unsure") %></th>
+            <th>{gettext("Editorial doubtful or unsure")}</th>
             <td>
               <.input
                 type="select"
@@ -1165,7 +1205,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
             </td>
           </tr>
           <tr>
-            <th><%= gettext("editorial_problematic") %></th>
+            <th>{gettext("editorial_problematic")}</th>
             <td>
               <.input
                 type="select"
@@ -1175,13 +1215,13 @@ translations (with the requisite logic around splitting on ", " and adding it ba
             </td>
           </tr>
           <tr>
-            <th><%= gettext("Published") %></th>
+            <th>{gettext("Published")}</th>
             <td>
               <.input type="select" field={@form[:published]} options={[nil, true, false]} />
             </td>
           </tr>
           <tr>
-            <th><%= gettext("Proposed new sign") %></th>
+            <th>{gettext("Proposed new sign")}</th>
             <td>
               <.input
                 type="select"
@@ -1196,12 +1236,12 @@ translations (with the requisite logic around splitting on ", " and adding it ba
       <table>
         <thead>
           <tr>
-            <th colspan="2"><%= gettext("editorial video") %></th>
+            <th colspan="2">{gettext("editorial video")}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <th><%= gettext("Redo video") %></th>
+            <th>{gettext("Redo video")}</th>
             <td>
               <.input
                 type="select"
@@ -1211,7 +1251,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
             </td>
           </tr>
           <tr>
-            <th><%= gettext("Corpus attested") %></th>
+            <th>{gettext("Corpus attested")}</th>
             <%!-- TODO: this will ideally come from actually analysing the corpus
              --%>
             <td>
@@ -1220,7 +1260,10 @@ translations (with the requisite logic around splitting on ", " and adding it ba
           </tr>
         </tbody>
       </table>
+
+      <button class="button mt-2">
+        {gettext("Save")}{if assigns[:touched], do: "*"}
+      </button>
     </div>
-    <%!-- TODO: definitions, video,  --%>
   </div>
 </.form>

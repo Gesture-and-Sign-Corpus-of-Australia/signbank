@@ -14,7 +14,7 @@
               patch={~p"/dictionary/sign/#{result.id_gloss}?q=#{@search_term}"}
               phx-click={JS.push_focus()}
             >
-              <%= index %>
+              {index}
             </.link>
           </div>
         <% end %>
@@ -25,14 +25,14 @@
 
 <div :if={@sign.sense_number} class="level">
   <p :if={@sign.sense_number == 1}>
-    <%= gettext(
+    {gettext(
       "This sign has two or more completely separate meanings. Click Next to see the other ones."
-    ) %>
+    )}
   </p>
   <p :if={@sign.sense_number > 1}>
-    <%= gettext(
+    {gettext(
       "This sign has two or more completely separate meanings. Click Next and Previous to see the other ones."
-    ) %>
+    )}
   </p>
 </div>
 <div class="columns">
@@ -45,19 +45,19 @@
           <em>this entry has no keywords</em>
         <% [keyword] -> %>
           <span class={bold_matching_keyword(keyword, @search_term)}>
-            <%= keyword %>
+            {keyword}
           </span>
         <% keywords -> %>
           <%= for {keyword, index} <- Enum.with_index(keywords, 1) do %>
             <span class={bold_matching_keyword(keyword, @search_term)}>
-              <%= keyword %><%= if index < Enum.count(keywords), do: ", " %>
+              {keyword}{if index < Enum.count(keywords), do: ", "}
             </span>
           <% end %>
       <% end %>
     </p>
     <div :if={Enum.count(@sign.suggested_signs) > 0} style="margin-top: 0.5em">
       <h2 class="is-size-5">Suggested signs</h2>
-      <p><%= @sign.suggested_signs_description %></p>
+      <p>{@sign.suggested_signs_description}</p>
       <ul class="suggested_signs">
         <li :for={suggestion <- @sign.suggested_signs}>
           <.modal id={"suggesed_sign_modal_#{suggestion.id}"}>
@@ -83,4 +83,4 @@
   </div>
 </div>
 
-<%!-- seealso/ant --%>
+<%!-- TODO: add seealso/ant collapsible embeds --%>

@@ -8,6 +8,8 @@ defmodule SignbankWeb.Search.SearchForm do
   embedded_schema do
     embeds_many :filters, Filter, on_replace: :delete do
       field :field, Ecto.Enum, values: Signbank.Dictionary.Sign.__schema__(:fields)
+      # sub_field is a key on :field, for filtering on nested data
+      field :sub_field, :string, default: nil
 
       field :op, Ecto.Enum,
         values: [
@@ -35,12 +37,10 @@ defmodule SignbankWeb.Search.SearchForm do
 
   @doc false
   def filter_changeset(filter, params) do
-    fields = [:field, :op, :value]
-
     changeset =
       filter
-      |> cast(params, fields)
-      |> validate_required(fields)
+      |> cast(params, [:field, :op, :sub_field, :value])
+      |> validate_required([:field, :op, :value])
 
     if get_change(changeset, :delete) do
       %{changeset | action: :delete}
@@ -48,4 +48,12 @@ defmodule SignbankWeb.Search.SearchForm do
       changeset
     end
   end
+end
+
+defmodule SignbankWeb.Search.SearchForm.FilterCategory do
+  defstruct name: nil, label: nil, fields: []
+end
+
+defmodule SignbankWeb.Search.SearchForm.FilterField do
+  defstruct name: nil, label: nil, type: nil, options: nil
 end

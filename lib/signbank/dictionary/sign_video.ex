@@ -18,7 +18,7 @@ defmodule Signbank.Dictionary.SignVideo do
   end
 
   def changeset(video, attrs) do
-    required_fields = [:url, :sign_id]
+    required_fields = [:url]
 
     video
     |> cast(attrs, required_fields)

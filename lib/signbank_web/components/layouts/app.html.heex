@@ -66,39 +66,39 @@
       </div>
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">
-          <%= gettext("Research") %>
+          {gettext("Research")}
         </a>
 
         <div class="navbar-dropdown is-right">
           <.link class="navbar-item" href={~p"/research/corpus"}>
-            <%= gettext("Corpus") %>
+            {gettext("Corpus")}
           </.link>
           <.link class="navbar-item" href={~p"/research/vocabulary"}>
-            <%= gettext("Vocabulary") %>
+            {gettext("Vocabulary")}
           </.link>
           <.link class="navbar-item" href={~p"/about/grammar"}>
-            <%= gettext("Grammar") %>
+            {gettext("Grammar")}
           </.link>
           <.link class="navbar-item" href={~p"/dictionary/search"}>
-            <%= gettext("Advanced search") %>
+            {gettext("Advanced search")}
           </.link>
         </div>
       </div>
 
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">
-          <%= gettext("About") %>
+          {gettext("About")}
         </a>
 
         <div class="navbar-dropdown is-right">
           <.link class="navbar-item" href={~p"/about/community"}>
-            <%= gettext("Community") %>
+            {gettext("Community")}
           </.link>
           <.link class="navbar-item" href={~p"/about/history"}>
-            <%= gettext("History") %>
+            {gettext("History")}
           </.link>
           <.link class="navbar-item" href={~p"/about/acknowledgements"}>
-            <%= gettext("Acknowledgements") %>
+            {gettext("Acknowledgements")}
           </.link>
         </div>
       </div>
@@ -106,6 +106,6 @@
   </nav>
   <main>
     <.flash_group flash={@flash} />
-    <%= @inner_content %>
+    {@inner_content}
   </main>
 </div>

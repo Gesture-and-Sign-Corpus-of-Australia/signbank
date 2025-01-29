@@ -42,15 +42,15 @@ defmodule Signbank.Accounts.UserNotifier do
       "Confirmation instructions",
       ~H"""
       <.email_layout>
-        <h1><%= @application_name %> registration.</h1>
-        <p>Hi <%= @user.email %>,</p>
-        <p>You can confirm your <%= @application_name %> account by visiting the URL below:</p>
+        <h1>{@application_name} registration.</h1>
+        <p>Hi {@user.email},</p>
+        <p>You can confirm your {@application_name} account by visiting the URL below:</p>
         <p>
-          <%= @url %>
+          {@url}
         </p>
         <p>If you didn't create an account with us, please ignore this email.</p>
         <p>Best,</p>
-        <p>The <%= @application_name %> Team</p>
+        <p>The {@application_name} Team</p>
       </.email_layout>
       """
     )
@@ -72,14 +72,14 @@ defmodule Signbank.Accounts.UserNotifier do
       ~H"""
       <.email_layout>
         <h1>Reset password instructions</h1>
-        <p>Hi <%= @user.email %>,</p>
+        <p>Hi {@user.email},</p>
         <p>You can reset your password by visiting the URL below:</p>
         <p>
-          <%= @url %>
+          {@url}
         </p>
         <p>If you didn't request this change, please ignore this.</p>
         <p>Best,</p>
-        <p>The <%= @application_name %> Team</p>
+        <p>The {@application_name} Team</p>
       </.email_layout>
       """
     )
@@ -102,14 +102,14 @@ defmodule Signbank.Accounts.UserNotifier do
       <.email_layout>
         <%!-- TODO: move application name to environment variables --%>
         <h1>Update email instructions</h1>
-        <p>Hi <%= @user.email %>,</p>
+        <p>Hi {@user.email},</p>
         <p>You can change your email by visiting the URL below:</p>
         <p>
-          <%= @url %>
+          {@url}
         </p>
         <p>If you didn't request this change, please ignore this.</p>
         <p>Best,</p>
-        <p>The <%= @application_name %> Team</p>
+        <p>The {@application_name} Team</p>
       </.email_layout>
       """
     )
@@ -147,7 +147,7 @@ defmodule Signbank.Accounts.UserNotifier do
         </style>
       </head>
       <body>
-        <%= render_slot(@inner_block) %>
+        {render_slot(@inner_block)}
       </body>
     </html>
     """

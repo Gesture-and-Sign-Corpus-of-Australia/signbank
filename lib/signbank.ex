@@ -6,4 +6,12 @@ defmodule Signbank do
   Contexts are also responsible for managing your data, regardless
   if it comes from the database, an external API or others.
   """
+
+  def signed_languages do
+    ["asf"]
+  end
+
+  def signed_language?(lang) do
+    lang in signed_languages()
+  end
 end
