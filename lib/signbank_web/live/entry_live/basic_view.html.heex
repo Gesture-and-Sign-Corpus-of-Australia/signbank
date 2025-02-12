@@ -1,6 +1,8 @@
 <nav class="level entry-page__switch_entry">
-  <.entry_nav class="level-left" sign={@sign} current_user={@current_user} />
-
+  <div class="level-left">
+    <.entry_nav class="level-left" sign={@sign} current_user={@current_user} />
+    <div :if={!@sign.published} class="bg-striped">This entry is not published.</div>
+  </div>
   <div class="level-right">
     <%!-- <p :if={@search_term != nil and not Enum.empty?(@search_results)}> --%>
     <div :if={@search_term != nil and not Enum.empty?(@search_results)} class="search-matches">

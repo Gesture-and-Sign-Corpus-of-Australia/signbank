@@ -49,9 +49,11 @@ $color_subordinate_hand: #aed784;
   margin-top: auto;
   margin-bottom: auto;
 }
+
 [data-drag-handle]:active {
   cursor: ns-resize;
 }
+
 .bg-yellow-100 {
   background: palegoldenrod;
 }
@@ -438,6 +440,17 @@ table tr:has([phx-click]) {
   }
 }
 
+.bg-striped {
+  $bg: #d1d1d177;
+  background-image: linear-gradient(
+    45deg, transparent 11.11%, 
+    $bg 11.11%, $bg 50%,
+    transparent 50%, transparent 61.11%,
+    $bg 61.11%, $bg 100%
+  );
+  background-size: 25.46px 25.46px;
+}
+
 .flash {
   position: fixed;
   bottom: 0.5rem;
@@ -594,6 +607,7 @@ table tr:has([phx-click]) {
 }
 
 .edit_sections {
+
   &,
   // fix for bulma CSS
   input {
@@ -604,8 +618,7 @@ table tr:has([phx-click]) {
   gap: 10px;
   // TODO: this layout doesn't work as intended, but I think copying the FM Pro layout 1:1 is going to be almost impossible
   grid-template-rows: 1fr 2fr 2fr 2fr;
-  grid-template-areas:
-  "video video editorial grammatical_function"
+  grid-template-areas: "video video editorial grammatical_function"
   "phonology phonology vocabulary morphology"
   "phonology phonology definitions definitions"
   "phonology phonology definitions definitions";
@@ -619,77 +632,79 @@ table tr:has([phx-click]) {
     "video": #00000000
   );
 
-  @each $name, $color in $sections {
-    ##{$name}_section {
-      --section_color: #{$color};
-      grid-area: #{$name};
-      
-      table+table {
-        margin-top: 10px;
-      }
+@each $name, $color in $sections {
+  ##{$name}_section {
+    --section_color: #{$color};
+    grid-area: #{$name};
+
+    table+table {
+      margin-top: 10px;
     }
   }
+}
 
-  #editorial_section {
-    thead {
-      border: 4px solid #ec602c;
-    }
+#editorial_section {
+  thead {
+    border: 4px solid #ec602c;
+  }
+}
+
+#definitions_section {
+  .drag-handle {
+    margin-right: 1em;
   }
 
-  #definitions_section {
-    .drag-handle {
-      margin-right: 1em;
-    }
+  .definition {
+    display: flex;
+    padding: 1em;
+    width: 100%;
+    border: 1px solid black;
+    background-color: white;
+    margin-bottom: 20px;
 
-    .definition {
-      display:flex;
-      padding: 1em;
-      width:100%;
-      border: 1px solid black;
-      background-color:white;
-      margin-bottom: 20px;
-
-      textarea {
-        width: 100%;
-      }
+    textarea {
+      width: 100%;
     }
   }
+}
 
-  table {
-    width: 310px;
+table {
+  width: 310px;
 
-    td {
-      text-align: right;
-    }
+  td {
+    text-align: right;
   }
+}
 
-  &>div {
-    border: 4px solid var(--section_color);
-    padding: 10px;
+&>div {
+  border: 4px solid var(--section_color);
+  padding: 10px;
 
-    thead {
-      background: var(--section_color);
-    }
-  }
-
-  input,
-  select {
+  thead {
     background: var(--section_color);
   }
+}
 
-  .dominant_hand_field {
-    background: $color_dominant_hand;
-    &.allophone_field {
-      background: color.scale($color_dominant_hand, $lightness: -30%)
-    }
-  }
+input,
+select {
+  background: var(--section_color);
+}
 
-  .subordinate_hand_field {
-    background: $color_subordinate_hand;
-    &.allophone_field {
-      background: color.scale($color_subordinate_hand, $lightness: -30%)
-    }
+.dominant_hand_field {
+  background: $color_dominant_hand;
+
+  &.allophone_field {
+    background: color.scale($color_dominant_hand, $lightness: -30%)
   }
+}
+
+.subordinate_hand_field {
+  background: $color_subordinate_hand;
+
+  &.allophone_field {
+    background: color.scale($color_subordinate_hand, $lightness: -30%)
+  }
+}
 }
 
 
@@ -698,11 +713,13 @@ table tr:has([phx-click]) {
   height: 209px;
   background: url(/images/spritesheet.png) -0px -0px;
 }
+
 .handshape.handshape__point {
   width: 209px;
   height: 209px;
   background: url(/images/spritesheet.png) -418px -0px;
 }
+
 .handshape.handshape__flat {
   width: 209px;
   height: 209px;
