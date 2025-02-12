@@ -5,6 +5,8 @@ defmodule SignbankWeb.SignLive.Index do
   alias Signbank.Dictionary
   alias Signbank.Dictionary.Sign
 
+  on_mount {SignbankWeb.UserAuth, :mount_current_user}
+
   @impl true
   def mount(_params, _session, socket) do
     {:ok, stream(socket, :signs, [])}
@@ -23,7 +25,7 @@ defmodule SignbankWeb.SignLive.Index do
 
     # TODO: we need to use `n` to get to a specific match number, but right now we can't
     # see other matches and they're not sorted properly anyway
-    case Dictionary.fuzzy_find_keyword(search_term) do
+    case Dictionary.fuzzy_find_keyword(search_term, socket.assigns.current_user) do
       # if we match a keyword exactly, and its the only match, jump straight to results
       {:ok, [[^search_term, id_gloss, _]]} ->
         {:noreply,

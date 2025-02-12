@@ -240,7 +240,7 @@ defmodule Signbank.Dictionary do
   If the search is not ambiguous (i.e., there is an exact keyword match and there
   are no other keywords that start with `query`), then it only returns that one match.
   """
-  def fuzzy_find_keyword(query) do
+  def fuzzy_find_keyword(query, current_user \\ nil) do
     region_sorter = fn [_id_gloss, _kw, regions, _published] ->
       Enum.find_index(sort_order(), fn x ->
         Atom.to_string(x) == Enum.at(regions, 0)
@@ -267,7 +267,13 @@ defmodule Signbank.Dictionary do
       {:ok, %Postgrex.Result{rows: rows}} ->
         results =
           rows
-          |> Enum.group_by(fn [_id_gloss, kw, _regions, _published] -> kw end)
+          |> Enum.filter(fn [_id_gloss, _kw, _regions, published?] ->
+            case current_user do
+              %User{role: role} when role in [:tech, :editor] -> true
+              _ -> published?
+            end
+          end)
+          |> Enum.group_by(fn [_id_gloss, kw, _regions, _published?] -> kw end)
           |> Enum.map(fn {kw, matches} ->
             similarity = matches |> Enum.at(0) |> Enum.at(3)
 
