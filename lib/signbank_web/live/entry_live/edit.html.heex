@@ -954,8 +954,6 @@ translations (with the requisite logic around splitting on ", " and adding it ba
           </tbody>
         </table>
 
-        <%!-- IOU one semantic categories section --%>
-
         <table>
           <thead>
             <tr>
@@ -982,6 +980,23 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                   field={@form[:popular_explanation]}
                   options={[nil, true, false]}
                 />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table>
+          <thead>
+            <tr>
+              <th colspan="2">{gettext("Vocabulary: semantics (topic, theme)")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>{gettext("Semantic categories")}</th>
+              <%!-- TODO: need form control here --%>
+              <td>
+                selection UI TBD
               </td>
             </tr>
           </tbody>

@@ -92,6 +92,8 @@ defmodule Signbank.Dictionary.Sign do
 
     field :crude, :boolean
 
+    many_to_many :semantic_categories, Dictionary.SemanticCategory, join_through: "signs_semantic_categories"
+
     timestamps(type: :utc_datetime)
   end
 

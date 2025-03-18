@@ -173,6 +173,7 @@ defmodule Signbank.Dictionary do
           citation: [definitions: [], variants: []],
           definitions: [],
           variants: [videos: [], regions: []],
+          semantic_categories: [],
           regions: [],
           videos: [],
           active_video: [],

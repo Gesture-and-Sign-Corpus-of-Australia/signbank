@@ -163,6 +163,9 @@
             <li :if={@sign.popular_explanation}>
               Popular explanation: {@sign.popular_explanation}
             </li>
+            <li :if={Enum.count(@sign.semantic_categories) > 0}>
+              Semantic category: {@sign.semantic_categories |> Enum.map(fn c -> c.name end) |> Enum.join(", ")}
+            </li>
 
             <%!-- as yet unimplemented:
           <li>Corpus attested: </li>
