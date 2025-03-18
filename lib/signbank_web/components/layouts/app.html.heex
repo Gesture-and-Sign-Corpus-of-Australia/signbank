@@ -9,6 +9,7 @@
       </a>
       <a
         role="button"
+        href="#"
         class="navbar-burger is-white"
         aria-label="menu"
         aria-expanded="false"
@@ -27,7 +28,9 @@
     </div>
 
     <div id="navbar-menu" class="navbar-menu navbar-end">
-      <div style="order: 99; /* place on the right for desktop */" class="navbar-item">
+      <%!-- TODO: make two copies of the search bar (one for mobile and one for desktop; to avoid using `order` --%>
+      <%!-- TODO: hide chevrons for menu items on mobile --%>
+      <div style="display:inline-flex;flex-direction:column;order: 99; /* place on the right for desktop */" class="navbar-item">
         <form action="/dictionary" method="GET">
           <div class="field has-addons">
             <div class="control has-icons-right">
@@ -38,34 +41,28 @@
               <button class="button">
                 <Heroicons.magnifying_glass class="icon--medium zzicon--small" />
               </button>
-              <button type="button" class="dropdown is-right is-hoverable">
-                <Heroicons.chevron_down class="icon--medium dropdown-trigger zzicon--small" />
-                <div class="dropdown-menu" role="menu">
-                  <div class="dropdown-content">
-                    <%= for handshape <- [:point, :letter_c, :flat] do %>
-                      <a
-                        href="#"
-                        class=""
-                        onclick={"(()=>{window.addHandshapeFilter('#{handshape}')})();return false"}
-                      >
-                        <div class={~w(handshape handshape__#{handshape})} />
-                      </a>
-                    <% end %>
-                    <%!-- <a href="#" class="dropdown-item">  </a>
-                    <a class="dropdown-item"> Other dropdown item </a>
-                    <a href="#" class="dropdown-item is-active"> Active dropdown item </a>
-                    <a href="#" class="dropdown-item"> Other dropdown item </a>
-                    <hr class="dropdown-divider" />
-                    <a href="#" class="dropdown-item"> With a divider </a> --%>
-                  </div>
-                </div>
-              </button>
             </div>
           </div>
         </form>
+        <.link class="" href={~p"/dictionary/phonological-search"}>
+          Search by sign feature
+          <%!-- <div class="dropdown-menu" role="menu">
+            <div class="dropdown-content">
+              <%= for handshape <- [:point, :letter_c, :flat] do %>
+                <a
+                  href="#"
+                  class=""
+                  onclick={"(()=>{window.addHandshapeFilter('#{handshape}')})();return false"}
+                >
+                  <div class={~w(handshape handshape__#{handshape})} />
+                </a>
+              <% end %>
+            </div>
+          </div> --%>
+        </.link>
       </div>
       <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">
+        <a class="navbar-link" href="#">
           {gettext("Research")}
         </a>
 
@@ -86,7 +83,7 @@
       </div>
 
       <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">
+        <a class="navbar-link" href="#">
           {gettext("About")}
         </a>
 

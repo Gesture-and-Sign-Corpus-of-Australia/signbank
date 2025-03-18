@@ -35,10 +35,11 @@ $color_subordinate_hand: #aed784;
 @use "fonts.scss";
 @use "modal.scss";
 
-
-
-
-
+video:focus-within,
+:focus-visible {
+    outline: 3px solid black !important;
+    box-shadow: 0 0 0 6px white !important;
+}
 
 
 [data-drag-handle] {
@@ -61,8 +62,6 @@ $color_subordinate_hand: #aed784;
 .shadow-2xl {
   box-shadow: black 20px 20px;
 }
-
-
 
 
 
@@ -92,7 +91,8 @@ $gaps: (
   align-items: center;
 
   .navbar-item,
-  .navbar-link {
+  .navbar-link,
+  a {
     color: $yellow;
   }
 }
@@ -724,4 +724,14 @@ select {
   width: 209px;
   height: 209px;
   background: url(/images/spritesheet.png) -4180px -0px;
+}
+
+
+
+.highlight,
+.highlight rect {
+  $c: blue;
+  background: $c;
+  fill: $c;
+  opacity: 0.8;
 }

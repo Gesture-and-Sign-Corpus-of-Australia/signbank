@@ -36,6 +36,8 @@ defmodule SignbankWeb.Router do
 
     live "/dictionary/search", SignLive.Search, :show
 
+    live "/dictionary/phonological-search", SignLive.PhonologicalSearch, :show
+
     live "/dictionary/sign/:id", SignLive.BasicView, :show
     live "/dictionary/sign/:id/detail", SignLive.LinguisticView, :show
     # TODO: merge the two views maybe, there's a lot of duplication between them

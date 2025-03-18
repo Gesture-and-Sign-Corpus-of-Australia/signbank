@@ -82,6 +82,24 @@ window.addHandshapeFilter = (value) => {
 
 }
 
+// TODO: use this to highlight the current selected phonological search handshape/location
+window.addEventListener("phx:phon-filter-highlight", (e) => {
+  if (e.detail.location) {
+    let els = document.querySelectorAll(`[phx-value-location="${e.detail.location}"]`);
+    
+    [...document.querySelectorAll(".location_filter_container > *")].forEach(x => x.classList.remove("highlight"));
+
+    for (let el of [...els]) {
+      el.classList.add("highlight");
+    }
+  }
+  if (e.detail.handshape) {
+    let el = document.querySelector(`[phx-value-handshape="${e.detail.handshape}"]`);
+    [...el.parentElement.children].forEach(x => x.classList.remove("highlight"));
+    el.classList.add("highlight");
+  }
+})
+
 // Show progress bar on live navigation and form submits
 topbar.config({ barColors: { 0: "#29d" }, shadowColor: "rgba(0, 0, 0, .3)" })
 window.addEventListener("phx:page-loading-start", _info => topbar.show(300))
