@@ -95,6 +95,6 @@ defmodule SignbankWeb.SignLive.Index do
   end
 
   def persist_query_params(params) do
-    Map.filter(params, fn {key, _val} -> key in ["hs", "loc", "q"] end)
+    Map.filter(params, fn {key, val} -> key in ["hs", "loc", "q"] or val == "" or val == nil end)
   end
 end
