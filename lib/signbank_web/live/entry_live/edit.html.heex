@@ -832,7 +832,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
             </tr> --%>
             <.regions_checkgroup
               field={@form[:regions]}
-              label={"" || gettext("Regions")}
+              label={gettext("Regions")}
               options={
                 Signbank.Dictionary.SignRegion.regions()
                 |> Enum.map(&{Signbank.Dictionary.SignRegion.region_to_string(&1), &1})
