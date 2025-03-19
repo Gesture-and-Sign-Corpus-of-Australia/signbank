@@ -48,7 +48,10 @@ translations (with the requisite logic around splitting on ", " and adding it ba
 /> --%>
 
 <%!-- TODO: move this to CSS --%>
-<nav class="level" style="position:sticky;top:15px;background-color:white;border-bottom: 1px solid black;z-index:10;">
+<nav
+  class="level"
+  style="position:sticky;top:15px;background-color:white;border-bottom: 1px solid black;z-index:10;"
+>
   <.entry_nav class="level-left" sign={@sign} current_user={@current_user} />
   <.link
     :if={@current_user && @current_user.role in [:tech, :editor]}
@@ -1182,15 +1185,17 @@ translations (with the requisite logic around splitting on ", " and adding it ba
           </tr>
         </thead>
         <tbody>
-          <tr  :for={[role, label] <- [
-            [:general, gettext("General Sign")],
-            [:noun, gettext("Noun (things)")],
-            [:verb, gettext("Verb & adjective (actions/processes/states))")],
-            [:questions, gettext("Question signs")],
-            [:pointing_sign, gettext("Pointing signs")],
-            [:interactive, gettext("Interactive & backchannel")],
-            [:modifier, gettext("Modifier (of verb, sentence, or another modifier)")],
-          ]}>
+          <tr :for={
+            [role, label] <- [
+              [:general, gettext("General Sign")],
+              [:noun, gettext("Noun (things)")],
+              [:verb, gettext("Verb & adjective (actions/processes/states))")],
+              [:questions, gettext("Question signs")],
+              [:pointing_sign, gettext("Pointing signs")],
+              [:interactive, gettext("Interactive & backchannel")],
+              [:modifier, gettext("Modifier (of verb, sentence, or another modifier)")]
+            ]
+          }>
             <th>{label}</th>
             <td>
               {Map.get(%{true: "✔", false: "✘"}, Enum.any?(@sign.definitions, &(&1.role == role)))}
@@ -1198,7 +1203,6 @@ translations (with the requisite logic around splitting on ", " and adding it ba
           </tr>
         </tbody>
       </table>
-
     </div>
 
     <div id="editorial_section">

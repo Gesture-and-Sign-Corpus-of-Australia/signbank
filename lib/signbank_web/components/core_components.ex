@@ -848,7 +848,11 @@ defmodule SignbankWeb.CoreComponents do
 
   attr :class, :string, required: false
   attr :sign, Dictionary.Sign, required: false
-  attr :view, :atom, values: [:basic, :detail, :edit], default: :basic, doc: "used to stay in the same view on navigation"
+
+  attr :view, :atom,
+    values: [:basic, :detail, :edit],
+    default: :basic,
+    doc: "used to stay in the same view on navigation"
 
   attr :current_user, User, required: false
 

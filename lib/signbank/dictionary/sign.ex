@@ -92,7 +92,8 @@ defmodule Signbank.Dictionary.Sign do
 
     field :crude, :boolean
 
-    many_to_many :semantic_categories, Dictionary.SemanticCategory, join_through: "signs_semantic_categories"
+    many_to_many :semantic_categories, Dictionary.SemanticCategory,
+      join_through: "signs_semantic_categories"
 
     timestamps(type: :utc_datetime)
   end
@@ -149,7 +150,7 @@ defmodule Signbank.Dictionary.Sign do
       :videos,
       with: &Dictionary.SignVideo.changeset/2,
       drop_param: :videos_drop
-      )
+    )
     |> cast_assoc(
       :definitions,
       with: &Dictionary.Definition.changeset/3,

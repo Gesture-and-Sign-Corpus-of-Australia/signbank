@@ -8,10 +8,10 @@ defmodule Signbank.Repo.Migrations.CreateSemanticCategories do
 
     create table(:signs_semantic_categories) do
       add :sign_id,
-        references(:signs, on_delete: :nothing)
+          references(:signs, on_delete: :nothing)
 
       add :semantic_category_id,
-        references(:semantic_categories, on_delete: :nothing)
+          references(:semantic_categories, on_delete: :nothing)
     end
   end
 end

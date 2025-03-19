@@ -7,7 +7,7 @@
     <%!-- <p :if={@search_term != nil and not Enum.empty?(@search_results)}> --%>
     <div :if={not Enum.empty?(@search_results)} class="search-matches">
       <div>
-        Matches <span :if={@search_term != nil}>for the word <i><%= @search_term %></i></span>
+        Matches <span :if={@search_term != nil}>for the word <i>{@search_term}</i></span>
         <span :if={@handshape != nil}>with a {@handshape} handshape</span>
         <span :if={@location != nil}>at {@location} location</span>:
       </div>

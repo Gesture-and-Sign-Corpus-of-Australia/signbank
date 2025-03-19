@@ -136,22 +136,24 @@ defmodule SignbankWeb.SignLive.Edit do
 
   defp handle_upload_progress(:video, entry, socket) do
     if entry.done? do
-      uploaded_file = consume_uploaded_entry(socket, entry, fn %{key: path} ->
-        {:ok, path}
-      end)
+      uploaded_file =
+        consume_uploaded_entry(socket, entry, fn %{key: path} ->
+          {:ok, path}
+        end)
 
-      socket = update(socket, :form, fn %{source: changeset} ->
-        existing = Ecto.Changeset.get_assoc(changeset, :videos)
+      socket =
+        update(socket, :form, fn %{source: changeset} ->
+          existing = Ecto.Changeset.get_assoc(changeset, :videos)
 
-        changeset =
-          Ecto.Changeset.put_assoc(
-            changeset,
-            :videos,
-            existing ++ [%Dictionary.SignVideo{url: uploaded_file}]
-          )
+          changeset =
+            Ecto.Changeset.put_assoc(
+              changeset,
+              :videos,
+              existing ++ [%Dictionary.SignVideo{url: uploaded_file}]
+            )
 
-        to_form(changeset)
-      end)
+          to_form(changeset)
+        end)
 
       {:noreply, put_flash(socket, :info, "file uploaded")}
     else
@@ -160,13 +162,22 @@ defmodule SignbankWeb.SignLive.Edit do
   end
 
   def video(assigns) do
-    assigns = assigns
+    assigns =
+      assigns
       |> assign(
         :is_active_video,
-        (if assigns.active_video.value, do: assigns.active_video.value.id == assigns.f[:id].value, else: false)
+        if(assigns.active_video.value,
+          do: assigns.active_video.value.id == assigns.f[:id].value,
+          else: false
+        )
       )
+
     ~H"""
-    <div id={"sign_video_#{@f[:id].value}"} class="video" style={""<>(if false, do: "opacity: 50%;", else: "")<>(if @is_active_video, do: "border:2px solid darkgrey;", else: "")}>
+    <div
+      id={"sign_video_#{@f[:id].value}"}
+      class="video"
+      style={""<>(if false, do: "opacity: 50%;", else: "")<>(if @is_active_video, do: "border:2px solid darkgrey;", else: "")}
+    >
       <div class="level mb-0">
         <.button
           type="button"
@@ -178,18 +189,33 @@ defmodule SignbankWeb.SignLive.Edit do
           <Heroicons.x_mark class="icon--small" />
         </.button>
         <%= if is_nil(@f[:id].value) do %>
-          <.button style="cursor: not-allowed;" title="Please save before setting as active video" disabled type="button">
+          <.button
+            style="cursor: not-allowed;"
+            title="Please save before setting as active video"
+            disabled
+            type="button"
+          >
             <Heroicons.arrow_up class="icon--small" />
           </.button>
         <% else %>
-          <.button title="Set as active video" type="button" phx-value-id={@f[:id].value} phx-click="set-active-video">
+          <.button
+            title="Set as active video"
+            type="button"
+            phx-value-id={@f[:id].value}
+            phx-click="set-active-video"
+          >
             <Heroicons.arrow_up class="icon--small" />
           </.button>
         <% end %>
       </div>
 
       <video controls="" muted="" autoplay="" width="600">
-        <source src={Path.join(Application.fetch_env!(:signbank, :media_url), @f[:url].value || "missing-video.mp4")} />
+        <source src={
+          Path.join(
+            Application.fetch_env!(:signbank, :media_url),
+            @f[:url].value || "missing-video.mp4"
+          )
+        } />
       </video>
       {@f[:id].value}
       <.input type="hidden" field={@f[:url]} />
@@ -205,7 +231,7 @@ defmodule SignbankWeb.SignLive.Edit do
     <%!-- TODO: move to CSS file --%>
     <div class="definition" style={""<>(if @deleted, do: "opacity: 50%;", else: "")}>
       <Heroicons.bars_2 data-drag-handle class="drag-handle" />
-      <div style={"display:flex;flex-direction:column;flex-grow:1"}>
+      <div style="display:flex;flex-direction:column;flex-grow:1">
         <div class="level">
           <input type="hidden" name="sign[definitions_position][]" } value={@f.index} />
           <input
@@ -237,7 +263,7 @@ defmodule SignbankWeb.SignLive.Edit do
               Delete?
             <% end %>
           </.button>
-      </div>
+        </div>
       </div>
     </div>
     """

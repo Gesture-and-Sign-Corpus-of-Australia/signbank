@@ -28,14 +28,15 @@ defmodule SignbankWeb.SignLive.Index do
       case Dictionary.get_sign_by_phon_feature!(params) do
         [] ->
           {:noreply,
-            socket
-            |> apply_action(socket.assigns.live_action, params)
-            |> assign(:error, gettext("No matches found."))}
+           socket
+           |> apply_action(socket.assigns.live_action, params)
+           |> assign(:error, gettext("No matches found."))}
+
         [first | _] ->
           {:noreply,
-            push_patch(socket,
-              to: ~p"/dictionary/sign/#{first.id_gloss}?#{persist_query_params(params)}"
-            )}
+           push_patch(socket,
+             to: ~p"/dictionary/sign/#{first.id_gloss}?#{persist_query_params(params)}"
+           )}
       end
     else
       # TODO: we need to use `n` to get to a specific match number, but right now we can't
@@ -44,21 +45,21 @@ defmodule SignbankWeb.SignLive.Index do
         # if we match a keyword exactly, and its the only match, jump straight to results
         {:ok, [[^search_term, id_gloss, _]]} ->
           {:noreply,
-          push_patch(socket,
-            to: ~p"/dictionary/sign/#{id_gloss}?#{%{"q" => search_term}}"
-          )}
+           push_patch(socket,
+             to: ~p"/dictionary/sign/#{id_gloss}?#{%{"q" => search_term}}"
+           )}
 
         {:ok, inexact_matches} ->
           {:noreply,
-          socket
-          |> apply_action(socket.assigns.live_action, params)
-          |> assign(:inexact_matches, inexact_matches)}
+           socket
+           |> apply_action(socket.assigns.live_action, params)
+           |> assign(:inexact_matches, inexact_matches)}
 
         {:err, msg} ->
           {:noreply,
-          socket
-          |> apply_action(socket.assigns.live_action, params)
-          |> assign(:error, msg)}
+           socket
+           |> apply_action(socket.assigns.live_action, params)
+           |> assign(:error, msg)}
       end
     end
   end

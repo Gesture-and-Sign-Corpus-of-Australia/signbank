@@ -18,38 +18,39 @@ defmodule SignbankWeb.SignLive.BasicView do
     case Dictionary.get_sign_by_id_gloss(id_gloss, socket.assigns.current_user) do
       nil ->
         {:noreply,
-        socket
-        |> put_flash(:error, "You do not have permission to access this page, please log in.")
-        |> redirect(to: ~p"/users/log_in")}
+         socket
+         |> put_flash(:error, "You do not have permission to access this page, please log in.")
+         |> redirect(to: ~p"/users/log_in")}
 
       sign ->
-        socket = if handshape || location do
-          assign(
-            socket,
-            :search_results,
-            Dictionary.get_sign_by_phon_feature!(params)
-          )
-        else
-          assign(
-            socket,
-            :search_results,
-            if is_nil(search_term) do
-              []
-            else
-              {:ok, search_results} = Dictionary.get_sign_by_keyword!(search_term)
-              search_results
-            end
-          )
-        end
+        socket =
+          if handshape || location do
+            assign(
+              socket,
+              :search_results,
+              Dictionary.get_sign_by_phon_feature!(params)
+            )
+          else
+            assign(
+              socket,
+              :search_results,
+              if is_nil(search_term) do
+                []
+              else
+                {:ok, search_results} = Dictionary.get_sign_by_keyword!(search_term)
+                search_results
+              end
+            )
+          end
 
         {:noreply,
-          socket
-          |> assign(:page_title, page_title(socket.assigns.live_action))
-          |> assign(:sign, sign)
-          |> assign(:handshape, handshape)
-          |> assign(:location, location)
-          |> assign(:query_params, persist_query_params(params))
-          |> assign(:search_term, search_term)}
+         socket
+         |> assign(:page_title, page_title(socket.assigns.live_action))
+         |> assign(:sign, sign)
+         |> assign(:handshape, handshape)
+         |> assign(:location, location)
+         |> assign(:query_params, persist_query_params(params))
+         |> assign(:search_term, search_term)}
     end
   end
 

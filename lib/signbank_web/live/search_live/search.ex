@@ -126,13 +126,16 @@ defmodule SignbankWeb.SignLive.Search do
           %Ecto.Embedded{
             field: :phonology
           }}} ->
-          assigns = assign(
-            assigns,
-            options: phonology_filters()
-            |> Enum.map(fn
-              %{label: label, name: name} -> {label, name}
-            end)
-          )
+          assigns =
+            assign(
+              assigns,
+              options:
+                phonology_filters()
+                |> Enum.map(fn
+                  %{label: label, name: name} -> {label, name}
+                end)
+            )
+
           ~H"""
           <.phonology_filter_control f_filter={@f_filter} options={@options} />
           """
@@ -144,17 +147,20 @@ defmodule SignbankWeb.SignLive.Search do
     end
   end
 
-  attr  :f_filter, :map, required: true
+  attr :f_filter, :map, required: true
   attr :options, :list
   attr :depth, :integer, default: 0
   # attr  :type, :atom, required: true, values: [:category, :field]
   def phonology_filter_control(assigns) do
     if assigns.f_filter[:selected] do
-      assigns = assign(assigns,
-      suboptions: phonology_filters(assigns.f_filter[:selected_top_level].value))
+      assigns =
+        assign(assigns,
+          suboptions: phonology_filters(assigns.f_filter[:selected_top_level].value)
+        )
+
       ~H"""
       <.filter_control type="select" field={@f_filter[:selected_top_level]} options={@options} />
-      <%= @suboptions %>
+      {@suboptions}
       """
     else
       ~H"""
@@ -199,14 +205,26 @@ defmodule SignbankWeb.SignLive.Search do
           |> Enum.map(fn
             %{label: label, name: name} -> {label, name}
           end),
-        sub_fields: sub_fields |> Enum.map(fn %SearchForm.FilterField{label: label, name: name} -> {label, name} end),
+        sub_fields:
+          sub_fields
+          |> Enum.map(fn %SearchForm.FilterField{label: label, name: name} -> {label, name} end),
         values: values
       )
 
     ~H"""
     <.filter_control type="select" field={@f_filter[:selected_top_level]} options={@top_level} />
-    <.filter_control :if={@f_filter[:selected_top_level].value != nil} type="select" field={@f_filter[:sub_field]} options={@sub_fields} />
-    <.filter_control :if={@f_filter[:sub_field].value != nil} type="select" field={@f_filter[:sub_field]} options={@sub_fields} />
+    <.filter_control
+      :if={@f_filter[:selected_top_level].value != nil}
+      type="select"
+      field={@f_filter[:sub_field]}
+      options={@sub_fields}
+    />
+    <.filter_control
+      :if={@f_filter[:sub_field].value != nil}
+      type="select"
+      field={@f_filter[:sub_field]}
+      options={@sub_fields}
+    />
     <%!-- <.subfilter f_filter={@f_filter} /> --%>
     """
 
