@@ -119,7 +119,7 @@ defmodule SimpleS3Upload do
 
   def entry_url(entry) do
     # "http://#{bucket()}.s3.#{region()}.amazonaws.com/#{entry.uuid}.#{ext(entry)}"
-    "#{Application.fetch_env!(:signbank, :media_url)}/"<>s3_filepath(entry)
+    "#{Application.fetch_env!(:signbank, :media_url)}/" <> s3_filepath(entry)
   end
 
   def presign_entry(entry, socket) do

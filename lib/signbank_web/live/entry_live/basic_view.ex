@@ -12,19 +12,24 @@ defmodule SignbankWeb.SignLive.BasicView do
   @impl true
   def handle_params(%{"id" => id_gloss} = params, _, socket) do
     search_term = Map.get(params, "q")
-
-    # TODO: I don't remember where this comes from atm, good sign to rename whatever `n` is meant to be
-    # n = Map.get(params, "n")
+    handshape = Map.get(params, "hs")
+    location = Map.get(params, "loc")
 
     case Dictionary.get_sign_by_id_gloss(id_gloss, socket.assigns.current_user) do
       nil ->
         {:noreply,
-         socket
-         |> put_flash(:error, "You do not have permission to access this page, please log in.")
-         |> redirect(to: ~p"/users/log_in")}
+        socket
+        |> put_flash(:error, "You do not have permission to access this page, please log in.")
+        |> redirect(to: ~p"/users/log_in")}
 
       sign ->
-        socket =
+        socket = if handshape || location do
+          assign(
+            socket,
+            :search_results,
+            Dictionary.get_sign_by_phon_feature!(params)
+          )
+        else
           assign(
             socket,
             :search_results,
@@ -35,13 +40,21 @@ defmodule SignbankWeb.SignLive.BasicView do
               search_results
             end
           )
+        end
 
         {:noreply,
-         socket
-         |> assign(:page_title, page_title(socket.assigns.live_action))
-         |> assign(:sign, sign)
-         |> assign(:search_term, search_term)}
+          socket
+          |> assign(:page_title, page_title(socket.assigns.live_action))
+          |> assign(:sign, sign)
+          |> assign(:handshape, handshape)
+          |> assign(:location, location)
+          |> assign(:query_params, persist_query_params(params))
+          |> assign(:search_term, search_term)}
     end
+  end
+
+  def persist_query_params(params) do
+    Map.filter(params, fn {key, _val} -> key in ["hs", "loc", "q"] end)
   end
 
   def bold_matching_keyword(keyword, search_term) do

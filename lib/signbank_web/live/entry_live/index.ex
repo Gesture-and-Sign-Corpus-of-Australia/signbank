@@ -20,30 +20,46 @@ defmodule SignbankWeb.SignLive.Index do
       |> assign(:error, nil)
 
     search_term = Map.get(params, "q")
-    n = Map.get(params, "n")
-    # handshape = String.to_existing_atom(Map.get(params, "handshape", :))
 
-    # TODO: we need to use `n` to get to a specific match number, but right now we can't
-    # see other matches and they're not sorted properly anyway
-    case Dictionary.fuzzy_find_keyword(search_term, socket.assigns.current_user) do
-      # if we match a keyword exactly, and its the only match, jump straight to results
-      {:ok, [[^search_term, id_gloss, _]]} ->
-        {:noreply,
-         push_patch(socket,
-           to: ~p"/dictionary/sign/#{id_gloss}?#{%{"q" => search_term, "n" => n}}"
-         )}
+    handshape = Map.get(params, "hs")
+    location = Map.get(params, "loc")
 
-      {:ok, inexact_matches} ->
-        {:noreply,
-         socket
-         |> apply_action(socket.assigns.live_action, params)
-         |> assign(:inexact_matches, inexact_matches)}
+    if handshape || location do
+      case Dictionary.get_sign_by_phon_feature!(params) do
+        [] ->
+          {:noreply,
+            socket
+            |> apply_action(socket.assigns.live_action, params)
+            |> assign(:error, gettext("No matches found."))}
+        [first | _] ->
+          {:noreply,
+            push_patch(socket,
+              to: ~p"/dictionary/sign/#{first.id_gloss}?#{persist_query_params(params)}"
+            )}
+      end
+    else
+      # TODO: we need to use `n` to get to a specific match number, but right now we can't
+      # see other matches and they're not sorted properly anyway
+      case Dictionary.fuzzy_find_keyword(search_term, socket.assigns.current_user) do
+        # if we match a keyword exactly, and its the only match, jump straight to results
+        {:ok, [[^search_term, id_gloss, _]]} ->
+          {:noreply,
+          push_patch(socket,
+            to: ~p"/dictionary/sign/#{id_gloss}?#{%{"q" => search_term}}"
+          )}
 
-      {:err, msg} ->
-        {:noreply,
-         socket
-         |> apply_action(socket.assigns.live_action, params)
-         |> assign(:error, msg)}
+        {:ok, inexact_matches} ->
+          {:noreply,
+          socket
+          |> apply_action(socket.assigns.live_action, params)
+          |> assign(:inexact_matches, inexact_matches)}
+
+        {:err, msg} ->
+          {:noreply,
+          socket
+          |> apply_action(socket.assigns.live_action, params)
+          |> assign(:error, msg)}
+      end
     end
   end
 
@@ -76,5 +92,9 @@ defmodule SignbankWeb.SignLive.Index do
     {:ok, _} = Dictionary.delete_sign(sign)
 
     {:noreply, stream_delete(socket, :signs, sign)}
+  end
+
+  def persist_query_params(params) do
+    Map.filter(params, fn {key, _val} -> key in ["hs", "loc", "q"] end)
   end
 end

@@ -196,6 +196,50 @@ defmodule Signbank.Dictionary do
   end
 
   @doc """
+  Results list of signs filtered by phonological feature and keyword
+  """
+  def get_sign_by_phon_feature!(user \\ %User{},  params) do
+    query = from(
+      s in Sign,
+      preload: [
+        citation: [definitions: [], variants: []],
+        definitions: [],
+        variants: [videos: [], regions: []],
+        regions: [],
+        videos: [],
+        active_video: [],
+        suggested_signs: []
+      ]
+    )
+
+    query = if handshape = Map.get(params, "hs") do
+      from(s in query, where: fragment("phonology->>? = ?", "dominant_initial_handshape", ^handshape))
+    else
+      query
+    end
+
+    query = if location = Map.get(params, "loc") do
+      from(s in query, where: fragment("phonology->>? = ?", "initial_primary_location", ^location))
+    else
+      query
+    end
+
+    query = if q = Map.get(params, "q") do
+      from(s in query, where: fragment("exists (select * from (select unnest(keywords::citext[])) foo(keyword) where foo.keyword like ?)", ^"#{q}%"))
+    else
+      query
+    end
+
+    Repo.all(
+      if is_nil(user) or Map.get(user, :role) not in [:tech, :editor] do
+        from s in query, where: s.published == true
+      else
+        query
+      end
+    )
+  end
+
+  @doc """
   Returns a sign with the given `id_gloss`. It only returns citation entries.
 
   ## Examples

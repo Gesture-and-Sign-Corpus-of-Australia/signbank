@@ -11,8 +11,17 @@ defmodule SignbankWeb.SignLive.PhonologicalSearch do
     # TODO: add optional keyword search here
     # TODO: add 'Search' button which is disabled if no filters are selected
     ~H"""
-    <%= @selected_handshape %>
-    <%= @selected_location %>
+    <form action="/dictionary" method="GET">
+      <div class="field has-addons">
+        <input class="input" type="text" name="q" placeholder={gettext("Filter by keyword (optional)...")} />
+        <input id="search-handshape-filter" type="hidden" name="hs" value={@selected_handshape} />
+        <input id="search-location-filter" type="hidden" name="loc" value={@selected_location} />
+        <button class="button">
+          <Heroicons.magnifying_glass class="icon--medium zzicon--small" />
+        </button>
+      </div>
+    </form>
+
     <h1>Handshape</h1>
     <.handshapes />
     <h1>Location</h1>
@@ -76,7 +85,6 @@ defmodule SignbankWeb.SignLive.PhonologicalSearch do
   end
 
   def body(assigns) do
-    IO.inspect assigns
     ~H"""
     <svg {assigns} version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 800 800">
       <image width="800" height="800" xlink:href="/images/locations_body.png"></image>
@@ -200,15 +208,19 @@ defmodule SignbankWeb.SignLive.PhonologicalSearch do
 
   def handle_event("filter", %{"location" => location}, socket) do
     # TODO: actually handle filter selection; perhaps highlight one of the regions
-    socket = assign(socket, selected_location: location)
+    socket = socket
+    |> assign(selected_location: location)
     |> push_event("phon-filter-highlight", %{location: location})
+
     {:noreply, socket}
   end
 
   def handle_event("filter", %{"handshape" => handshape}, socket) do
     # TODO: actually handle filter selection; perhaps highlight one of the regions
-    socket = assign(socket, selected_handshape: handshape)
+    socket = socket
+    |> assign(selected_handshape: handshape)
     |> push_event("phon-filter-highlight", %{handshape: handshape})
+
     {:noreply, socket}
   end
 

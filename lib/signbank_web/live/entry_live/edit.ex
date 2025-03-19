@@ -147,7 +147,7 @@ defmodule SignbankWeb.SignLive.Edit do
           Ecto.Changeset.put_assoc(
             changeset,
             :videos,
-            existing++[%Dictionary.SignVideo{url: uploaded_file}]
+            existing ++ [%Dictionary.SignVideo{url: uploaded_file}]
           )
 
         to_form(changeset)
