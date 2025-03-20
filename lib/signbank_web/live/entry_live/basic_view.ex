@@ -28,7 +28,8 @@ defmodule SignbankWeb.SignLive.BasicView do
             assign(
               socket,
               :search_results,
-              Dictionary.get_sign_by_phon_feature!(params)
+              # TODO: shouldn't tie input here to specific shape of query params
+              Dictionary.get_sign_by_phon_feature!(persist_query_params(params))
             )
           else
             assign(
@@ -55,7 +56,7 @@ defmodule SignbankWeb.SignLive.BasicView do
   end
 
   def persist_query_params(params) do
-    Map.filter(params, fn {key, val} -> key in ["hs", "loc", "q"] or val == "" or val == nil end)
+    Map.filter(params, fn {key, val} -> key in ["hs", "loc", "q"] and val not in ["", nil] end)
   end
 
   def bold_matching_keyword(keyword, search_term) do
