@@ -25,7 +25,7 @@ defmodule SignbankWeb.SignLive.Index do
     location = Map.get(params, "loc")
 
     if handshape || location do
-      case Dictionary.get_sign_by_phon_feature!(params) do
+      case Dictionary.get_sign_by_phon_feature!(persist_query_params(params)) do
         [] ->
           {:noreply,
            socket
