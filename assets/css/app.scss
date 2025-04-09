@@ -35,12 +35,21 @@ $color_subordinate_hand: #aed784;
 @use "fonts.scss";
 @use "modal.scss";
 
+a {
+  text-decoration: underline;
+}
+
+#navbar-menu {
+  a {
+    text-decoration: none;
+  }
+}
+
 video:focus-within,
 :focus-visible {
     outline: 3px solid black !important;
     box-shadow: 0 0 0 6px white !important;
 }
-
 
 [data-drag-handle] {
   height: 20px;

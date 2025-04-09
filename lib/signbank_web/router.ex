@@ -22,6 +22,7 @@ defmodule SignbankWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    get "/terms-and-conditions", PageController, :terms_and_conditions
     get "/about/acknowledgements", PageController, :acknowledgements
     get "/about/classes", PageController, :classes
     get "/about/community", PageController, :community
