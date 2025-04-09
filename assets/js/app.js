@@ -84,19 +84,20 @@ window.addHandshapeFilter = (value) => {
 
 // TODO: use this to highlight the current selected phonological search handshape/location
 window.addEventListener("phx:phon-filter-highlight", (e) => {
-  if (e.detail.location) {
-    let els = document.querySelectorAll(`[phx-value-location="${e.detail.location}"]`);
-    
+  if (e.detail.hasOwnProperty('location')) {
     [...document.querySelectorAll(".location_filter_container > *")].forEach(x => x.classList.remove("highlight"));
-
+    
+    let els = document.querySelectorAll(`[phx-value-location="${e.detail.location}"]`);
     for (let el of [...els]) {
       el.classList.add("highlight");
     }
   }
-  if (e.detail.handshape) {
+  if (e.detail.hasOwnProperty('handshape')) {
+    [...document.querySelector(`#handshapegrid`).children].forEach(x => x.classList.remove("highlight"));
     let el = document.querySelector(`[phx-value-handshape="${e.detail.handshape}"]`);
-    [...el.parentElement.children].forEach(x => x.classList.remove("highlight"));
-    el.classList.add("highlight");
+    if (el) {
+      el.classList.add("highlight");
+    }
   }
 })
 

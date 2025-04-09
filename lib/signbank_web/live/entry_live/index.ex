@@ -55,6 +55,7 @@ defmodule SignbankWeb.SignLive.Index do
            |> apply_action(socket.assigns.live_action, params)
            |> assign(:inexact_matches, inexact_matches)}
 
+        #  TODO: fuzzy_find_keyword/2 should have returned an empty list here; the only err is "No results found."
         {:err, msg} ->
           {:noreply,
            socket
