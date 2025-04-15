@@ -35,15 +35,17 @@ $color_subordinate_hand: #aed784;
 @use "fonts.scss";
 @use "modal.scss";
 
-a {
+a:not([class*=button]) {
   text-decoration: underline;
 }
 
-#navbar-menu {
+#navbar-menu,
+.panel-tabs > {
   a {
     text-decoration: none;
   }
 }
+
 
 video:focus-within,
 :focus-visible {

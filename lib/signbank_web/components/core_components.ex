@@ -827,7 +827,7 @@ defmodule SignbankWeb.CoreComponents do
             <div>
               <Heroicons.eye_slash :if={not definition.published} class="icon--small" />
               <p>
-                {definition.text}
+                {Phoenix.HTML.raw(bold_english_keyword(definition.text))}
               </p>
               <video :if={definition.url} controls muted width="200">
                 <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{definition.url}"} />
@@ -840,11 +840,25 @@ defmodule SignbankWeb.CoreComponents do
     """
   end
 
-  # def info_button(assigns) do
-  #   ~H"""
-  #   <button>
-  #   """
-  # end
+  defp bold_english_keyword(nil) do
+    nil
+  end
+
+  defp bold_english_keyword(text) do
+    case Regex.split(~r/English =/, text, include_captures: true) do
+      [before, english_equals, to_highlight] ->
+        before <>
+          english_equals <>
+          Regex.replace(
+            ~r/(\([^,;.]*\)\s?)?([\w-'‘!? ]+)(?<bracketed>.? ?\[.*\] ?)?(\s?\([^,;.]*\))?(?=[,;.]|$){1}/,
+            to_highlight,
+            "\\1<b>\\2</b>\\3\\4"
+          )
+
+      _ ->
+        text
+    end
+  end
 
   attr :class, :string, required: false
   attr :sign, Dictionary.Sign, required: false

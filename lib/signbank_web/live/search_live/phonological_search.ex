@@ -13,8 +13,8 @@ defmodule SignbankWeb.SignLive.PhonologicalSearch do
     ~H"""
     <h1 class="is-size-3">Search by sign features</h1>
     <p>
-      Find a sign by clicking on a <a href="#handshape">handshape</a>
-      and/or a <a href="#location">location</a>.
+      Find a sign by clicking on a <a href="#handshape">handshape</a>,
+      a <a href="#location">location</a>, or both.
     </p>
 
     <hr />
@@ -240,6 +240,7 @@ defmodule SignbankWeb.SignLive.PhonologicalSearch do
       #handshapegrid * {
       margin: 0.2em;
       flex: 0 1 14%;
+      /* TODO: images 100% width, to fix small ones */
       }
       @media (max-width: 1000px) {
         #handshapegrid * {
