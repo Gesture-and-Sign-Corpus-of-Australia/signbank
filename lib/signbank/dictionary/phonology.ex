@@ -6,6 +6,7 @@ defmodule Signbank.Dictionary.Phonology do
   use Gettext, backend: Signbank.Gettext
   import Ecto.Changeset
 
+  # TODO: check when I swapped keys and values here, it broke edit inputs
   @palm_orientations [
     towards: gettext("Towards"),
     left: gettext("Left"),
@@ -209,6 +210,20 @@ defmodule Signbank.Dictionary.Phonology do
   def paths, do: @paths
   def repetition_types, do: @repetition_types
   def handednesses, do: @handednesses
+  def palm_orientations(:reverse), do: reverse(@palm_orientations)
+  def finger_hand_orientations(:reverse), do: reverse(@finger_hand_orientations)
+  def locations(:reverse), do: reverse(@locations)
+  def handshape_allophones(:reverse), do: reverse(@handshape_allophones)
+  def handshapes(:reverse), do: reverse(@handshapes)
+  def handparts(:reverse), do: reverse(@handparts)
+  def sides(:reverse), do: reverse(@sides)
+  def directions(:reverse), do: reverse(@directions)
+  def paths(:reverse), do: reverse(@paths)
+  def repetition_types(:reverse), do: reverse(@repetition_types)
+  def handednesses(:reverse), do: reverse(@handednesses)
+  defp reverse(keywords) do
+    Enum.map(keywords, fn {k, v} -> {v, k} end)
+  end
 
   def handshape_image(:relaxed), do: "/images/handshapes/nextsense/relaxed.png"
   def handshape_image(:round), do: "/images/handshapes/nextsense/round.png"

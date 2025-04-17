@@ -102,7 +102,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                   class="dominant_hand_field"
                   type="select"
                   field={phonology_f[:dominant_initial_handshape]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.handshapes()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.handshapes(:reverse)}
                 />
               </td>
               <td>
@@ -110,7 +110,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                   class="dominant_hand_field allophone_field"
                   type="select"
                   field={phonology_f[:dominant_initial_handshape_allophone]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.handshape_allophones()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.handshape_allophones(:reverse)}
                 />
               </td>
             </tr>
@@ -121,7 +121,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                   class="dominant_hand_field"
                   type="select"
                   field={phonology_f[:dominant_final_handshape]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.handshapes()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.handshapes(:reverse)}
                 />
               </td>
               <td>
@@ -129,7 +129,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                   class="dominant_hand_field allophone_field"
                   type="select"
                   field={phonology_f[:dominant_final_handshape_allophone]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.handshape_allophones()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.handshape_allophones(:reverse)}
                 />
               </td>
             </tr>
@@ -140,7 +140,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                   class="subordinate_hand_field"
                   type="select"
                   field={phonology_f[:subordinate_initial_handshape]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.handshapes()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.handshapes(:reverse)}
                 />
               </td>
               <td>
@@ -148,7 +148,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                   class="subordinate_hand_field allophone_field"
                   type="select"
                   field={phonology_f[:subordinate_initial_handshape_allophone]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.handshape_allophones()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.handshape_allophones(:reverse)}
                 />
               </td>
             </tr>
@@ -159,7 +159,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                   class="subordinate_hand_field"
                   type="select"
                   field={phonology_f[:subordinate_final_handshape]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.handshapes()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.handshapes(:reverse)}
                 />
               </td>
               <td>
@@ -167,7 +167,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                   class="subordinate_hand_field allophone_field"
                   type="select"
                   field={phonology_f[:subordinate_final_handshape_allophone]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.handshape_allophones()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.handshape_allophones(:reverse)}
                 />
               </td>
             </tr>
@@ -187,7 +187,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                 <.input
                   type="select"
                   field={phonology_f[:initial_primary_location]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.locations()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.locations(:reverse)}
                 />
               </td>
             </tr>
@@ -197,7 +197,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                 <.input
                   type="select"
                   field={phonology_f[:final_primary_location]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.locations()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.locations(:reverse)}
                 />
               </td>
             </tr>
@@ -207,7 +207,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                 <.input
                   type="select"
                   field={phonology_f[:location_rightside_or_leftside]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.sides()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.sides(:reverse)}
                 />
               </td>
             </tr>
@@ -230,7 +230,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                   class="dominant_hand_field"
                   type="select"
                   field={phonology_f[:dominant_initial_finger_hand_orientation]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.finger_hand_orientations()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.finger_hand_orientations(:reverse)}
                 />
               </td>
             </tr>
@@ -241,7 +241,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                   class="dominant_hand_field"
                   type="select"
                   field={phonology_f[:dominant_final_finger_hand_orientation]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.finger_hand_orientations()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.finger_hand_orientations(:reverse)}
                 />
               </td>
             </tr>
@@ -252,7 +252,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                   class="subordinate_hand_field"
                   type="select"
                   field={phonology_f[:subordinate_initial_finger_hand_orientation]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.finger_hand_orientations()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.finger_hand_orientations(:reverse)}
                 />
               </td>
             </tr>
@@ -263,7 +263,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                   class="subordinate_hand_field"
                   type="select"
                   field={phonology_f[:subordinate_final_finger_hand_orientation]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.finger_hand_orientations()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.finger_hand_orientations(:reverse)}
                 />
               </td>
             </tr>
@@ -284,7 +284,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                   class="dominant_hand_field"
                   type="select"
                   field={phonology_f[:dominant_initial_palm_orientation]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.palm_orientations()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.palm_orientations(:reverse)}
                 />
               </td>
             </tr>
@@ -295,7 +295,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                   class="dominant_hand_field"
                   type="select"
                   field={phonology_f[:dominant_final_palm_orientation]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.palm_orientations()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.palm_orientations(:reverse)}
                 />
               </td>
             </tr>
@@ -306,7 +306,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                   class="subordinate_hand_field"
                   type="select"
                   field={phonology_f[:subordinate_initial_palm_orientation]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.palm_orientations()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.palm_orientations(:reverse)}
                 />
               </td>
             </tr>
@@ -317,7 +317,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                   class="subordinate_hand_field"
                   type="select"
                   field={phonology_f[:subordinate_final_palm_orientation]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.palm_orientations()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.palm_orientations(:reverse)}
                 />
               </td>
             </tr>
@@ -338,7 +338,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                   class="dominant_hand_field"
                   type="select"
                   field={phonology_f[:dominant_initial_interacting_handpart]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.handparts()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.handparts(:reverse)}
                 />
               </td>
             </tr>
@@ -349,7 +349,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                   class="dominant_hand_field"
                   type="select"
                   field={phonology_f[:dominant_final_interacting_handpart]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.handparts()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.handparts(:reverse)}
                 />
               </td>
             </tr>
@@ -360,7 +360,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                   class="subordinate_hand_field"
                   type="select"
                   field={phonology_f[:subordinate_initial_interacting_handpart]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.handparts()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.handparts(:reverse)}
                 />
               </td>
             </tr>
@@ -371,7 +371,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                   class="subordinate_hand_field"
                   type="select"
                   field={phonology_f[:subordinate_final_interacting_handpart]}
-                  options={[nil] ++ Signbank.Dictionary.Phonology.handparts()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.handparts(:reverse)}
                 />
               </td>
             </tr>
@@ -672,7 +672,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                 <.input
                   class="dominant_hand_field"
                   type="select"
-                  options={[nil] ++ Signbank.Dictionary.Phonology.directions()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.directions(:reverse)}
                   field={phonology_f[:movement_direction]}
                 />
               </td>
@@ -683,7 +683,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                 <.input
                   class="dominant_hand_field"
                   type="select"
-                  options={[nil] ++ Signbank.Dictionary.Phonology.paths()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.paths(:reverse)}
                   field={phonology_f[:movement_path]}
                 />
               </td>
@@ -705,7 +705,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
                 <.input
                   class="dominant_hand_field"
                   type="select"
-                  options={[nil] ++ Signbank.Dictionary.Phonology.repetition_types()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.repetition_types(:reverse)}
                   field={phonology_f[:repetition_type]}
                 />
               </td>
@@ -759,7 +759,7 @@ translations (with the requisite logic around splitting on ", " and adding it ba
               <td>
                 <.input
                   type="select"
-                  options={[nil] ++ Signbank.Dictionary.Phonology.handednesses()}
+                  options={[nil] ++ Signbank.Dictionary.Phonology.handednesses(:reverse)}
                   field={phonology_f[:handedness]}
                 />
               </td>
