@@ -37,7 +37,7 @@
       {@inner_content}
       <footer>
         <div class="level">
-          <%= if %{role: :tech} = @current_user do %>
+          <%= if @current_user && (%{role: :tech} = @current_user) do %>
             <.link
               class={["admin_login level-left"]}
               href={~p"/tech"}
