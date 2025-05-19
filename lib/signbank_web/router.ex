@@ -74,6 +74,8 @@ defmodule SignbankWeb.Router do
 
     import Phoenix.LiveDashboard.Router
 
+    live "/", Tech.Index, :index
+
     live_dashboard "/dashboard", metrics: SignbankWeb.Telemetry
     # Future tech pages to make:
     # - bulk data loader (maybe just videos)

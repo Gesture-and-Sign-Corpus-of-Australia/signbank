@@ -37,12 +37,21 @@
       {@inner_content}
       <footer>
         <div class="level">
-          <.link
-            class={["admin_login level-left", if(@current_user, do: "is-invisible")]}
-            href={~p"/users/log_in"}
-          >
-            Admin login
-          </.link>
+          <%= if %{role: :tech} = @current_user do %>
+            <.link
+              class={["admin_login level-left"]}
+              href={~p"/tech"}
+            >
+              Dashboard
+            </.link>
+          <% else %>
+            <.link
+              class={["admin_login level-left", if(@current_user, do: "is-invisible")]}
+              href={~p"/users/log_in"}
+            >
+              Admin login
+            </.link>
+          <% end %>
           <p>
             <a href={~p"/terms-and-conditions"}>Terms of use</a>.
           </p>
