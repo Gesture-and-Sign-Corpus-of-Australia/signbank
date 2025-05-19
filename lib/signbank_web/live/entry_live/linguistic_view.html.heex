@@ -33,6 +33,36 @@
       </div>
     </div>
     <p><strong>Keywords:</strong> {Enum.join(@sign.keywords || [], ", ")}</p>
+
+    <hr />
+
+    <div :if={@sign.type == :citation and Enum.count(@sign.variants) > 0} class="box">
+      <h3 class="is-size-5">Variants</h3>
+      <ol class="entry-page__variant_list">
+        <%= for {variant, index} <- Enum.with_index(@sign.variants, 1) do %>
+          <li>
+            <.link
+              class="button"
+              href={~p"/dictionary/sign/#{variant.id_gloss}/detail?#{@params}"}
+            >
+              {index}
+            </.link>
+          </li>
+        <% end %>
+      </ol>
+    </div>
+
+    <div :if={@sign.type == :variant}>
+      <.link
+        class="button"
+        href={~p"/dictionary/sign/#{@sign.citation.id_gloss}/detail?#{@params}"}
+      >
+        Citation form
+        <span class="icon is-small">
+          <Heroicons.chevron_right class="icon--small" />
+        </span>
+      </.link>
+    </div>
   </div>
 
   <div class="column is-flex is-flex-direction-column has-gap-large">
@@ -409,35 +439,5 @@
     <hr />
 
     <.definitions type={:linguistic} user={@current_user} sign={@sign} />
-
-    <hr />
-
-    <div :if={@sign.type == :citation and Enum.count(@sign.variants) > 0} class="box">
-      <h3 class="is-size-5">Variants</h3>
-      <ol class="entry-page__variant_list">
-        <%= for {variant, index} <- Enum.with_index(@sign.variants, 1) do %>
-          <li>
-            <.link
-              class="button"
-              href={~p"/dictionary/sign/#{variant.id_gloss}/detail?#{@params}"}
-            >
-              {index}
-            </.link>
-          </li>
-        <% end %>
-      </ol>
-    </div>
-
-    <div :if={@sign.type == :variant}>
-      <.link
-        class="button"
-        href={~p"/dictionary/sign/#{@sign.citation.id_gloss}/detail?#{@params}"}
-      >
-        Citation form
-        <span class="icon is-small">
-          <Heroicons.chevron_right class="icon--small" />
-        </span>
-      </.link>
-    </div>
   </div>
 </div>
