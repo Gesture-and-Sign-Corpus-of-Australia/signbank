@@ -14,9 +14,9 @@ defmodule Signbank.Dictionary.SignRelation do
   ]
   def relation_types, do: @relation_types
 
-  def region_to_string(:antonym), do: gettext("Antonym")
-  def region_to_string(:synonym), do: gettext("Synonym")
-  def region_to_string(:see_also), do: gettext("See also")
+  def relation_to_string(:antonym), do: gettext("Antonym")
+  def relation_to_string(:synonym), do: gettext("Synonym")
+  def relation_to_string(:see_also), do: gettext("See also")
 
   schema "sign_relations" do
     belongs_to :sign_a, Signbank.Dictionary.Sign
@@ -24,7 +24,7 @@ defmodule Signbank.Dictionary.SignRelation do
 
     field :type, Ecto.Enum, values: @relation_types
 
-    timestamps(type: :utc_datetime)
+    timestamps type: :utc_datetime
   end
 
   @doc false
@@ -37,7 +37,7 @@ defmodule Signbank.Dictionary.SignRelation do
     definition
     |> cast(attrs, required_fields)
     |> validate_required(required_fields)
-    |> unique_constraint(:id, name: "sign_regions_pkey")
-    |> unique_constraint([:sign_id, :region], name: "sign_sign_regions_unique")
+    |> unique_constraint(:id, name: "sign_relations_pkey")
+    |> unique_constraint([:sign_id, :region], name: "sign_sign_relations_unique")
   end
 end

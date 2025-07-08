@@ -41,7 +41,7 @@
           #
           {Credo.Check.Design.AliasUsage,
            [priority: :low, if_nested_deeper_than: 2, if_called_more_often_than: 2]},
-          {Credo.Check.Design.TagTODO, [exit_status: 0]},
+          # {Credo.Check.Design.TagTODO, [exit_status: 0]},
           {Credo.Check.Design.TagFIXME, []},
 
           #
@@ -110,7 +110,7 @@
           {Credo.Check.Warning.UnusedStringOperation, []},
           {Credo.Check.Warning.UnusedTupleOperation, []},
           {Credo.Check.Warning.UnsafeExec, []},
-          {Credo.Check.Refactor.PipeChainStart, []},
+          # {Credo.Check.Refactor.PipeChainStart, []},
           {Credo.Check.Design.DuplicatedCode, []},
           {Credo.Check.Readability.BlockPipe, []},
           {Credo.Check.Readability.WithCustomTaggedTuple, []},

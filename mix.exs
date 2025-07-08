@@ -4,10 +4,11 @@ defmodule Signbank.MixProject do
   def project do
     [
       app: :signbank,
-      version: "0.7.0",
-      elixir: "~> 1.17",
+      version: "0.8.0",
+      elixir: "~> 1.18",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
+      consolidate_protocols: Mix.env() != :dev,
       aliases: aliases(),
       deps: deps(),
       releases: [
@@ -15,7 +16,8 @@ defmodule Signbank.MixProject do
           steps: [:assemble, :tar]
         ]
       ],
-      dialyzer: [flags: [:error_handling, :underspecs]]
+      dialyzer: [flags: [:error_handling, :underspecs]],
+      listeners: [Phoenix.CodeReloader]
     ]
   end
 
@@ -39,52 +41,63 @@ defmodule Signbank.MixProject do
   defp deps do
     [
       # Basic Phoenix dependancies
-      {:bcrypt_elixir, "~> 3.0"},
-      {:phoenix, "~> 1.7.11"},
+      {:phoenix, "~> 1.8.0-rc.3", override: true},
       {:phoenix_ecto, "~> 4.5"},
-      {:ecto_sql, "~> 3.12"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 4.2"},
+      {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 1.0"},
-      {:floki, ">= 0.30.0"},
+      {:phoenix_live_view, "~> 1.0.9"},
       {:phoenix_live_dashboard, "~> 0.8.3"},
-      {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
-      # Email sending
-      {:swoosh, "~> 1.5"},
-      {:finch, "~> 0.13"},
-      {:telemetry_metrics, "~> 1.0"},
-      {:telemetry_poller, "~> 1.0"},
-      {:gettext, "~> 0.20"},
-      {:jason, "~> 1.2"},
-      {:dns_cluster, "~> 0.1.1"},
-      {:bandit, "~> 1.2"},
-      # Static code analysis
-      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
-      # Static code analysis
+      {:esbuild, "~> 0.9", runtime: Mix.env() == :dev},
+      {:ecto, "~> 3.0"},
+      {:ecto_sql, "~> 3.10"},
+      {:ecto_psql_extras, "~> 0.8"},
+
+      # Pagination
+      {:scrivener_ecto, "~> 3.0"},
+
+      # Static code analysis and linting
+      {:credo, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:lexical_credo, "~> 0.5", only: [:dev, :test]},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
+
       # Detect unsafe migrations
       {:excellent_migrations, "~> 0.1", only: [:dev, :test], runtime: false},
-      # Run prod using systemd
-      {:systemd, "~> 0.6"},
-      # SCSS compilation
-      {:dart_sass, "~> 0.6", runtime: Mix.env() == :dev},
-      # Pagination
-      {:scrivener_ecto, "~> 3.1"},
-      # Locale data (for localisation)
-      {:ex_cldr, "~> 2.40"},
-      {:ex_cldr_lists, "~> 2.11"},
-      # Icon components
-      {:heroicons, "~> 0.5.5"},
-      # Enables monitoring Ecto from the dashboard
-      {:ecto_psql_extras, "~> 0.7"},
-      {:csv, "~> 3.2"},
+
+      # for localisation
+      {:ex_cldr_lists, "~> 2.0"},
+      {:ex_cldr, "~> 2.0"},
+      {:gettext, "~> 0.26"},
+
       # XML parsing
-      {:saxy, "~> 1.5"},
-      {:meeseeks, "~> 0.17.0"},
-      # Formats Ecto logs nicely in :dev
+      {:meeseeks, "~> 0.18"},
+      {:saxy, "~> 1.0"},
+      {:sweet_xml, "~> 0.7"},
+      {:bandit, "~> 1.5"},
+      {:bcrypt_elixir, "~> 3.0"},
+      {:csv, "~> 3.2"},
+      {:dns_cluster, "~> 0.1.1"},
       {:ecto_dev_logger, "~> 0.14"},
-      {:lexical_credo, "~> 0.5.0", only: [:dev, :test]}
+      {:ex_aws_s3, "~> 2.0"},
+      {:ex_aws, "~> 2.0"},
+      {:floki, ">= 0.30.0", only: :test},
+      {:heroicons,
+       github: "tailwindlabs/heroicons",
+       tag: "v2.1.1",
+       sparse: "optimized",
+       app: false,
+       compile: false,
+       depth: 1},
+      {:jason, "~> 1.2"},
+      {:oban, "~> 2.0"},
+      {:oban_web, "~> 2.11"},
+      {:req, "~> 0.5"},
+      {:swoosh, "~> 1.0"},
+      {:systemd, "~> 0.6"},
+      {:tailwind, "~> 0.3", runtime: Mix.env() == :dev},
+      {:telemetry_metrics, "~> 1.0"},
+      {:telemetry_poller, "~> 1.0"},
+      {:kino_component, "~> 0.2"}
     ]
   end
 
@@ -96,16 +109,16 @@ defmodule Signbank.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "assets.setup"],
+      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.setup": ["esbuild.install --if-missing"],
-      "assets.build": ["esbuild signbank"],
+      "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
+      "assets.build": ["tailwind signbank", "esbuild signbank"],
       "assets.deploy": [
         "assets.setup",
+        "tailwind signbank --minify",
         "esbuild signbank --minify",
-        "sass default --no-source-map --style=compressed",
         "phx.digest"
       ]
     ]

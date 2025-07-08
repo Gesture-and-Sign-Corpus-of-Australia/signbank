@@ -5,7 +5,6 @@ defmodule Signbank.Dictionary.Morphology do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @primary_key false
   embedded_schema do
     field :directional, :boolean
     field :beginning_directional, :boolean
@@ -29,8 +28,7 @@ defmodule Signbank.Dictionary.Morphology do
   end
 
   def changeset(phonology, attrs) do
-    phonology
-    |> cast(attrs, [
+    cast(phonology, attrs, [
       :directional,
       :beginning_directional,
       :end_directional,

@@ -1,6 +1,6 @@
 defmodule Signbank.Dictionary.SemanticCategory do
+  @moduledoc false
   use Ecto.Schema
-  import Ecto.Changeset
   alias Signbank.Dictionary
 
   schema "semantic_categories" do

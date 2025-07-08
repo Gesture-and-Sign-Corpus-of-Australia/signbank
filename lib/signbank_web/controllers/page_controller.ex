@@ -8,7 +8,6 @@ defmodule SignbankWeb.PageController do
   def corpus(conn, _params), do: render(conn, :corpus)
   def dictionary(conn, _params), do: render(conn, :dictionary)
   def annotations(conn, _params), do: render(conn, :annotations)
-  def grammar(conn, _params), do: render(conn, :grammar)
   def history(conn, _params), do: render(conn, :history)
   def vocabulary(conn, _params), do: render(conn, :vocabulary)
   def terms_and_conditions(conn, _params), do: render(conn, :terms_and_conditions)

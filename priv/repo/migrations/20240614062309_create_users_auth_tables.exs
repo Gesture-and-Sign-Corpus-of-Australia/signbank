@@ -7,9 +7,11 @@ defmodule Signbank.Repo.Migrations.CreateUsersAuthTables do
 
     create table(:users) do
       add :email, :citext, null: false
-      add :hashed_password, :string, null: false
-      add :confirmed_at, :naive_datetime
+      add :hashed_password, :string
+      add :confirmed_at, :utc_datetime
+
       add :role, :string, null: false, default: "none"
+
       timestamps(type: :utc_datetime)
     end
 
@@ -18,7 +20,9 @@ defmodule Signbank.Repo.Migrations.CreateUsersAuthTables do
       add :token, :binary, null: false
       add :context, :string, null: false
       add :sent_to, :string
-      timestamps(updated_at: false)
+      add :authenticated_at, :utc_datetime
+
+      timestamps(type: :utc_datetime, updated_at: false)
     end
   end
 end

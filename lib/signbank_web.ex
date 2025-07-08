@@ -39,12 +39,11 @@ defmodule SignbankWeb do
 
   def controller do
     quote do
-      use Phoenix.Controller,
-        formats: [:html, :json],
-        layouts: [html: SignbankWeb.Layouts]
+      use Phoenix.Controller, formats: [:html, :json]
+
+      use Gettext, backend: Signbank.Gettext
 
       import Plug.Conn
-      use Gettext, backend: Signbank.Gettext
 
       unquote(verified_routes())
     end
@@ -52,8 +51,7 @@ defmodule SignbankWeb do
 
   def live_view do
     quote do
-      use Phoenix.LiveView,
-        layout: {SignbankWeb.Layouts, :app}
+      use Phoenix.LiveView
 
       unquote(html_helpers())
     end
@@ -82,15 +80,17 @@ defmodule SignbankWeb do
 
   defp html_helpers do
     quote do
-      # HTML escaping functionality
-      import Phoenix.HTML
-      # Core UI components and translation
-      import SignbankWeb.CoreComponents
-      import SignbankWeb.MapComponents
+      # Translation
       use Gettext, backend: Signbank.Gettext
 
-      # Shortcut for generating JS commands
+      # HTML escaping functionality
+      import Phoenix.HTML
+      # Core UI components
+      import SignbankWeb.CoreComponents
+
+      # Common modules used in templates
       alias Phoenix.LiveView.JS
+      alias SignbankWeb.Layouts
 
       # Routes generation with the ~p sigil
       unquote(verified_routes())
@@ -107,7 +107,7 @@ defmodule SignbankWeb do
   end
 
   @doc """
-  When used, dispatch to the appropriate controller/view/etc.
+  When used, dispatch to the appropriate controller/live_view/etc.
   """
   defmacro __using__(which) when is_atom(which) do
     apply(__MODULE__, which, [])

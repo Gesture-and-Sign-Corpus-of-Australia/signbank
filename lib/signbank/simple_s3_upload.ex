@@ -81,7 +81,9 @@ defmodule SimpleS3Upload do
   end
 
   def upload_url do
-    Application.fetch_env!(:signbank, SimpleS3Upload)[:base_url]
+    Application.fetch_env!(:signbank, SimpleS3Upload)[:scheme] <>
+      Application.fetch_env!(:signbank, SimpleS3Upload)[:host] <>
+      ":" <> Application.fetch_env!(:signbank, SimpleS3Upload)[:port]
   end
 
   defp config do

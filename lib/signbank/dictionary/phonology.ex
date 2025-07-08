@@ -186,12 +186,12 @@ defmodule Signbank.Dictionary.Phonology do
   ]
   @repetition_types [
     none: gettext("None"),
-    one_same_loc: gettext("One same loc"),
-    two_same_loc: gettext("Two same loc"),
-    multiple_same_loc: gettext("Multiple same loc"),
-    one_diff_locs: gettext("One diff locs"),
-    two_diff_locs: gettext("Two diff locs"),
-    multiple_diff_locs: gettext("Multiple diff locs")
+    one_same_loc: gettext("One repetition, same location"),
+    two_same_loc: gettext("Two repetitions, same location"),
+    multiple_same_loc: gettext("Multiple reps, same location"),
+    one_diff_locs: gettext("One repetition, different locations"),
+    two_diff_locs: gettext("Two repetitions, different locations"),
+    multiple_diff_locs: gettext("Multiple reps, different locations")
   ]
   @handednesses [
     one: gettext("one"),
@@ -199,28 +199,18 @@ defmodule Signbank.Dictionary.Phonology do
     double: gettext("double")
   ]
 
-  def palm_orientations, do: @palm_orientations
-  def finger_hand_orientations, do: @finger_hand_orientations
-  def locations, do: @locations
-  def handshape_allophones, do: @handshape_allophones
-  def handshapes, do: @handshapes
-  def handparts, do: @handparts
-  def sides, do: @sides
-  def directions, do: @directions
-  def paths, do: @paths
-  def repetition_types, do: @repetition_types
-  def handednesses, do: @handednesses
-  def palm_orientations(:reverse), do: reverse(@palm_orientations)
-  def finger_hand_orientations(:reverse), do: reverse(@finger_hand_orientations)
-  def locations(:reverse), do: reverse(@locations)
-  def handshape_allophones(:reverse), do: reverse(@handshape_allophones)
-  def handshapes(:reverse), do: reverse(@handshapes)
-  def handparts(:reverse), do: reverse(@handparts)
-  def sides(:reverse), do: reverse(@sides)
-  def directions(:reverse), do: reverse(@directions)
-  def paths(:reverse), do: reverse(@paths)
-  def repetition_types(:reverse), do: reverse(@repetition_types)
-  def handednesses(:reverse), do: reverse(@handednesses)
+  def palm_orientations, do: reverse(@palm_orientations)
+  def finger_hand_orientations, do: reverse(@finger_hand_orientations)
+  def locations, do: reverse(@locations)
+  def handshape_allophones, do: reverse(@handshape_allophones)
+  def handshapes, do: reverse(@handshapes)
+  def handparts, do: reverse(@handparts)
+  def sides, do: reverse(@sides)
+  def directions, do: reverse(@directions)
+  def paths, do: reverse(@paths)
+  def repetition_types, do: reverse(@repetition_types)
+  def handednesses, do: reverse(@handednesses)
+
   defp reverse(keywords) do
     Enum.map(keywords, fn {k, v} -> {v, k} end)
   end
@@ -295,7 +285,6 @@ defmodule Signbank.Dictionary.Phonology do
   def handshape_image(:animal_closed), do: "/images/handshapes/hf/animal_closed.svg"
   def handshape_image(:queer), do: "/images/handshapes/hf/queer.png"
 
-  @primary_key false
   embedded_schema do
     field :dominant_initial_handshape, Ecto.Enum, values: @handshapes
     field :dominant_initial_handshape_allophone, Ecto.Enum, values: @handshape_allophones
@@ -368,8 +357,7 @@ defmodule Signbank.Dictionary.Phonology do
   end
 
   def changeset(phonology, attrs) do
-    phonology
-    |> cast(attrs, [
+    cast(phonology, attrs, [
       :dominant_initial_handshape,
       :dominant_initial_handshape_allophone,
       :dominant_final_handshape,

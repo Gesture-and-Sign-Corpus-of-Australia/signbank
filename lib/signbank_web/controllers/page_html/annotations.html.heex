@@ -1,39 +1,39 @@
-<link phx-track-static rel="stylesheet" href={~p"/assets/about.css"} />
-
-<div class="content">
-  <h2>The Auslan Corpus annotation files</h2>
-  <p>
-    At present, 357 movies in the Auslan Corpus have annotation files containing annotations at various levels of detail.
-    Annotations are being added to the corpus all the time. The current annotation files have one or more of the following types of annotations:
-  </p>
-  <ul>
-    <li>identification and IDglossing of nouns and verbs only</li>
-    <li>sign tokenization and IDglossing for all signs</li>
-    <li>tagging for sign grammatical class ("part of speech")</li>
-    <li>identification of gaze direction during points</li>
-    <li>identification of palm orientation during points</li>
-    <li>identification of clause boundaries</li>
-    <li>identification of verb arguments</li>
-    <li>tagging of verb arguments for macro-roles and semantic roles</li>
-    <li>tagging for the presence or absence of
-      spatial modification</li>
-    <li>the identification of periods constructed action ('role shift')</li>
-    <li>free
-      translation</li>
-    <li>literal translation.</li>
-  </ul>
-  <p>The amount of time required for
-    the annotation of signed language texts is enormous
-    and it is anticipated that it will take many years before the Auslan
-    archive becomes sufficiently richly annotated (and hence
-    machine-readable) and qualifies as a true linguistic corpus.</p>
-  <p>
-    Value-adding the movies in the archive with annotations is time consuming and expensive. These annotation files are not publicly available but will be made to fellow researchers on requests on a data-sharing and data-enrichment basis (i.e., access to existing annotation files will be granted on condition that enriched annotation files are returned to the corpus). Research collaboration is also encouraged.
-  </p>
-  <p>
-    Click <a
-      href="http://media.auslan.org.au/django-summernote/2020-09-04/69f180d0-04bf-4831-b59c-0b0b8f07cbb5.pdf"
-      target="_blank"
-    >here</a>&nbsp;for a copy of the guidelines used to create the annotations for the Auslan Corpus as it now exists. (Last updated 2019.)
-  </p>
-</div>
+<Layouts.app flash={@flash} current_scope={@current_scope}>
+  <div class="content">
+    <h2>The Auslan Corpus annotation files</h2>
+    <p>
+      At present, 357 movies in the Auslan Corpus have annotation files containing annotations at various levels of detail.
+      Annotations are being added to the corpus all the time. The current annotation files have one or more of the following types of annotations:
+    </p>
+    <ul>
+      <li>identification and IDglossing of nouns and verbs only</li>
+      <li>sign tokenization and IDglossing for all signs</li>
+      <li>tagging for sign grammatical class ("part of speech")</li>
+      <li>identification of gaze direction during points</li>
+      <li>identification of palm orientation during points</li>
+      <li>identification of clause boundaries</li>
+      <li>identification of verb arguments</li>
+      <li>tagging of verb arguments for macro-roles and semantic roles</li>
+      <li>tagging for the presence or absence of
+        spatial modification</li>
+      <li>the identification of periods constructed action ('role shift')</li>
+      <li>free
+        translation</li>
+      <li>literal translation.</li>
+    </ul>
+    <p>The amount of time required for
+      the annotation of signed language texts is enormous
+      and it is anticipated that it will take many years before the Auslan
+      archive becomes sufficiently richly annotated (and hence
+      machine-readable) and qualifies as a true linguistic corpus.</p>
+    <p>
+      Value-adding the movies in the archive with annotations is time consuming and expensive. These annotation files are not publicly available but will be made to fellow researchers on requests on a data-sharing and data-enrichment basis (i.e., access to existing annotation files will be granted on condition that enriched annotation files are returned to the corpus). Research collaboration is also encouraged.
+    </p>
+    <p>
+      Click <a
+        href="http://media.auslan.org.au/django-summernote/2020-09-04/69f180d0-04bf-4831-b59c-0b0b8f07cbb5.pdf"
+        target="_blank"
+      >here</a>&nbsp;for a copy of the guidelines used to create the annotations for the Auslan Corpus as it now exists. (Last updated 2019.)
+    </p>
+  </div>
+</Layouts.app>
