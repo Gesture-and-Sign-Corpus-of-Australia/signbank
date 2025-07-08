@@ -52,6 +52,7 @@ defmodule SignbankWeb.CorpusExamples do
     """
   end
 
+  # TODO: delete commented out code
   # def render(assigns) do
   #   examples = :ets.lookup(:corpus_annotations_index, assigns.gloss)
   #   IO.inspect(examples)
