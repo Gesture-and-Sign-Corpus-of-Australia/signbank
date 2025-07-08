@@ -4,62 +4,55 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
-    <.live_title suffix=" · Auslan Signbank">
-      {assigns[:page_title] || "Signbank"}
+    <.live_title
+      default={Application.fetch_env!(:signbank, :application_name)}
+      suffix={" · #{Application.fetch_env!(:signbank, :application_name)}"}
+    >
+      {assigns[:page_title]}
     </.live_title>
-    <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
-    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
+    <link phx-track-static rel="stylesheet" href={~p"/assets/css/app.css"} />
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/js/app.js"}>
+    </script>
+    <script>
+      (() => {
+        const setTheme = (theme) => {
+          if (theme === "system") {
+            localStorage.removeItem("phx:theme");
+            document.documentElement.removeAttribute("data-theme");
+          } else {
+            localStorage.setItem("phx:theme", theme);
+            document.documentElement.setAttribute("data-theme", theme);
+          }
+        };
+        if (!document.documentElement.hasAttribute("data-theme")) {
+          setTheme(localStorage.getItem("phx:theme") || "system");
+        }
+        window.addEventListener("storage", (e) => e.key === "phx:theme" && setTheme(e.newValue || "system"));
+        window.addEventListener("phx:set-theme", ({ detail: { theme } }) => setTheme(theme));
+      })();
     </script>
   </head>
   <body>
-    <ul class="login-controls">
-      <%= if @current_user do %>
-        <li class="login-controls__current-user">
-          {@current_user.email} {case @current_user.role do
+    <ul
+      class="text-yellow bg-purple flex items-end justify-end gap-[1em] m-0 h-[1lh] pt-8 pr-4 sm:pr-6 lg:pr-8"
+      data-old-class="menu menu-horizontal w-full relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end"
+    >
+      <%= if @current_scope do %>
+        <li>
+          {@current_scope.user.email} {case @current_scope.user.role do
             :editor -> "(Editor)"
             :tech -> "(Tech)"
             :none -> nil
           end}
         </li>
         <li>
-          <.link href={~p"/users/settings"}>
-            Settings
-          </.link>
+          <.link href={~p"/users/settings"}>Settings</.link>
         </li>
         <li>
-          <.link href={~p"/users/log_out"} method="delete">
-            Log out
-          </.link>
+          <.link href={~p"/users/log-out"} method="delete">Log out</.link>
         </li>
       <% end %>
     </ul>
-    <div id="page-container">
-      {@inner_content}
-      <footer>
-        <div class="level">
-          <%= if @current_user && (%{role: :tech} = @current_user) do %>
-            <.link
-              class={["admin_login level-left"]}
-              href={~p"/tech"}
-            >
-              Dashboard
-            </.link>
-          <% else %>
-            <.link
-              class={["admin_login level-left", if(@current_user, do: "is-invisible")]}
-              href={~p"/users/log_in"}
-            >
-              Admin login
-            </.link>
-          <% end %>
-          <p>
-            <a href={~p"/terms-and-conditions"}>Terms of use</a>.
-          </p>
-        </div>
-        <p class="app_version">
-          Signbank v{Application.spec(:signbank, :vsn)}
-        </p>
-      </footer>
-    </div>
+    {@inner_content}
   </body>
 </html>

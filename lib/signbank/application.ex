@@ -11,9 +11,8 @@ defmodule Signbank.Application do
       SignbankWeb.Telemetry,
       Signbank.Repo,
       {DNSCluster, query: Application.get_env(:signbank, :dns_cluster_query) || :ignore},
+      {Oban, Application.fetch_env!(:signbank, Oban)},
       {Phoenix.PubSub, name: Signbank.PubSub},
-      # Start the Finch HTTP client for sending emails
-      {Finch, name: Signbank.Finch},
       # Start a worker by calling: Signbank.Worker.start_link(arg)
       # {Signbank.Worker, arg},
       # Start to serve requests, typically the last entry
@@ -30,15 +29,7 @@ defmodule Signbank.Application do
     Supervisor.start_link(children, opts)
   end
 
-  # Tell Phoenix to update the endpoint configuration
-  # whenever the application is updated.
-  @impl true
-  def config_change(changed, _new, removed) do
-    SignbankWeb.Endpoint.config_change(changed, removed)
-    :ok
-  end
-
-  def choose_logger do
+  defp choose_logger do
     case Application.get_env(:signbank, :logger, :console) do
       :systemd ->
         :logger.add_handlers(:systemd)
@@ -47,5 +38,13 @@ defmodule Signbank.Application do
       :console ->
         nil
     end
+  end
+
+  # Tell Phoenix to update the endpoint configuration
+  # whenever the application is updated.
+  @impl true
+  def config_change(changed, _new, removed) do
+    SignbankWeb.Endpoint.config_change(changed, removed)
+    :ok
   end
 end

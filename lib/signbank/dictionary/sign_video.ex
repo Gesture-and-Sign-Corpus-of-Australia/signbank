@@ -14,14 +14,14 @@ defmodule Signbank.Dictionary.SignVideo do
 
     belongs_to :sign, Signbank.Dictionary.Sign
 
-    timestamps(type: :utc_datetime)
+    timestamps type: :utc_datetime
   end
 
   def changeset(video, attrs) do
     required_fields = [:url]
 
     video
-    |> cast(attrs, required_fields)
+    |> cast(attrs, required_fields ++ [:sign_id])
     |> validate_required(required_fields)
     |> unique_constraint(:url)
   end

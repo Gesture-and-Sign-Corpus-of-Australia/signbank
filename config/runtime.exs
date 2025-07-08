@@ -25,14 +25,29 @@ config :signbank, SimpleS3Upload,
   secret_access_key: System.get_env("S3_SECRET_ACCESS_KEY"),
   bucket: System.get_env("S3_BUCKET"),
   region: System.get_env("S3_REGION"),
-  base_url: System.get_env("S3_BASE_URL")
+  scheme: System.get_env("S3_SCHEME"),
+  host: System.get_env("S3_HOST"),
+  port: System.get_env("S3_PORT")
 
 config :signbank, :media_url, System.get_env("MEDIA_URL")
+config :signbank, :corpus_root, System.get_env("CORPUS_ROOT")
+config :signbank, :upload_staging, System.get_env("UPLOAD_STAGING_DIR") || "/var/tmp/signbank"
 
 config :signbank,
   application_name: System.get_env("APPLICATION_NAME") || "Signbank"
 
 config :signbank, Signbank.Mailer, from_address: System.get_env("MAIL_FROM") || "info@example.org"
+
+config :ex_aws,
+  http_client: ExAws.Request.Req,
+  access_key_id: System.get_env("S3_ACCESS_KEY_ID"),
+  secret_access_key: System.get_env("S3_SECRET_ACCESS_KEY"),
+  region: System.get_env("S3_REGION")
+
+config :ex_aws, :s3,
+  scheme: System.get_env("S3_SCHEME"),
+  port: System.get_env("S3_PORT"),
+  host: System.get_env("S3_HOST")
 
 if config_env() == :prod do
   database_url =
@@ -101,6 +116,4 @@ if config_env() == :prod do
         adapter: Swoosh.Adapters.Sendgrid,
         api_key: System.get_env("SENDGRID_API_KEY")
   end
-
-  config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: Signbank.Finch
 end

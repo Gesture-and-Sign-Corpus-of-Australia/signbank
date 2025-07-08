@@ -3,6 +3,7 @@ defmodule VideoScroller do
   Shows a sign and its variants in a carosel.
   """
   use SignbankWeb, :live_component
+  import SignbankWeb.MapComponents
 
   def render(assigns) do
     # if we're on a citation sign, concat it into list with all variants,
@@ -52,7 +53,8 @@ defmodule VideoScroller do
         data-disabled={!@next_sign_link}
         aria-label="previous variant"
       >
-        <Heroicons.arrow_left class="icon--small" />
+        <%!-- <Heroicons.arrow_left class="icon--small" /> --%>
+        <.icon name="hero-arrow-left" class="size-6" />
       </.link>
       <.link
         :if={@previous_sign_link}
@@ -62,7 +64,8 @@ defmodule VideoScroller do
         data-disabled={!@previous_sign_link}
         aria-label="next variant"
       >
-        <Heroicons.arrow_right class="icon--small" />
+        <%!-- <Heroicons.arrow_right class="icon--small" /> --%>
+        <.icon name="hero-arrow-right" class="size-6" />
       </.link>
       <.video_frame id={"variant_video_#{@sign.id}_#{@counter}"} sign={@sign} />
     </div>
@@ -70,12 +73,12 @@ defmodule VideoScroller do
   end
 
   def handle_event("previous", _, socket) do
-    {:noreply, socket |> assign(counter: socket.assigns.counter - 1)}
+    {:noreply, assign(socket, counter: socket.assigns.counter - 1)}
   end
 
   def handle_event("next", _, socket) do
     # send(self(), {:updated_card, %{socket.assigns.card | title: title}})
-    {:noreply, socket |> assign(counter: socket.assigns.counter + 1)}
+    {:noreply, assign(socket, counter: socket.assigns.counter + 1)}
   end
 
   defp video_frame_class(sign) do
@@ -95,9 +98,16 @@ defmodule VideoScroller do
     ~H"""
     <div id={"video_#{@id}"} class={["video-frame", video_frame_class(@sign)]}>
       <div class="video-frame__video_wrapper">
-        <video controls muted autoplay width="600">
-          <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{Enum.at(@sign.videos,0).url}"} />
-        </video>
+        <%= if @sign.active_video do %>
+          <video controls muted autoplay width="600">
+            <source
+              :if={@sign.active_video}
+              src={"#{Application.fetch_env!(:signbank, :media_url)}/#{@sign.active_video.url}"}
+            />
+          </video>
+        <% else %>
+          <p class="bg-slate-500 w-[600px] aspect-video">This entry has no video</p>
+        <% end %>
         <div class="video-frame__sign-type">
           {cond do
             @sign.english_entry -> "fingerspelled"

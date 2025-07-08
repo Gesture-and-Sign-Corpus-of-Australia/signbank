@@ -30,7 +30,6 @@ The `minio-user` runs the minio systemd service and we store the files in its ho
 #### minio client
 
 > See https://min.io/docs/minio/linux/reference/minio-mc.html
-
 ### Database
 ```
 sudo apt install postgresql
@@ -90,12 +89,9 @@ DATABASE_URL=ecto://signbank:signbank@localhost:5432/signbank
 POOL_SIZE=10
 SECRET_KEY_BASE=
 RELEASE_COOKIE=
-
 MEDIA_URL=https://media.auslan.org.au/signbank
-
 S3_ACCESS_KEY_ID=<generate in Minio web console>
 S3_SECRET_ACCESS_KEY=<generate in Minio web console>
-
 S3_BUCKET=signbank
 S3_REGION=us-east-1
 S3_BASE_URL=https://media.auslan.org.au
@@ -137,7 +133,6 @@ The database referenced by `DATABASE_URL` should already exist before the first 
 
 ## Caddy (can use Nginx if preferred)
 > To install Caddy follow https://caddyserver.com/docs/install#debian-ubuntu-raspbian
-
 `/etc/caddy/Caddyfile`
 ```
 import Caddyfile.d/*.caddyfile
@@ -148,7 +143,6 @@ import Caddyfile.d/*.caddyfile
 www.uat.auslan.org.au {
         redir https://uat.auslan.org.au{uri}
 }
-
 uat.auslan.org.au {
         reverse_proxy {
                 to localhost:8080
@@ -163,10 +157,10 @@ media.uat.auslan.org.au {
         reverse_proxy :9000
     }
 }
-
 minio.uat.auslan.org.au {
     handle_path/* {
         reverse_proxy :9001
     }
 }
 ```
+
