@@ -42,7 +42,7 @@ defmodule Signbank.Dictionary.Definition do
 
     field :delete, :boolean, virtual: true
 
-    timestamps(type: :utc_datetime)
+    timestamps type: :utc_datetime
   end
 
   @doc false

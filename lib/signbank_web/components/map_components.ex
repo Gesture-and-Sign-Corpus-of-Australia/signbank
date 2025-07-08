@@ -7,12 +7,23 @@ defmodule SignbankWeb.MapComponents do
   defp generate_alt_text([]), do: "no states"
 
   defp generate_alt_text(selected) do
-    # HACK: this way of listing states cannot be reliably localised
+    # HACK: this way of listing states cannot be reliably localised (into written languages other than English)
     selected
     |> Enum.flat_map(fn
-      %{region: :southern_dialect} -> ["the southern states"]
-      %{region: :northern_dialect} -> ["the northen states"]
-      %{region: region} -> [Atom.to_string(region)]
+      %{region: :southern_dialect} ->
+        [
+          "Northern Territory",
+          "South Australia",
+          "Tasmania",
+          "Victoria",
+          "Western Australia"
+        ]
+
+      %{region: :northern_dialect} ->
+        ["ACT", "Queensland", "New South Wales"]
+
+      %{region: region} ->
+        [Signbank.Dictionary.SignRegion.region_to_string(region)]
     end)
     |> Signbank.Cldr.List.to_string!(locale: Signbank.Cldr.get_locale().cldr_locale_name)
   end
@@ -41,11 +52,12 @@ defmodule SignbankWeb.MapComponents do
     Enum.any?(
       selected,
       fn
-        %{region: :australia_wide} -> false
-        %{region: :unknown} -> false
-        %{region: :not_applicable} -> false
-        %{region: :no_region} -> false
-        _ -> true
+        %{region: region}
+        when region in [:australia_wide, :unknown, :not_applicable, :no_region] ->
+          false
+
+        _ ->
+          true
       end
     )
   end
@@ -55,7 +67,7 @@ defmodule SignbankWeb.MapComponents do
   """
   attr :class, :string, default: ""
 
-  attr(:selected, :atom,
+  attr :selected, :atom,
     values: [
       :no_region,
       :not_applicable,
@@ -71,7 +83,6 @@ defmodule SignbankWeb.MapComponents do
       :victoria,
       :western_australia
     ]
-  )
 
   # TODO: bring up a modal with region names on click
   def australia_map(assigns) do
@@ -106,7 +117,7 @@ defmodule SignbankWeb.MapComponents do
       class={Enum.join([@class, "region_map_svg", generate_classes(@selected)], " ")}
     >
       <title>
-        A map of australia with {generate_alt_text(@selected)} selected.
+        A map of Australia with {generate_alt_text(@selected)} selected.
       </title>
       <g id="root" fill="#d3d3d3" stroke="black">
         <path

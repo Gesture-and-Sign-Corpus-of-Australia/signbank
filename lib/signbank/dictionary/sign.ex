@@ -3,11 +3,21 @@ defmodule Signbank.Dictionary.Sign do
   A dictionary entry
   """
   use Ecto.Schema
+  use Gettext, backend: Signbank.Gettext
   import Ecto.Changeset
   alias Signbank.Dictionary
 
-  @iconicity_values [:opaque, :obscure, :translucent, :transparent]
-  def iconicity_values, do: @iconicity_values
+  @iconicity_values [
+    opaque: gettext("opaque"),
+    obscure: gettext("obscure"),
+    translucent: gettext("translucent"),
+    transparent: gettext("transparent")
+  ]
+  def iconicity_values, do: reverse(@iconicity_values)
+
+  defp reverse(keywords) do
+    Enum.map(keywords, fn {k, v} -> {v, k} end)
+  end
 
   schema "signs" do
     field :type, Ecto.Enum, values: [:citation, :variant]
@@ -27,13 +37,14 @@ defmodule Signbank.Dictionary.Sign do
     # TODO: uncomment this after adding %Tag{}/SignTag
     # many_to_many :tags, Dictionary.Tag, join_through: Dictionary.SignTag
 
-    embeds_one :phonology, Dictionary.Phonology, on_replace: :delete
-    embeds_one :morphology, Dictionary.Morphology, on_replace: :delete
+    embeds_one :phonology, Dictionary.Phonology, on_replace: :update
+    embeds_one :morphology, Dictionary.Morphology, on_replace: :update
 
     # TODO: revisit this, it's not a foreign key in the database, I don't know how bad that is
     belongs_to :active_video, Dictionary.SignVideo,
       foreign_key: :active_video_id,
-      references: :id
+      references: :id,
+      on_replace: :nilify
 
     has_many :videos, Dictionary.SignVideo, on_replace: :delete
     has_many :regions, Dictionary.SignRegion, on_replace: :delete
@@ -95,10 +106,12 @@ defmodule Signbank.Dictionary.Sign do
     many_to_many :semantic_categories, Dictionary.SemanticCategory,
       join_through: "signs_semantic_categories"
 
-    timestamps(type: :utc_datetime)
+    timestamps type: :utc_datetime
   end
 
   def changeset(sign, attrs) do
+    IO.inspect(attrs)
+
     required_fields = [
       :type,
       :id_gloss,
@@ -106,8 +119,7 @@ defmodule Signbank.Dictionary.Sign do
       :keywords,
       :published,
       :proposed_new_sign,
-      :crude,
-      :english_entry
+      :crude
     ]
 
     optional_fields = [
@@ -116,6 +128,7 @@ defmodule Signbank.Dictionary.Sign do
       :legacy_id,
       :legacy_sign_number,
       :legacy_stem_sign_number,
+      :suggested_signs_description,
       :asl_gloss,
       :bsl_gloss,
       :iconicity,
@@ -125,8 +138,10 @@ defmodule Signbank.Dictionary.Sign do
       :signed_english_gloss,
       :is_signed_english_only,
       :is_signed_english_based_on_auslan,
+      :english_entry,
       :editorial_doubtful_or_unsure,
       :editorial_problematic,
+      :editorial_problematic_video,
       :lexis_marginal_or_minority,
       :lexis_obsolete,
       :lexis_technical_or_specialist_jargon,
@@ -145,7 +160,11 @@ defmodule Signbank.Dictionary.Sign do
     |> assoc_constraint(:citation)
     # |> assoc_constraint(:active_video)
     # |> put_assoc(:active_video, attrs[:active_video])
-    |> cast_assoc(:active_video)
+    # cast suggested_signs
+    # cast semantic_categories
+    |> cast_assoc(:active_video,
+      with: &Dictionary.SignVideo.changeset/2
+    )
     |> cast_assoc(
       :videos,
       with: &Dictionary.SignVideo.changeset/2,
@@ -193,8 +212,11 @@ defmodule Signbank.Dictionary.Sign do
         |> guard_field_not_exists(:definitions, "variant cannot have definitions")
 
       :citation ->
-        changeset
-        |> guard_field_not_exists(:variant_of_id, "cannot be set when type is not variant")
+        guard_field_not_exists(
+          changeset,
+          :variant_of_id,
+          "cannot be set when type is not variant"
+        )
 
       _ ->
         changeset

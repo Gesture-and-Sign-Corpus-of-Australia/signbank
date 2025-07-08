@@ -42,7 +42,7 @@ defmodule Signbank.Dictionary.SignRegion do
 
     field :region, Ecto.Enum, values: @regions
 
-    timestamps(type: :utc_datetime)
+    timestamps type: :utc_datetime
   end
 
   @doc false

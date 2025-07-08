@@ -7,6 +7,29 @@
 # General application configuration
 import Config
 
+config :signbank, :scopes,
+  user: [
+    default: true,
+    module: Signbank.Accounts.Scope,
+    assign_key: :current_scope,
+    access_path: [:user, :id],
+    schema_key: :user_id,
+    schema_type: :id,
+    schema_table: :users,
+    test_data_fixture: Signbank.AccountsFixtures,
+    test_login_helper: :register_and_log_in_user
+  ]
+
+config :signbank, Oban,
+  engine: Oban.Engines.Basic,
+  notifier: Oban.Notifiers.Postgres,
+  queues: [default: 10, ffmpeg: 4],
+  repo: Signbank.Repo,
+  plugins: [
+    {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 7},
+    {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(30)}
+  ]
+
 config :signbank,
   ecto_repos: [Signbank.Repo],
   generators: [timestamp_type: :utc_datetime]
@@ -20,7 +43,7 @@ config :signbank, SignbankWeb.Endpoint,
     layout: false
   ],
   pubsub_server: Signbank.PubSub,
-  live_view: [signing_salt: "76fkOPyS"]
+  live_view: [signing_salt: "x7rQ45iZ"]
 
 # Configures the mailer
 #
@@ -31,31 +54,35 @@ config :signbank, SignbankWeb.Endpoint,
 # at the `config/runtime.exs`.
 config :signbank, Signbank.Mailer, adapter: Swoosh.Adapters.Local
 
+# Configure esbuild (the version is required)
 config :esbuild,
   version: "0.17.11",
   signbank: [
     args:
-      ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
+      ~w(js/app.js --bundle --target=es2022 --outdir=../priv/static/assets/js --external:/fonts/* --external:/images/*),
     cd: Path.expand("../assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
 
+# Configure tailwind (the version is required)
+config :tailwind,
+  version: "4.0.9",
+  signbank: [
+    args: ~w(
+      --input=assets/css/app.css
+      --output=priv/static/assets/css/app.css
+    ),
+    cd: Path.expand("..", __DIR__)
+  ]
+
 # Configures Elixir's Logger
-config :logger, :console,
+config :logger, :default_formatter,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :dart_sass,
-  version: "1.61.0",
-  default: [
-    args: ~w(css/:../priv/static/assets/),
-    cd: Path.expand("../assets", __DIR__)
-  ]
-
-# <input.scss>:<output.css> <input/>:<output/> <dir/>
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

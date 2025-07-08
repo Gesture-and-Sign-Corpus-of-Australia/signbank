@@ -1,0 +1,102 @@
+<Layouts.app flash={@flash} current_scope={@current_scope}>
+<nav class="level entry-page__switch_entry">
+  <div class="level-left">
+    <.entry_nav sign={@sign} current_scope={@current_scope} />
+    <div :if={!@sign.published} class="bg-striped">This entry is not published.</div>
+  </div>
+  <div class="level-right">
+    <div :if={not Enum.empty?(@search_results)} class="search-matches">
+      <div phx-no-format>
+        Matches
+        <span :if={@search_term != nil}>for the word <i>{@search_term}</i></span><span :if={
+          @handshape != nil
+        }>with a {@handshape} handshape</span><span :if={@location != nil}> at {@location} location</span><%!--
+        --%>:
+      </div>
+      <div class="field has-addons">
+        <%= for {result, index} <- Enum.with_index(Enum.sort_by(@search_results, fn %{id_gloss: id_gloss} -> id_gloss end, :asc), 1) do %>
+          <div class="control">
+            <.link
+              id={"search_result_#{result.id_gloss}"}
+              class={"button #{if @sign.id_gloss == result.id_gloss do "entry-page__search_result--current" end}"}
+              patch={~p"/dictionary/sign/#{result.id_gloss}?#{@query_params}"}
+              phx-click={JS.push_focus()}
+            >
+              {index}
+            </.link>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div :if={@sign.sense_number} class="level">
+  <p :if={@sign.sense_number == 1}>
+    {gettext(
+      "This sign has two or more completely separate meanings. Click Next to see the other ones."
+    )}
+  </p>
+  <p :if={@sign.sense_number > 1}>
+    {gettext(
+      "This sign has two or more completely separate meanings. Click Next and Previous to see the other ones."
+    )}
+  </p>
+</div>
+<div class="columns">
+  <div class="column">
+    <.live_component module={VideoScroller} counter={0} id={@sign.id} sign={@sign} />
+    <p>
+      <strong>Keywords:</strong>
+      <%= case @sign.keywords do %>
+        <% [] -> %>
+          <em>this entry has no keywords</em>
+        <% [keyword] -> %>
+          <span class={bold_matching_keyword(keyword, @search_term)}>
+            {keyword}
+          </span>
+        <% keywords -> %>
+          <%= for {keyword, index} <- Enum.with_index(keywords, 1) do %>
+            <span class={bold_matching_keyword(keyword, @search_term)}>
+              {keyword}{if index < Enum.count(keywords), do: ", "}
+            </span>
+          <% end %>
+      <% end %>
+    </p>
+    <%!-- <.live_component
+      module={SignbankWeb.CorpusExamples}
+      id={"#{@sign.id}_corpus_examples"}
+      gloss={@sign.id_gloss_annotation}
+      version={:modal}
+    /> --%>
+    <div :if={Enum.count(@sign.suggested_signs) > 0} style="margin-top: 0.5em">
+      <h2 class="is-size-5">Suggested signs</h2>
+      <p>{@sign.suggested_signs_description}</p>
+      <ul class="suggested_signs">
+        <li :for={suggestion <- @sign.suggested_signs}>
+          <.modal id={"suggesed_sign_modal_#{suggestion.id}"}>
+            <video controls autoplay muted width="400">
+              <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{suggestion.url}"} />
+            </video>
+          </.modal>
+          <%!-- with preload="metadata" this functions as a thumbnail, although its not ideal --%>
+          <%!-- phx-click={show_modal("suggesed_sign_modal_#{suggestion.id}")} --%>
+          <video
+            onclick={"suggesed_sign_modal_#{suggestion.id}.showModal()"}
+            preload="metadata"
+            muted
+            width="100"
+          >
+            <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{suggestion.url}"} />
+          </video>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="column">
+    <.definitions type={:basic} sign={@sign} />
+  </div>
+</div>
+
+<%!-- TODO: add seealso/ant collapsible embeds --%>
+</Layouts.app>

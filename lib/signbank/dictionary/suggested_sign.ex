@@ -11,7 +11,7 @@ defmodule Signbank.Dictionary.SuggestedSign do
 
     belongs_to :sign, Signbank.Dictionary.Sign
 
-    timestamps(type: :utc_datetime)
+    timestamps type: :utc_datetime
   end
 
   def changeset(video, attrs) do

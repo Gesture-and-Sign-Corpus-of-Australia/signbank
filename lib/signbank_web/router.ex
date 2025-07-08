@@ -2,6 +2,7 @@
 defmodule SignbankWeb.Router do
   use SignbankWeb, :router
 
+  import Oban.Web.Router
   import SignbankWeb.UserAuth
 
   pipeline :browser do
@@ -11,7 +12,7 @@ defmodule SignbankWeb.Router do
     plug :put_root_layout, html: {SignbankWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug :fetch_current_user
+    plug :fetch_current_scope_for_user
   end
 
   pipeline :api do
@@ -30,29 +31,44 @@ defmodule SignbankWeb.Router do
     get "/about/history", PageController, :history
     get "/research/annotations", PageController, :annotations
     get "/about/dictionary", PageController, :dictionary
-    get "/about/grammar", PageController, :grammar
+    live "/about/grammar", GrammarLive
     get "/research/vocabulary", PageController, :vocabulary
 
-    live "/dictionary", SignLive.Index, :index
-
-    live "/dictionary/search", SignLive.Search, :show
-
+    live "/dictionary/search", Search, :show
     live "/dictionary/phonological-search", SignLive.PhonologicalSearch, :show
 
-    live "/dictionary/sign/:id", SignLive.BasicView, :show
-    live "/dictionary/sign/:id/detail", SignLive.LinguisticView, :show
-    # TODO: merge the two views maybe, there's a lot of duplication between them
+    live "/dictionary/sign/", SignLive.Basic, :search
+    live "/dictionary/sign/:id", SignLive.Basic, :show
+    live "/dictionary/sign/:id/detail", SignLive.Detail, :show
   end
 
   # Editor routes
   scope "/", SignbankWeb do
-    pipe_through [:browser, :require_authenticated_user]
+    pipe_through [:browser, :require_authenticated_user, :require_editor_or_tech]
 
+    # TODO: make editor routes
     live_session :editor,
-      on_mount: [{SignbankWeb.UserAuth, :ensure_authenticated}] do
-      live "/dictionary/new", SignLive.Index, :new
+      on_mount: [{SignbankWeb.UserAuth, :require_authenticated}] do
+      # live "/dictionary/new", SignLive.Index, :new
       live "/dictionary/sign/:id/edit", SignLive.Edit, :edit
     end
+  end
+
+  scope "/tech", SignbankWeb do
+    pipe_through [:browser, :require_authenticated_user, :require_tech]
+
+    import Phoenix.LiveDashboard.Router
+
+    live "/", MaintenanceLive
+
+    live_dashboard "/dashboard", metrics: SignbankWeb.Telemetry
+    oban_dashboard("/oban")
+    # Future tech pages to make:
+    # - bulk data loader (maybe just videos)
+    # - custom query
+    # - export
+    # - sign diff
+    # - user stats page
   end
 
   # Other scopes may use custom stacks.
@@ -64,62 +80,35 @@ defmodule SignbankWeb.Router do
   if Application.compile_env(:signbank, :dev_routes) do
     scope "/dev" do
       pipe_through :browser
-
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
-  end
-
-  scope "/tech", SignbankWeb do
-    pipe_through [:browser, :require_authenticated_tech]
-
-    import Phoenix.LiveDashboard.Router
-
-    live "/", Tech.Index, :index
-
-    live_dashboard "/dashboard", metrics: SignbankWeb.Telemetry
-    # Future tech pages to make:
-    # - bulk data loader (maybe just videos)
-    # - custom query
-    # - export
-    # - sign diff
-    # - user stats page
   end
 
   ## Authentication routes
 
   scope "/", SignbankWeb do
-    pipe_through [:browser, :redirect_if_user_is_authenticated]
-
-    live_session :redirect_if_user_is_authenticated,
-      on_mount: [{SignbankWeb.UserAuth, :redirect_if_user_is_authenticated}] do
-      live "/users/register", UserRegistrationLive, :new
-      live "/users/log_in", UserLoginLive, :new
-      live "/users/reset_password", UserForgotPasswordLive, :new
-      live "/users/reset_password/:token", UserResetPasswordLive, :edit
-    end
-
-    post "/users/log_in", UserSessionController, :create
-  end
-
-  scope "/", SignbankWeb do
     pipe_through [:browser, :require_authenticated_user]
 
     live_session :require_authenticated_user,
-      on_mount: [{SignbankWeb.UserAuth, :ensure_authenticated}] do
-      live "/users/settings", UserSettingsLive, :edit
-      live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+      on_mount: [{SignbankWeb.UserAuth, :require_authenticated}] do
+      live "/users/settings", UserLive.Settings, :edit
+      live "/users/settings/confirm-email/:token", UserLive.Settings, :confirm_email
     end
+
+    post "/users/update-password", UserSessionController, :update_password
   end
 
   scope "/", SignbankWeb do
     pipe_through [:browser]
 
-    delete "/users/log_out", UserSessionController, :delete
-
     live_session :current_user,
-      on_mount: [{SignbankWeb.UserAuth, :mount_current_user}] do
-      live "/users/confirm/:token", UserConfirmationLive, :edit
-      live "/users/confirm", UserConfirmationInstructionsLive, :new
+      on_mount: [{SignbankWeb.UserAuth, :mount_current_scope}] do
+      live "/users/register", UserLive.Registration, :new
+      live "/users/log-in", UserLive.Login, :new
+      live "/users/log-in/:token", UserLive.Confirmation, :new
     end
+
+    post "/users/log-in", UserSessionController, :create
+    delete "/users/log-out", UserSessionController, :delete
   end
 end

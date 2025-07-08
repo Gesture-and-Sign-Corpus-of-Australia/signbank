@@ -31,7 +31,7 @@ msgid "has invalid format"
 msgstr ""
 
 ## From Ecto.Changeset.validate_subset/3
-msgid "has an invalid sign"
+msgid "has an invalid entry"
 msgstr ""
 
 ## From Ecto.Changeset.validate_exclusion/3
@@ -43,10 +43,10 @@ msgid "does not match confirmation"
 msgstr ""
 
 ## From Ecto.Changeset.no_assoc_constraint/3
-msgid "is still associated with this sign"
+msgid "is still associated with this entry"
 msgstr ""
 
-msgid "are still associated with this sign"
+msgid "are still associated with this entry"
 msgstr ""
 
 ## From Ecto.Changeset.validate_length/3
