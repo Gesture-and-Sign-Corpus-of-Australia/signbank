@@ -153,7 +153,6 @@ defmodule SignbankWeb.SignLive.Edit do
             )
             |> Ecto.Changeset.put_assoc(:active_video, video)
 
-          IO.inspect(video)
           to_form(changeset)
         end)
 

@@ -87,7 +87,6 @@ window.addHandshapeFilter = (value) => {
 
 // TODO: use this to highlight the current selected phonological search handshape/location
 window.addEventListener("phx:phon-filter-highlight", (e) => {
-  console.log('ran filter')
   if (e.detail.hasOwnProperty('location')) {
     [...document.querySelectorAll(".location_filter_container > *")].forEach(x => x.classList.remove("highlight"));
     

@@ -110,8 +110,6 @@ defmodule Signbank.Dictionary.Sign do
   end
 
   def changeset(sign, attrs) do
-    IO.inspect(attrs)
-
     required_fields = [
       :type,
       :id_gloss,
