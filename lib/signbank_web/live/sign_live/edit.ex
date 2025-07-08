@@ -363,6 +363,7 @@ defmodule SignbankWeb.SignLive.Edit do
     |> Enum.filter(&(!is_nil(&1)))
   end
 
+  # TODO: dead code
   def video_manager(assigns) do
     ~H"""
     <SignbankWeb.Modal.modal id={@id}>
