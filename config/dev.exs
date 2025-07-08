@@ -24,7 +24,7 @@ config :signbank, SignbankWeb.Endpoint,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "3EhVI405XGCdh3q8pz6CS3hrsrDi/BpHKJzxSIBNgNbuvf/2ltPOIhRNsjEDBuqR",
+  secret_key_base: "wP7Q8pHFKJKfyl4kGdNwuYKh6YSe/0D25lSTbpRDnENCLsdN+lLMQBV99kN2fhLt",
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:signbank, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:signbank, ~w(--watch)]}

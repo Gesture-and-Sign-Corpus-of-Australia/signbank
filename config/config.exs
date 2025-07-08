@@ -43,7 +43,7 @@ config :signbank, SignbankWeb.Endpoint,
     layout: false
   ],
   pubsub_server: Signbank.PubSub,
-  live_view: [signing_salt: "x7rQ45iZ"]
+  live_view: [signing_salt: "76fkOPyS"]
 
 # Configures the mailer
 #

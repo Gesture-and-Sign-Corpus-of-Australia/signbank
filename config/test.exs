@@ -21,7 +21,7 @@ config :signbank, Signbank.Repo,
 # you can enable the server option below.
 config :signbank, SignbankWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
-  secret_key_base: "Q50GQE/tR2NxX1DArkCVYwBKkHxNzyjnvirIpA+B2n/TF1G/lG6vtzp8ExK4zsiD",
+  secret_key_base: "8rImCpKg2ML3R1Lo0EdUAThEi+cGxgo51HiC9spLQL5s0Jrc1zhUxV9N/ftlvLgv",
   server: false
 
 # In test we don't send emails
