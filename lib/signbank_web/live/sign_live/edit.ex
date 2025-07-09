@@ -147,11 +147,10 @@ defmodule SignbankWeb.SignLive.Edit do
 
           changeset =
             changeset
-            |> Ecto.Changeset.put_assoc(
-              :videos,
-              existing ++ [video]
-            )
-            |> Ecto.Changeset.put_assoc(:active_video, video)
+            |> Ecto.Changeset.put_assoc(:active_video, %{
+              url: uploaded_file,
+              sign_id: socket.assigns.sign.id
+            })
 
           to_form(changeset)
         end)
