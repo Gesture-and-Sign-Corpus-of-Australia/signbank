@@ -135,12 +135,6 @@ defmodule SignbankWeb.SignLive.Edit do
           {:ok, path}
         end)
 
-      {:ok, video} =
-        Dictionary.create_video(%{
-          url: uploaded_file,
-          sign_id: socket.assigns.sign.id
-        })
-
       socket =
         update(socket, :form, fn %{source: changeset} ->
           existing = Ecto.Changeset.get_assoc(changeset, :videos)
