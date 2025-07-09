@@ -39,6 +39,10 @@ npm-debug.log
 s3/
 /priv/static/archive_assets
 
+# LSP folders
+.lexical
+.elixir_ls
+
 .DS_Store
 
 .env
