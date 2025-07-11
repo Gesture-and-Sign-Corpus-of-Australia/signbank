@@ -69,8 +69,8 @@ $color_subordinate_hand: #aed784; */
   --color-dominant-hand: #9db5f7;
   --color-subordinate-hand: #aed784;
   
-  --color-english_entry: #d23d32;
-  --color-is_signed_english_only: #f3a712;
+  --color-english_entry: #f3a712;
+  --color-is_signed_english_only: #d23d32;
   --color-citation: #2c55c7;
   --color-variant: #79b8fb;
 }
@@ -338,4 +338,49 @@ $color_subordinate_hand: #aed784; */
 
 .region_map_svg__select_tas #TAS {
   fill: var(--region-map-fill--selected);
+}
+
+
+/* Entry video */
+.video-frame {
+  padding: 1rem;
+  border-radius: 2px;
+}
+.video-frame.citation {
+  @apply --bg-citation
+}
+.video-frame.variant {
+  @apply --bg-variant
+}
+.video-frame.english_entry {
+  @apply --bg-english_entry
+}
+.video-frame.se_only {
+  @apply --bg-is_signed_english_only
+}
+.video-frame .video-frame__video_wrapper {
+  position: relative;
+  aspect-ratio: 16/9;
+  display: flex;
+}
+.video-frame .video-frame__video_wrapper video {
+  height: 100%;
+}
+.video-frame .video-frame__video_wrapper svg {
+  height: 100%;
+  width: 100%;
+  transform: translateX(40%) translateY(-34%) scale(0.2);
+  position: absolute;
+}
+.video-frame .video-frame__sign-type {
+  position: absolute;
+  font-size: 1.1em;
+  margin: 0.4rem;
+  padding: 0.3em;
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1px black solid;
+  display: inline-block;
+}
+.video-frame video {
+  width: 100%;
 }

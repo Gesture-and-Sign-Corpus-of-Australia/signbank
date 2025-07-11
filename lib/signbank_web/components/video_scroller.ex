@@ -26,6 +26,7 @@ defmodule VideoScroller do
     assigns =
       assign(
         assigns,
+        index_of_current_sign: index_of_current_sign,
         citation_and_variants: citation_and_variants,
         next_sign_link:
           if index_of_current_sign > 0 do
@@ -44,41 +45,38 @@ defmodule VideoScroller do
       )
 
     ~H"""
-    <div class="entry-page__videos_scroller">
-      <.link
-        :if={@next_sign_link}
-        id="previous_variant"
-        class="button entry-page__videos_scroller_slide_buttons"
-        patch={@next_sign_link}
-        data-disabled={!@next_sign_link}
-        aria-label="previous variant"
-      >
-        <%!-- <Heroicons.arrow_left class="icon--small" /> --%>
-        <.icon name="hero-arrow-left" class="size-6" />
-      </.link>
-      <.link
-        :if={@previous_sign_link}
-        id="next_variant"
-        class="button entry-page__videos_scroller_slide_buttons"
-        patch={@previous_sign_link}
-        data-disabled={!@previous_sign_link}
-        aria-label="next variant"
-      >
-        <%!-- <Heroicons.arrow_right class="icon--small" /> --%>
-        <.icon name="hero-arrow-right" class="size-6" />
-      </.link>
+    <div class="entry-page__videos_scroller mb-2">
       <.video_frame id={"variant_video_#{@sign.id}_#{@counter}"} sign={@sign} />
+      <div :if={@next_sign_link || @previous_sign_link} class="join flex justify-between items-center">
+        <.link
+          id="previous_variant"
+          class="join-item btn p-2"
+          patch={@next_sign_link}
+          disabled={!@next_sign_link}
+        >
+          <.icon name="hero-arrow-left" class="size-6" />
+          <span class="text-sm">
+            previous variant
+          </span>
+        </.link>
+        <%!-- z-index because only the border of the next button was visible --%>
+        <div class="z-10 join-item btn btn-disabled text-black grow-1">
+          {@index_of_current_sign + 1} of {citation_and_variants |> Enum.count()} variants
+        </div>
+        <.link
+          id="next_variant"
+          class="join-item btn p-2"
+          patch={@previous_sign_link}
+          disabled={!@previous_sign_link}
+        >
+          <span class="text-sm">
+            next variant
+          </span>
+          <.icon name="hero-arrow-right" class="size-6" />
+        </.link>
+      </div>
     </div>
     """
-  end
-
-  def handle_event("previous", _, socket) do
-    {:noreply, assign(socket, counter: socket.assigns.counter - 1)}
-  end
-
-  def handle_event("next", _, socket) do
-    # send(self(), {:updated_card, %{socket.assigns.card | title: title}})
-    {:noreply, assign(socket, counter: socket.assigns.counter + 1)}
   end
 
   defp video_frame_class(sign) do

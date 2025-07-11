@@ -59,7 +59,7 @@ defmodule SignbankWeb.SignLive.Basic do
           </p>
         </div>
         <div class="flex gap-4">
-          <div>
+          <div class="w-[60vw] max-w-[450px] grow-0 shrink-0">
             <.live_component module={VideoScroller} counter={0} id={@sign.id} sign={@sign} />
             <.keywords sign={@sign} search_term={@search_term} />
             <.live_component
@@ -97,7 +97,9 @@ defmodule SignbankWeb.SignLive.Basic do
           </div>
         </div>
 
-        <%!-- TODO: add seealso/ant collapsible embeds --%>
+        <div>
+          <%!-- TODO: add seealso/ant collapsible embeds here --%>
+        </div>
       </Layouts.app>
       """
     else

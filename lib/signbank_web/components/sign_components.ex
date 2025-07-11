@@ -206,8 +206,8 @@ defmodule SignbankWeb.SignComponents do
     assigns =
       assign(
         assigns,
-        previous: to_url.(next),
-        next: to_url.(previous),
+        next: to_url.(next),
+        previous: to_url.(previous),
         position: position,
         sign_count: Dictionary.count_signs(Map.get(assigns, :current_scope))
       )
