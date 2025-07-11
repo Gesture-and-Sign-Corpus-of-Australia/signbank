@@ -43,29 +43,12 @@
   }
 }
 
-/* TODO: make navy or similar */
-/* $citation_border: #2c55c7; */
-
-/* TODO: make sky blue */
-/* $variant_border: #79b8fb;
-
-$english_entry_border: #f3a712;
-$se_only_border: #d23d32;
-
-$footer-height: 5.3rem;
-
-$color_dominant_hand: #9db5f7;
-$color_subordinate_hand: #aed784; */
-
-
-
-
-
 @theme {
   --font-display: atkinson-hyperlegible, "sans-serif"; 
   --default-font-family: atkinson-hyperlegible, "sans-serif"; 
   --color-purple: #413c58;
   --color-yellow: #fff3c3;
+
   --color-dominant-hand: #9db5f7;
   --color-subordinate-hand: #aed784;
   
@@ -347,16 +330,16 @@ $color_subordinate_hand: #aed784; */
   border-radius: 2px;
 }
 .video-frame.citation {
-  @apply --bg-citation
+  @apply bg-citation
 }
 .video-frame.variant {
-  @apply --bg-variant
+  @apply bg-variant
 }
 .video-frame.english_entry {
-  @apply --bg-english_entry
+  @apply bg-english_entry
 }
 .video-frame.se_only {
-  @apply --bg-is_signed_english_only
+  @apply bg-is_signed_english_only
 }
 .video-frame .video-frame__video_wrapper {
   position: relative;
