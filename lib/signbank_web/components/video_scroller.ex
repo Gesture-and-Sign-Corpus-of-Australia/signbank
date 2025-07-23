@@ -61,7 +61,7 @@ defmodule VideoScroller do
         </.link>
         <%!-- z-index because only the border of the next button was visible --%>
         <div class="z-10 join-item btn btn-disabled text-black grow-1">
-          {@index_of_current_sign + 1} of {citation_and_variants |> Enum.count()} variants
+          {@index_of_current_sign + 1} of {@citation_and_variants |> Enum.count()} variants
         </div>
         <.link
           id="next_variant"

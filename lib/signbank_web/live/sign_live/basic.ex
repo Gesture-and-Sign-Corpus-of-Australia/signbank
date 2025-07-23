@@ -6,7 +6,87 @@ defmodule SignbankWeb.SignLive.Basic do
   on_mount {SignbankWeb.UserAuth, :mount_current_scope}
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(params, _session, socket) do
+    id_gloss = Map.get(params, "id")
+    search_term = Map.get(params, "q")
+    handshape = Map.get(params, "hs")
+    location = Map.get(params, "loc")
+
+    socket =
+      assign(socket,
+        error: nil,
+        inexact_matches: [],
+        query_params: persist_query_params(params),
+        search_term: search_term,
+        handshape: handshape,
+        location: location
+      )
+
+    socket =
+      cond do
+        # if we get handshape and/or location then ignore `q`
+        handshape || location ->
+          # TODO published? check against scope, if necessary; sign_order might already do it
+          assign(socket,
+            search_results:
+              Dictionary.get_sign_by_phon_features!(
+                handshape,
+                location,
+                socket.assigns.current_scope
+              )
+          )
+
+        # If we don't have an ID gloss, then we want to disambiguate `q`
+        id_gloss ->
+          socket =
+            if search_term do
+              case keyword_search(search_term, socket.assigns.current_scope) do
+                # We don't care if results is [], the page will look fine either way
+                {:ok, results} ->
+                  assign(socket, search_results: results)
+
+                {:multiple, results} ->
+                  results |> IO.inspect()
+
+                  assign(socket,
+                    search_results:
+                      results
+                      |> Enum.find(fn {kw, _, _} ->
+                        # Tream the query as an exact keyword, so skip disambiguation
+                        kw == search_term
+                      end)
+                      |> elem(1)
+                  )
+              end
+            else
+              socket
+            end
+
+          assign(socket, sign: load_sign(Map.get(params, "id"), socket.assigns.current_scope))
+
+        # If we have an ID, then `q` is already an exact keyword and we're viewing a result
+        true ->
+          case keyword_search(Map.get(params, "q"), socket.assigns.current_scope) do
+            {:ok, []} ->
+              assign(
+                socket,
+                error: "No matches"
+              )
+
+            {:ok, results} ->
+              assign(
+                socket,
+                search_results: results
+              )
+
+            {:multiple, inexact_matches} ->
+              assign(
+                socket,
+                search_results: inexact_matches
+              )
+          end
+      end
+
     {:ok, socket}
   end
 
@@ -15,34 +95,16 @@ defmodule SignbankWeb.SignLive.Basic do
     if :sign in Map.keys(assigns) do
       ~H"""
       <Layouts.app flash={@flash} current_scope={@current_scope}>
-        <nav class="flex flex-row justify-between mt-8">
+        <nav class="flex flex-row justify-between mt-4">
           <div class="flex flex-row self-end">
             <.entry_nav sign={@sign} current_scope={@current_scope} />
             <div :if={!@sign.published} class="bg-striped">This entry is not published.</div>
           </div>
-          <div class="border-none flex flex-row justify-self-end justify-end items-center text-right">
-            <div :if={not Enum.empty?(@search_results)} class="search-matches">
-              <div phx-no-format>
-                Matches
-                <span :if={@search_term != nil}>for the word <i>{@search_term}</i></span><span :if={
-                  @handshape != nil
-                }>with a {@handshape} handshape</span><span :if={@location != nil}> at {@location} location</span><%!--
-                --%>:
-              </div>
-              <div class="input join gap-0 w-min p-0 border-none">
-                <%= for {result, index} <- Enum.with_index(Enum.sort_by(@search_results, fn %{id_gloss: id_gloss} -> id_gloss end, :asc), 1) do %>
-                  <.link
-                    id={"search_result_#{result.id_gloss}"}
-                    class={"join-item border-none btn #{if @sign.id_gloss == result.id_gloss do "bg-slate-300" end}"}
-                    patch={~p"/dictionary/sign/#{result.id_gloss}?#{@query_params}"}
-                    phx-click={JS.push_focus()}
-                  >
-                    {index}
-                  </.link>
-                <% end %>
-              </div>
-            </div>
-          </div>
+          <.search_results
+            current={@sign.id_gloss}
+            search_results={assigns[:search_results]}
+            query_params={@query_params}
+          />
         </nav>
 
         <%!-- TODO: move onto video --%>
@@ -61,7 +123,7 @@ defmodule SignbankWeb.SignLive.Basic do
         <div class="flex gap-4">
           <div class="w-[60vw] max-w-[450px] grow-0 shrink-0">
             <.live_component module={VideoScroller} counter={0} id={@sign.id} sign={@sign} />
-            <.keywords sign={@sign} search_term={@search_term} />
+            <.keywords sign={@sign} search_term={assigns.query_params["q"]} />
             <.live_component
               module={SignbankWeb.CorpusExamples}
               id={"#{@sign.id}_corpus_examples"}
@@ -106,43 +168,55 @@ defmodule SignbankWeb.SignLive.Basic do
       ~H"""
       <Layouts.app flash={@flash} current_scope={@current_scope}>
         <%= if @error do %>
-          <p>There was an error attempting your search.</p>
+          <%!-- TODO: this needs styling --%>
+          <div class="prose lg:prose-xl">
+            <p>
+              There is no exact match to the word you typed.
+            </p>
+            <p>
+              There are three main reasons why there may be no match:
+              <ol>
+                <li>
+                  There really is no Auslan sign for which that word is a good translation (you may need to fingerspell the word).
+                </li>
+                <li>
+                  You have mis-typed the word or you have added unnecessary word endings. Follow these search tips:
+                  <ul>
+                    <li>type only the first few letters of a word</li>
+                    <li>type words with no word endings like ‘ing’, ‘ed’, or ‘s’.</li>
+                  </ul>
+                </li>
+
+                <li>
+                  The match is blocked in the public view of Auslan Signbank because the word/sign is obscene or offensive in English or Auslan, or both. (Schools and parents have repeatedly requested that these type of words/signs be only visible to registered users.) If you login or register with Signbank, you will then be able to find these matching words/signs if they exist in Auslan.
+                </li>
+              </ol>
+            </p>
+          </div>
         <% else %>
           <%= if not Enum.empty?(@inexact_matches) do %>
             <div>
               {Enum.count(@inexact_matches)} close matches found <hr />
               <ul class="keyword-disambig">
-                <%= for [keyword, id_gloss, published] <- Enum.sort_by(@inexact_matches, fn s -> s |> Enum.at(0) |> String.downcase end) do %>
-                  <li class="keyword-disambig__keyword" data-published={published}>
-                    <.link href={~p"/dictionary/sign/#{id_gloss}?q=#{keyword}"}>{keyword}</.link>
+                <%= for {keyword, matches, any_published} <- Enum.sort_by(@inexact_matches, fn {kw, _matches, _any_published} -> String.downcase(kw) end) do %>
+                  <li class={[
+                    if(!any_published, do: "after:content-['*'] after:font-xl after:ml-[-0.2em]")
+                  ]}>
+                    <a
+                      id={"#{keyword}__disambig_link"}
+                      class="hover:underline cursor-pointer"
+                      href={~p"/dictionary/sign/#{Enum.at(matches, 0)}?#{@query_params}"}
+                      phx-click="disambiguate"
+                      phx-value-keyword={keyword}
+                    >
+                      <%!-- phx-hook="BlockLink" --%>
+                      {keyword}
+                    </a>
+                    <%!-- phx-hook="StripHref"
+                      phx-value-keyword={keyword} --%>
                   </li>
                 <% end %>
               </ul>
-            </div>
-          <% else %>
-            <div class="content">
-              <p>
-                There is no exact match to the word you typed.
-              </p>
-              <p>
-                There are three main reasons why there may be no match:
-                <ol>
-                  <li>
-                    There really is no Auslan sign for which that word is a good translation (you may need to fingerspell the word).
-                  </li>
-                  <li>
-                    You have mis-typed the word or you have added unnecessary word endings. Follow these search tips:
-                    <ul>
-                      <li>type only the first few letters of a word</li>
-                      <li>type words with no word endings like ‘ing’, ‘ed’, or ‘s’.</li>
-                    </ul>
-                  </li>
-
-                  <li>
-                    The match is blocked in the public view of Auslan Signbank because the word/sign is obscene or offensive in English or Auslan, or both. (Schools and parents have repeatedly requested that these type of words/signs be only visible to registered users.) If you login or register with Signbank, you will then be able to find these matching words/signs if they exist in Auslan.
-                  </li>
-                </ol>
-              </p>
             </div>
           <% end %>
         <% end %>
@@ -153,50 +227,11 @@ defmodule SignbankWeb.SignLive.Basic do
 
   @impl true
   def handle_params(%{"id" => id_gloss} = params, _url, socket) do
-    search_term = Map.get(params, "q")
-    handshape = Map.get(params, "hs")
-    location = Map.get(params, "loc")
-
-    # TODO: there's a bug here, logged in editors shouldn't get a "no perms" error message for a 404
-    case Dictionary.get_sign_by_id_gloss(id_gloss, socket.assigns.current_scope) do
-      nil ->
-        {:noreply,
-         socket
-         |> put_flash(:error, "You do not have permission to access this page, please log in.")
-         |> redirect(to: ~p"/users/log-in")}
-
-      sign ->
-        socket =
-          if handshape || location do
-            assign(
-              socket,
-              :search_results,
-              # TODO: shouldn't tie input here to specific shape of query params
-              Dictionary.get_sign_by_phon_feature!(persist_query_params(params))
-            )
-          else
-            search_results =
-              if is_nil(search_term) do
-                []
-              else
-                {:ok, search_results} = Dictionary.get_sign_by_keyword!(search_term)
-                search_results
-              end
-
-            assign(socket, :search_results, search_results)
-          end
-
-        {:noreply,
-         assign(
-           socket,
-           page_title: page_title(socket.assigns.live_action),
-           sign: sign,
-           handshape: handshape,
-           location: location,
-           query_params: persist_query_params(params),
-           search_term: search_term
-         )}
-    end
+    {:noreply,
+     assign(
+       socket,
+       sign: load_sign(id_gloss, socket.assigns.current_scope)
+     )}
   end
 
   @impl true
@@ -204,10 +239,8 @@ defmodule SignbankWeb.SignLive.Basic do
     socket =
       socket
       |> assign(:inexact_matches, [])
-      |> assign(:error, nil)
 
     search_term = Map.get(params, "q")
-
     handshape = Map.get(params, "hs")
     location = Map.get(params, "loc")
 
@@ -223,22 +256,88 @@ defmodule SignbankWeb.SignLive.Basic do
            )}
       end
     else
+      socket =
+        assign(
+          socket,
+          # TODO: check what the page title is/should be
+          # page_title: page_title(socket.assigns.live_action),
+          handshape: handshape,
+          location: location,
+          search_term: search_term,
+          query_params: persist_query_params(params)
+        )
+
       # TODO: we need to use `n` to get to a specific match number, but right now we can't
       # see other matches and they're not sorted properly anyway
       case Dictionary.fuzzy_find_keyword(search_term, socket.assigns.current_scope) do
         # if we match a keyword exactly, and its the only match, jump straight to results
-        {:ok, [[^search_term, id_gloss, _]]} ->
+        [{^search_term, matches, all_published}] ->
+          socket =
+            assign(
+              socket,
+              sign: Enum.at(matches, 0)
+            )
+
+          # TODO: figure out how to make this not redirect
           {:noreply,
            push_patch(socket,
-             to: ~p"/dictionary/sign/#{id_gloss}?#{%{"q" => search_term}}"
+             to: ~p"/dictionary/sign/#{Enum.at(matches, 0)}?#{%{"q" => search_term}}"
            )}
 
-        {:ok, []} ->
+        [] ->
           {:noreply, assign(socket, :error, "No results found.")}
 
-        {:ok, inexact_matches} ->
+        inexact_matches ->
           {:noreply, assign(socket, :inexact_matches, inexact_matches)}
       end
+    end
+  end
+
+  @impl true
+  def handle_event("disambiguate", %{"keyword" => keyword}, socket) do
+    {_kw, search_results, _all_published} =
+      Enum.find(
+        socket.assigns.inexact_matches,
+        fn {kw, _signs, _all_published} ->
+          kw == keyword
+        end
+      )
+
+    # TODO: handle failure
+    sign =
+      Dictionary.get_sign_by_id_gloss(Enum.at(search_results, 0), socket.assigns.current_scope)
+
+    asdfsocket =
+      assign(
+        socket,
+        # TODO: check what the page title is/should be
+        # page_title: page_title(socket.assigns.live_action),
+        sign: sign,
+        search_results: search_results,
+        search_term: keyword
+      )
+
+    {:noreply, socket}
+  end
+
+  def keyword_search(search_term, current_scope) do
+    case Dictionary.fuzzy_find_keyword(search_term, current_scope) do
+      # if we match a keyword exactly, and its the only match, jump straight to results
+      [{^search_term, matches, _all_published}] ->
+        {:ok, matches}
+
+      [] ->
+        {:ok, []}
+
+      inexact_matches ->
+        {:multiple, inexact_matches}
+    end
+  end
+
+  def load_sign(id_gloss, current_scope) do
+    case Dictionary.get_sign_by_id_gloss(id_gloss, current_scope) do
+      %Dictionary.Sign{} = sign -> sign
+      _ -> nil
     end
   end
 
@@ -258,13 +357,92 @@ defmodule SignbankWeb.SignLive.Basic do
         <% [] -> %>
           <em>this entry has no keywords</em>
         <% keywords -> %>
-          <%= for {keyword, index} <- Enum.with_index(keywords, 1) do %>
+          <%= for {%{text: keyword}, index} <- Enum.with_index(keywords, 1) do %>
             <span class={if keyword == @search_term, do: "font-bold"}>{keyword}</span><span :if={
               index < Enum.count(keywords)
             }>, </span>
           <% end %>
       <% end %>
     </p>
+    """
+  end
+
+  defp search_results(assigns) do
+    search_term = Map.get(assigns.query_params, "q")
+    handshape = Map.get(assigns.query_params, "hs")
+    location = Map.get(assigns.query_params, "loc")
+
+    assigns =
+      assign(assigns,
+        search_term: search_term,
+        handshape: handshape,
+        location: location
+      )
+
+    ~H"""
+    <div class="border-none flex flex-row justify-self-end justify-end items-center text-right">
+      <div :if={assigns[:search_results] && not Enum.empty?(@search_results)} class="search-matches">
+        <div phx-no-format>
+          Matches
+          <span :if={assigns[:search_term]}>for the word <i>{@search_term}</i></span><span :if={
+            assigns[:handshape]
+          }>with a {@handshape} handshape</span><span :if={assigns[:location]}> at {@location} location</span><%!--
+          --%>:
+        </div>
+        <div class="input join gap-0 w-min p-0 border-none">
+          <% len = Enum.count(@search_results) %>
+          <% cur_i = (Enum.find_index(@search_results, &(&1 == @current)) || 0) + 1 %>
+          <% lower_bound = min(cur_i - 2, len - 4) %>
+          <% upper_bound = max(cur_i + 2, 5) %>
+          <.search_result
+            id_gloss={Enum.at(@search_results, 0)}
+            query_params={@query_params}
+            selected={cur_i}
+            index={1}
+          />
+          <span class={[
+            "join-item border-none btn btn-disabled",
+            if(lower_bound <= 2, do: "hidden")
+          ]}>
+            &hellip;
+          </span>
+          <%= for i <- lower_bound..upper_bound do %>
+            <.search_result
+              :if={1 < i and i < len}
+              id_gloss={@search_results |> Enum.at(i - 1)}
+              query_params={@query_params}
+              selected={cur_i}
+              index={i}
+            />
+          <% end %>
+          <span class={[
+            "join-item border-none btn btn-disabled",
+            if(upper_bound >= len - 1, do: "hidden")
+          ]}>
+            &hellip;
+          </span>
+          <.search_result
+            :if={len > 1}
+            id_gloss={Enum.at(@search_results, len - 1)}
+            query_params={@query_params}
+            selected={cur_i}
+            index={len}
+          />
+        </div>
+      </div>
+    </div>
+    """
+  end
+
+  defp search_result(assigns) do
+    ~H"""
+    <a
+      id={"search_result_#{@id_gloss}"}
+      class={"join-item border-none btn #{if @index == @selected do "bg-slate-300" end}"}
+      href={~p"/dictionary/sign/#{@id_gloss}?#{@query_params}"}
+    >
+      {@index}
+    </a>
     """
   end
 end

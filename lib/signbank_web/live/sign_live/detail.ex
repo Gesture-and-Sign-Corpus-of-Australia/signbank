@@ -15,7 +15,7 @@ defmodule SignbankWeb.SignLive.Detail do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
-      <nav class="flex flex-row justify-between mt-8">
+      <nav class="flex flex-row justify-between mt-4">
         <.entry_nav sign={@sign} current_scope={@current_scope} view={:detail} />
         <.link
           :if={@current_scope && @current_scope.user.role in [:tech, :editor]}
@@ -49,7 +49,6 @@ defmodule SignbankWeb.SignLive.Detail do
               <p class="video-frame__sign-type">{video_frame_type(@sign)}</p>
             </div>
           </div>
-          <p><strong>Keywords:</strong> {Enum.join(@sign.keywords || [], ", ")}</p>
 
           <hr />
 
@@ -78,23 +77,17 @@ defmodule SignbankWeb.SignLive.Detail do
 
         <div class="flex flex-col gap-4">
           <table class="summary-table">
-            <%= for field <- [
-              :id_gloss,
-              :id_gloss_annotation,
-              :keywords
+            <%= for {field, value} <- [
+              id_gloss: @sign.id_gloss,
+              id_gloss_annotation: @sign.id_gloss_annotation,
+              keywords: Enum.map_join(@sign.keywords, ", ", &(&1.text))
             ] do %>
               <tr>
                 <th>
                   {Gettext.gettext(Signbank.Gettext, Atom.to_string(field))}
                 </th>
                 <td>
-                  <%= with value <- Map.get(@sign, field) do %>
-                    <%= if is_list(value) do %>
-                      {Enum.join(value, ", ")}
-                    <% else %>
-                      {value}
-                    <% end %>
-                  <% end %>
+                  {value}
                 </td>
               </tr>
             <% end %>

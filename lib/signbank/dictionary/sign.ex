@@ -27,7 +27,7 @@ defmodule Signbank.Dictionary.Sign do
 
     field :sense_number, :integer
 
-    field :keywords, {:array, :string}
+    has_many :keywords, Dictionary.SignKeyword, on_replace: :delete
     field :legacy_id, :integer
     field :legacy_sign_number, :integer
     field :legacy_stem_sign_number, :integer
@@ -114,7 +114,6 @@ defmodule Signbank.Dictionary.Sign do
       :type,
       :id_gloss,
       :id_gloss_annotation,
-      :keywords,
       :published,
       :proposed_new_sign,
       :crude
@@ -160,6 +159,9 @@ defmodule Signbank.Dictionary.Sign do
     # |> put_assoc(:active_video, attrs[:active_video])
     # cast suggested_signs
     # cast semantic_categories
+    |> cast_assoc(:keywords,
+      with: &Dictionary.SignKeyword.changeset/2
+    )
     |> cast_assoc(:active_video,
       with: &Dictionary.SignVideo.changeset/2
     )

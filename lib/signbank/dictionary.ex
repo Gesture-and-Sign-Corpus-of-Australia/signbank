@@ -9,6 +9,7 @@ defmodule Signbank.Dictionary do
   alias Signbank.Accounts.User
   alias Signbank.Dictionary.Sign
   alias Signbank.Dictionary.SignVideo
+  alias Signbank.Dictionary.SignKeyword
   alias Signbank.Repo
 
   @default_order [
@@ -199,19 +200,53 @@ defmodule Signbank.Dictionary do
           active_video: [],
           relations: [],
           suggested_signs: [],
-          active_video: []
+          active_video: [],
+          keywords: []
         ],
         where: s.id_gloss == ^id_gloss
 
     Repo.one(
-      case is_struct(current_scope) and current_scope.user do
-        %User{role: role} when role in [:tech, :editor] ->
+      case get_in(current_scope, [Access.key(:user), Access.key(:role)]) do
+        role when role in [:tech, :editor] ->
           query
 
         _ ->
           from s in query, where: s.published == true
       end
     )
+  end
+
+  def get_sign_by_phon_features!(handshape, location, current_scope \\ nil) do
+    sign_order =
+      Signbank.Dictionary.SignOrder.order_query(
+        Signbank.Dictionary.SignOrder.default_order(),
+        get_in(current_scope, [Access.key!(:user), Access.key!(:role)]) in [:tech, :editor]
+      )
+
+    query =
+      from s in Sign,
+        join: so in subquery(sign_order),
+        on: [sign_id: s.id],
+        select: s.id_gloss
+
+    query =
+      if handshape do
+        from s in query,
+          where: fragment("phonology->>? = ?", "dominant_initial_handshape", ^handshape)
+      else
+        query
+      end
+
+    query =
+      if location do
+        from s in query,
+          where: fragment("phonology->>? = ?", "initial_primary_location", ^location)
+      else
+        query
+      end
+
+    query
+    |> Repo.all()
   end
 
   @doc """
@@ -221,6 +256,7 @@ defmodule Signbank.Dictionary do
     query =
       from s in Sign,
         preload: [
+          keywords: [],
           citation: [definitions: [], variants: []],
           definitions: [],
           variants: [videos: [], regions: []],
@@ -267,6 +303,20 @@ defmodule Signbank.Dictionary do
     )
   end
 
+  def get_sign_by_keyword!(keyword) do
+    case Repo.all(
+           from s in Sign,
+             join: k in SignKeyword,
+             on: [sign_id: s.id],
+             where:
+               k.text == ^keyword and
+                 s.type == :citation
+         ) do
+      [] -> {:err, "No signs with keyword #{keyword} found."}
+      results -> {:ok, results}
+    end
+  end
+
   @doc """
   Returns a sign with the given `id_gloss`. It only returns citation entries.
 
@@ -279,7 +329,7 @@ defmodule Signbank.Dictionary do
       {:ok, [["hour", "hour_clockface"], ["house", "house1a"]]}
 
   """
-  def get_sign_by_keyword!(keyword) do
+  def old_get_sign_by_keyword!(keyword) do
     region_sorter = fn %Sign{regions: regions} ->
       Enum.find_index(sort_order(), fn x ->
         Atom.to_string(x) == Enum.at(regions, 0)
@@ -290,6 +340,7 @@ defmodule Signbank.Dictionary do
     case Repo.all(
            from s in Sign,
              preload: [
+               keywords: [],
                citation: [definitions: []],
                definitions: [],
                variants: [videos: [], regions: []],
@@ -306,13 +357,58 @@ defmodule Signbank.Dictionary do
     end
   end
 
+  defp filter_visibility(query, current_scope \\ nil) do
+    if get_in(current_scope, [Access.key(:user), Access.key(:role)]) in [:tech, :editor] do
+      query
+    else
+      from s in query, where: s.published == true
+    end
+  end
+
+  # TODO: this function can probably merge with get_sign_by_keyword!
+  def fuzzy_find_keyword(search_term, current_scope \\ nil) do
+    # TODO: sort by sign_order
+
+    # Repo.all(
+    #   from s in Sign,
+    #     join: k in SignKeyword,
+    #     where: fragment("starts_with(lower(?),lower(?))", k.text, ^search_term)
+    # )
+
+    keywords =
+      from k in SignKeyword,
+        where: like(k.text, ^"#{search_term}%")
+
+    sign_order =
+      Signbank.Dictionary.SignOrder.order_query(
+        Signbank.Dictionary.SignOrder.default_order(),
+        get_in(current_scope, [Access.key(:user), Access.key(:role)]) in [:tech, :editor]
+      )
+
+    from(s in Sign,
+      join: so in subquery(sign_order),
+      on: [sign_id: s.id],
+      join: k in subquery(keywords),
+      on: [sign_id: s.id],
+      where: s.type == :citation,
+      select: {
+        k.text,
+        fragment("array_agg(? ORDER BY ?)", s.id_gloss, so.position),
+        fragment("bool_or(?)", s.published)
+      },
+      group_by: [k.text]
+    )
+    |> filter_visibility(current_scope)
+    |> Repo.all()
+  end
+
   @doc """
   Returns [[keyword, id_gloss of first match (by region sort)]..]
 
   If the search is not ambiguous (i.e., there is an exact keyword match and there
   are no other keywords that start with `query`), then it only returns that one match.
   """
-  def fuzzy_find_keyword(query, current_scope \\ nil) do
+  def old_fuzzy_find_keyword(query, current_scope \\ nil) do
     region_sorter = fn [_id_gloss, _kw, regions, _published] ->
       Enum.find_index(sort_order(), fn x ->
         Atom.to_string(x) == Enum.at(regions, 0)
@@ -336,7 +432,9 @@ defmodule Signbank.Dictionary do
       )
 
     visible? = fn [_id_gloss, _kw, _regions, published?] ->
-      published? or current_scope.user.role in [:tech, :editor]
+      # published? or (current_scope && get_in(current_scope, [:user, :role]) in [:tech, :editor])
+      published? or
+        get_in(current_scope, [Access.key(:user), Access.key(:role)]) in [:tech, :editor]
     end
 
     case results do
@@ -378,10 +476,7 @@ defmodule Signbank.Dictionary do
     query =
       Signbank.Dictionary.SignOrder.order_query(
         Signbank.Dictionary.SignOrder.default_order(),
-        case is_struct(current_scope) and current_scope.user do
-          %User{role: role} when role in [:tech, :editor] -> true
-          _ -> false
-        end
+        get_in(current_scope, [Access.key(:user), Access.key(:role)]) in [:tech, :editor]
       )
 
     case Repo.one(
@@ -391,7 +486,7 @@ defmodule Signbank.Dictionary do
              left_join: n in Sign,
              on: [id: so.next],
              select: %{previous: p, next: n, position: so.position},
-             where: so.id == ^id
+             where: so.sign_id == ^id
          ) do
       nil -> %{previous: nil, next: nil, position: nil}
       record -> record
