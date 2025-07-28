@@ -205,15 +205,12 @@ defmodule SignbankWeb.SignLive.Basic do
                     <a
                       id={"#{keyword}__disambig_link"}
                       class="hover:underline cursor-pointer"
-                      href={~p"/dictionary/sign/#{Enum.at(matches, 0)}?#{@query_params}"}
+                      href={~p"/dictionary/sign/#{Enum.at(matches, 0)}?#{%{@query_params | "q" => keyword}}"}
                       phx-click="disambiguate"
                       phx-value-keyword={keyword}
                     >
-                      <%!-- phx-hook="BlockLink" --%>
                       {keyword}
                     </a>
-                    <%!-- phx-hook="StripHref"
-                      phx-value-keyword={keyword} --%>
                   </li>
                 <% end %>
               </ul>
