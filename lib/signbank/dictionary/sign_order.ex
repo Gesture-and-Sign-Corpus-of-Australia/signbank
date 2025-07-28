@@ -14,8 +14,9 @@ defmodule Signbank.Dictionary.SignOrder do
     Ecto.Query.dynamic(
       [s],
       fragment(
-        "coalesce(array_position(? :: varchar[], phonology->>?),?)",
+        "coalesce(array_position(? :: varchar[], ?->>?),?)",
         ^values,
+        field(s, :phonology),
         ^field,
         ^default_position
       )
@@ -31,7 +32,7 @@ defmodule Signbank.Dictionary.SignOrder do
           ]
         ],
         select: %{
-          id: selected_as(s.id, :id),
+          sign_id: selected_as(s.id, :sign_id),
           position:
             selected_as(
               over(
@@ -358,19 +359,23 @@ defmodule Signbank.Dictionary.SignOrder do
         ],
         :nulls_first
       ),
-      Ecto.Query.dynamic(fragment("morphology ->> 'compound_of' nulls first")),
-      Ecto.Query.dynamic(fragment("sense_number nulls first")),
+      Ecto.Query.dynamic([s], fragment("? ->> 'compound_of' nulls first", field(s, :morphology))),
+      Ecto.Query.dynamic([s], fragment("? nulls first", field(s, :sense_number))),
       # ignore the parenthesised part of ID glosses
       Ecto.Query.dynamic(
-        fragment("""
-        regexp_replace(
+        [s],
+        fragment(
+          """
           regexp_replace(
-            lower(id_gloss),
-            '\\\(.*\\\)', ' ', 'i'
-          ),
-          '[-_]', ' ', 'ig'
+            regexp_replace(
+              lower(?),
+              '\\\(.*\\\)', ' ', 'i'
+            ),
+            '[-_]', ' ', 'ig'
+          )
+          """,
+          field(s, :id_gloss)
         )
-        """)
       )
     ]
   end
