@@ -62,7 +62,7 @@ defmodule SignbankWeb.Layouts do
     <.nav id="menu-sm" mobile />
 
     <%!-- <main class="px-4 py-20 sm:px-6 lg:px-8"> --%>
-    <main class="mx-auto max-w-4xl space-y-4">
+    <main class="mx-auto max-w-4xl space-y-4 pt-4">
       {render_slot(@inner_block)}
     </main>
 
@@ -115,8 +115,8 @@ defmodule SignbankWeb.Layouts do
     <ul class={[@base_class, @class]} {@rest}>
       <li>
         <form action="/dictionary/sign" method="GET">
-          <div class="field has-addons text-black">
-            <div class="control has-icons-right">
+          <div class="join flex text-black">
+            <div class="join-item">
               <input
                 class="input"
                 type="text"
@@ -124,14 +124,16 @@ defmodule SignbankWeb.Layouts do
                 placeholder={gettext("Search by English keyword…")}
               />
             </div>
-            <div class="control">
-              <button class="button">
-                <.icon name="hero-magnifying-glass" class="size-6 bg-yellow" />
-              </button>
-            </div>
+            <button class="join-item btn btn-icon">
+              <.icon name="hero-magnifying-glass" class="size-6 bg-black" />
+            </button>
           </div>
         </form>
+        <a class="btn btn-ghost" href={~p"/dictionary/phonological-search"}>
+          Search by handshape
+        </a>
       </li>
+
       <.nav_item mobile={@mobile}>
         {gettext("About")}
         <:children>

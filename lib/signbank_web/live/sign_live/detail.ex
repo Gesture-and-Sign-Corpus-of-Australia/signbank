@@ -15,7 +15,7 @@ defmodule SignbankWeb.SignLive.Detail do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
-      <nav class="flex flex-row justify-between mt-4">
+      <nav class="flex flex-row justify-between mt-8">
         <.entry_nav sign={@sign} current_scope={@current_scope} view={:detail} />
         <.link
           :if={@current_scope && @current_scope.user.role in [:tech, :editor]}

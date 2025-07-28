@@ -71,7 +71,7 @@ defmodule SignbankWeb.Search do
             <% end %>
             <%= for page_number <- (@page.page_number-2)..(@page.page_number+2) do %>
               <a
-                :if={page_number > 0 and page_number <= @page.total_pages}
+                :if={0 < page_number and page_number <= @page.total_pages}
                 phx-click="page"
                 phx-value-num={page_number}
                 class={["btn join-item", if(page_number == @page.page_number, do: "bg-slate-300")]}
