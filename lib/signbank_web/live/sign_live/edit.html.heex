@@ -1224,6 +1224,10 @@
     </.inputs_for>
 
     <div id="definitions_section">
+      <div class="p-2" :if={@sign.type == :variant}>
+        There are {@sign.citation.definitions |> Enum.count()} definitions on this variant's citation entry. Please edit them on the citation entry.
+        <%!-- <.link patch={~p"/dictionary/sign/#{@sign.citation.id_gloss}/edit"}>View citation entry</.link> --%>
+      </div>
       <div id="definitions_list" phx-hook="InitSorting">
         <.inputs_for :let={f_definitions} field={@form[:definitions]}>
           <.definition form="sign-form" f={f_definitions} deleted={f_definitions[:delete].value} />
@@ -1244,7 +1248,7 @@
             [role, label] <- [
               [:general, gettext("General Sign")],
               [:noun, gettext("Noun (things)")],
-              [:verb, gettext("Verb & adjective (actions/processes/states))")],
+              [:verb, gettext("Verb & adjective (actions/processes/states)")],
               [:questions, gettext("Question signs")],
               [:pointing_sign, gettext("Pointing signs")],
               [:interactive, gettext("Interactive & backchannel")],
