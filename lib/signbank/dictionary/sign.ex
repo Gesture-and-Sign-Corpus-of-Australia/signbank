@@ -183,20 +183,26 @@ defmodule Signbank.Dictionary.Sign do
       [] ->
         changeset
 
-      region_names ->
-        regions =
-          region_names
-          |> Enum.filter(&(&1 != ""))
-          |> match_region_names_to_existing(sign)
-
-        put_assoc(changeset, :regions, regions)
+      regions ->
+        put_assoc(
+          changeset,
+          :regions,
+          for region <- regions do
+            sign
+            |> Ecto.build_assoc(:regions)
+            |> Ecto.Changeset.cast(%{region: region}, [:region])
+          end
+        )
     end
   end
 
   defp match_region_names_to_existing(region_names, sign) do
     Enum.map(region_names, fn region_name ->
       # Dictionary.SignRegion.changeset(%Dictionary.SignRegion{}, %{sign_id: sign.id, region: region_name})
-      new_region = Ecto.build_assoc(sign, :regions, %{region: region_name})
+      new_region =
+        sign
+        |> Ecto.build_assoc(:regions)
+        |> Ecto.Changeset.cast(%{region: region_name}, [:region])
 
       Enum.find(sign.regions, new_region, &(&1.region == region_name))
     end)

@@ -46,6 +46,7 @@ defmodule SignbankWeb.SignLive.Edit do
      socket
      |> assign(:page_title, "edit entry")
      |> assign(:sign, sign)
+     |> assign(:regions, Dictionary.SignRegion.regions())
      |> init(sign)}
   end
 
@@ -280,80 +281,6 @@ defmodule SignbankWeb.SignLive.Edit do
       </div>
     </div>
     """
-  end
-
-  attr :id, :any
-  attr :name, :any
-  attr :label, :string, default: nil
-  attr :field, Phoenix.HTML.FormField
-  attr :errors, :list, default: []
-  attr :options, :list
-  attr :rest, :global, include: ~w(disabled form readonly)
-  attr :class, :string, default: nil
-
-  def regions_checkgroup(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
-    assigns =
-      assigns
-      |> assign(id: field.id)
-      |> assign(:value, field.value)
-      |> assign(:name, field.name <> "[]")
-      |> assign(:errors, field.errors)
-      |> assign_new(
-        :selected,
-        &pick_selected/1
-      )
-
-    ~H"""
-    <div phx-feedback-for={@name} class="text-sm">
-      <%!-- <.label for={@id}>{@label}</.label> --%>
-      <div>
-        <%!-- <div>
-          <input type="hidden" name={@name} value="" />
-          <ul :for={value <- @selected}><%= value %></ul>
-          <div :for={{label, value} <- @options} class="flex items-center">
-            <label for={"#{@name}-#{value}"}>
-              <input
-                type="checkbox"
-                id={"#{@name}-#{value}"}
-                name={@name}
-                value={value}
-                checked={Atom.to_string(value) in @selected}
-                {@rest}
-              />
-              <%= label %> value: <%= value %>
-            </label>
-          </div>
-        </div> --%>
-      </div>
-      <%!-- <.error :for={msg <- @errors}>{msg}</.error> --%>
-    </div>
-    """
-  end
-
-  defp pick_selected(assigns) do
-    assigns.value
-    |> Enum.map(fn x ->
-      case x do
-        %Ecto.Changeset{action: action, data: data} when action in [:insert, :update] ->
-          data.region
-
-        %Ecto.Changeset{} ->
-          nil
-
-        %{region: region} ->
-          region
-
-        "" ->
-          nil
-
-        x when is_binary(x) ->
-          x
-
-        _ ->
-          nil
-      end
-    end)
-    |> Enum.filter(&(!is_nil(&1)))
   end
 
   # TODO: dead code

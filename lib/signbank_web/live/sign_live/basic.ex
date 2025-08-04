@@ -46,7 +46,7 @@ defmodule SignbankWeb.SignLive.Basic do
                   assign(socket, search_results: results)
 
                 {:multiple, results} ->
-                  results |> IO.inspect()
+                  results
 
                   assign(socket,
                     search_results:
@@ -306,15 +306,15 @@ defmodule SignbankWeb.SignLive.Basic do
     sign =
       Dictionary.get_sign_by_id_gloss(Enum.at(search_results, 0), socket.assigns.current_scope)
 
-    asdfsocket =
-      assign(
-        socket,
-        # TODO: check what the page title is/should be
-        # page_title: page_title(socket.assigns.live_action),
-        sign: sign,
-        search_results: search_results,
-        search_term: keyword
-      )
+    # socket =
+    #   assign(
+    #     socket,
+    #     # TODO: check what the page title is/should be
+    #     # page_title: page_title(socket.assigns.live_action),
+    #     sign: sign,
+    #     search_results: search_results,
+    #     search_term: keyword
+    #   )
 
     {:noreply, socket}
   end

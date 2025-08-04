@@ -811,41 +811,18 @@
             </tr>
           </thead>
           <tbody>
-            <%!-- TODO: regions as checkboxes, surprisingly tricky --%>
-            <%!-- <tr :for={region <- Signbank.Dictionary.SignRegion.regions()}>
-              <th>
-                <%= region %>
-              </th>
+            <tr>
               <td>
-                <.input
-                  type="checkbox"
-                  name={"region_#{region}"}
-                  value={Enum.any?(@sign.regions, &(&1.region == region))}
-                />
-              </td>
-            </tr> --%>
-            <%!-- <tr>
-              <td style="text-align:left;">
-                <.input
-                  type="checkgroup"
-                  name="regions_list"
+                <.regions_checkgroup
+                  form="sign-form"
                   field={@form[:regions]}
                   options={
                     Signbank.Dictionary.SignRegion.regions()
                     |> Enum.map(&{Signbank.Dictionary.SignRegion.region_to_string(&1), &1})
                   }
-                  value={@sign.regions |> Enum.map(& &1.region)}
                 />
               </td>
-            </tr> --%>
-            <.regions_checkgroup
-              field={@form[:regions]}
-              label={gettext("Regions")}
-              options={
-                Signbank.Dictionary.SignRegion.regions()
-                |> Enum.map(&{Signbank.Dictionary.SignRegion.region_to_string(&1), &1})
-              }
-            />
+            </tr>
           </tbody>
         </table>
 

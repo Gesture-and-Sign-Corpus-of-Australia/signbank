@@ -518,4 +518,83 @@ defmodule SignbankWeb.CoreComponents do
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
+
+  attr :id, :any
+  attr :name, :any
+  attr :label, :string, default: nil
+  attr :field, Phoenix.HTML.FormField
+  attr :errors, :list, default: []
+  attr :options, :list
+  attr :rest, :global, include: ~w(disabled form readonly)
+  attr :class, :string, default: nil
+
+  def regions_checkgroup(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
+    assigns =
+      assigns
+      |> assign(id: field.id)
+      |> assign(:value, field.value)
+      |> assign(:name, field.name <> "[]")
+      |> assign(:errors, field.errors)
+      |> assign_new(
+        :selected,
+        &pick_selected/1
+      )
+
+    ~H"""
+    <div phx-feedback-for={@name} class="text-sm">
+      <fieldset class="fieldset p-4">
+        <input type="hidden" name={@name} value="" />
+        <label :for={{label, value} <- @options} for={"#{@name}-#{value}"} class="label">
+          <input
+            type="checkbox"
+            id={"#{@name}-#{value}"}
+            name={@name}
+            value={value}
+            checked={Atom.to_string(value) in @selected}
+            class="checkbox"
+            {@rest}
+          />
+          {label}
+        </label>
+      </fieldset>
+      <.error :for={msg <- @errors}>{msg}</.error>
+    </div>
+    """
+  end
+
+  defp pick_selected(assigns) do
+    assigns.value
+    |> Enum.map(fn
+      %Ecto.Changeset{action: action} = x when action in [:insert, :update, nil] ->
+        Ecto.Changeset.get_change(x, :region)
+
+      %Ecto.Changeset{} ->
+        nil
+
+      %{region: region} ->
+        region
+
+      "" ->
+        nil
+
+      x when is_binary(x) ->
+        x
+
+      x when is_atom(x) ->
+        Atom.to_string(x)
+
+      _ ->
+        nil
+    end)
+    |> Enum.filter(&(!is_nil(&1)))
+    |> Enum.map(fn
+      # HACK: I feel this shouldn't be necessary, something is weird with our form casting
+      x when is_atom(x) ->
+        Atom.to_string(x)
+
+      x ->
+        x
+    end)
+    |> Enum.map(&IO.inspect(&1, label: "help?"))
+  end
 end
