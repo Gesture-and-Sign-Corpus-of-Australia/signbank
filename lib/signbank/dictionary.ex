@@ -10,6 +10,7 @@ defmodule Signbank.Dictionary do
   alias Signbank.Dictionary.Sign
   alias Signbank.Dictionary.SignVideo
   alias Signbank.Dictionary.SignKeyword
+  alias Signbank.Dictionary.Definition
   alias Signbank.Repo
 
   @default_order [
@@ -27,6 +28,54 @@ defmodule Signbank.Dictionary do
 
   defp sort_order, do: @default_order
 
+  def query_from_filter(
+        %Signbank.Search.Filter{
+          field: :keywords,
+          op: op,
+          value: val
+        },
+        queryable
+      ) do
+    conditions =
+      case op do
+        :equal_to -> dynamic([d], d.text == ^val)
+        :contains -> dynamic([d], like(d.text, ^"%#{val}%"))
+        :starts_with -> dynamic([d], like(d.text, ^"#{val}%"))
+        :regex -> dynamic([d], fragment("? ~ ?", d.text, ^val))
+      end
+
+    suq =
+      from d in SignKeyword,
+        where: d.sign_id == parent_as(:signs).id,
+        where: ^conditions
+
+    dynamic([s], ^queryable and exists(subquery(suq)))
+  end
+
+  def query_from_filter(
+        %Signbank.Search.Filter{
+          field: :definitions,
+          op: op,
+          value: val
+        },
+        queryable
+      ) do
+    conditions =
+      case op do
+        :equal_to -> dynamic([d], d.text == ^val)
+        :contains -> dynamic([d], like(d.text, ^"%#{val}%"))
+        :starts_with -> dynamic([d], like(d.text, ^"#{val}%"))
+        :regex -> dynamic([d], fragment("? ~ ?", d.text, ^val))
+      end
+
+    suq =
+      from d in Definition,
+        where: d.sign_id == parent_as(:signs).id,
+        where: ^conditions
+
+    dynamic([s], ^queryable and exists(subquery(suq)))
+  end
+
   # sub_field is for fields inside a JSON column
   def query_from_filter(
         %Signbank.Search.Filter{
@@ -43,6 +92,25 @@ defmodule Signbank.Dictionary do
       dynamic([s], ^queryable and fragment("?::json->>? is null", ^field, ^sub_field))
     else
       dynamic([s], ^queryable and fragment("?->>? = ?", field(s, ^field), ^sub_field, ^val))
+    end
+  end
+
+  def query_from_filter(
+        %Signbank.Search.Filter{
+          field: :has_video,
+          op: :equal_to,
+          value: val
+        },
+        queryable
+      ) do
+    suq =
+      from d in SignVideo,
+        where: d.id == parent_as(:signs).active_video_id
+
+    if val do
+      dynamic([s], ^queryable and exists(subquery(suq)))
+    else
+      dynamic([s], ^queryable and not exists(subquery(suq)))
     end
   end
 
@@ -136,6 +204,7 @@ defmodule Signbank.Dictionary do
       ) do
     base_query =
       from s in Sign,
+        as: :signs,
         order_by: [
           fragment("lower(?) ASC", s.id_gloss)
         ]

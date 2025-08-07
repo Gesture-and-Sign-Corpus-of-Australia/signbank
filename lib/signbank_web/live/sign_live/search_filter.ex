@@ -17,7 +17,7 @@ defmodule SearchFilter do
     @moduledoc """
     Defines one field in the advanced search form.
     """
-    defstruct name: nil, inside: nil, label: nil, type: nil, options: nil
+    defstruct name: nil, inside: nil, label: nil, type: nil, assoc_field: nil, options: nil
   end
 
   def control(assigns) do
@@ -258,8 +258,18 @@ defmodule SearchFilter do
       # %Field{label: "legacy_sign_number", name: :legacy_sign_number, type: "text"},
       # %Field{label: "legacy_stem_sign_number", name: :legacy_stem_sign_number, type: "text"},
 
-      # TODO: tricky one, this is actually an array
+      # HACK: at the moment handling keywords and definitions filters are just hardcoded,
+      # in the future there should really be some kind of `type: "association"` so that
+      # they can be handled generically
       %Field{label: "Keywords", name: :keywords, type: "text"},
+      %Field{label: "Definitions", name: :definitions, type: "text"},
+
+      # has video is also special-cased in `query_from_filter/2`
+      %Field{
+        label: "Has video",
+        name: :has_video,
+        type: "boolean"
+      },
 
       # TODO: only show to editors
       %Field{label: "Published", name: :published, type: "boolean"},
@@ -281,12 +291,6 @@ defmodule SearchFilter do
         type: "text"
       },
 
-      # TODO: not sure where to put this in the order
-      %Field{
-        label: "Suggested signs description",
-        name: :suggested_signs_description,
-        type: "text"
-      },
       # TODO: these fields don't exist yet, but this is their filter definition for when they do
       # %Field{label: "Note", name: :note, type: "text"},
       # %Field{label: "Editor note", name: :editor_note, type: "text"},

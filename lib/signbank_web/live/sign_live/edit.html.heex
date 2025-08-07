@@ -1224,7 +1224,7 @@
     </.inputs_for>
 
     <div id="definitions_section">
-      <div class="p-2" :if={@sign.type == :variant}>
+      <div :if={@sign.type == :variant} class="p-2">
         There are {@sign.citation.definitions |> Enum.count()} definitions on this variant's citation entry. Please edit them on the citation entry.
         <%!-- <.link patch={~p"/dictionary/sign/#{@sign.citation.id_gloss}/edit"}>View citation entry</.link> --%>
       </div>

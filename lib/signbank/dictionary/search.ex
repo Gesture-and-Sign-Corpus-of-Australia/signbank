@@ -7,7 +7,15 @@ defmodule Signbank.Search do
   @primary_key false
   embedded_schema do
     embeds_many :filters, Filter, on_replace: :delete do
-      field :field, Ecto.Enum, values: Signbank.Dictionary.Sign.__schema__(:fields)
+      field :field, Ecto.Enum,
+        values:
+          Signbank.Dictionary.Sign.__schema__(:fields) ++
+            [
+              :keywords,
+              :definitions,
+              :has_video
+            ]
+
       # sub_field is a key on :field, for filtering on nested data
       field :sub_field, :string, default: nil
 
