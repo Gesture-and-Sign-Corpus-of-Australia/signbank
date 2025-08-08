@@ -40,6 +40,42 @@
 
       <label for={@uploads.video.ref}>Upload new video:</label>
       <.live_file_input class="file-input" form="sign-form" upload={@uploads.video} />
+
+      <hr class="m-1" />
+
+      <table>
+        <tr>
+          <th colspan="2" class="bg-green-300">GLOSSING</th>
+        </tr>
+        <tr>
+          <th>ID gloss ANNOTATION</th>
+          <td>{@sign.id_gloss_annotation}</td>
+        </tr>
+        <tr>
+          <th>ID gloss</th>
+          <td>{@sign.id_gloss}</td>
+        </tr>
+        <tr>
+          <th>Morphemic analysis gloss</th>
+          <td>{@sign.id_gloss_variant_analysis}</td>
+        </tr>
+      </table>
+
+      <table>
+        <tr>
+          <th colspan="2" class="bg-green-300">Keywords ('translations')</th>
+        </tr>
+        <tr>
+          <td>
+            <.input
+              type="textarea"
+              form="sign-form"
+              field={@form[:keywords_joined]}
+              value={@sign.keywords |> Enum.map(& &1.text) |> Enum.join(", ")}
+            />
+          </td>
+        </tr>
+      </table>
     </div>
     <.inputs_for :let={phonology_f} field={@form[:phonology]}>
       <div id="phonology_section">

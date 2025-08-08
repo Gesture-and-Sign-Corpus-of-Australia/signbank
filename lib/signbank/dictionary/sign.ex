@@ -159,9 +159,6 @@ defmodule Signbank.Dictionary.Sign do
     # |> put_assoc(:active_video, attrs[:active_video])
     # cast suggested_signs
     # cast semantic_categories
-    |> cast_assoc(:keywords,
-      with: &Dictionary.SignKeyword.changeset/2
-    )
     |> cast_assoc(:active_video,
       with: &Dictionary.SignVideo.changeset/2
     )
@@ -176,6 +173,24 @@ defmodule Signbank.Dictionary.Sign do
       sort_param: :definitions_position
     )
     |> put_regions(sign, attrs)
+    |> put_keywords(sign, attrs)
+  end
+
+  defp put_keywords(changeset, sign, attrs) do
+    IO.inspect(attrs)
+
+    keywords =
+      for keyword <- Map.get(attrs, "keywords", []) do
+        Enum.find(
+          sign.keywords,
+          sign
+          |> Ecto.build_assoc(:keywords)
+          |> Ecto.Changeset.cast(%{text: keyword}, [:text]),
+          &(&1.text == keyword)
+        )
+      end
+
+    put_assoc(changeset, :keywords, keywords)
   end
 
   defp put_regions(changeset, sign, attrs) do

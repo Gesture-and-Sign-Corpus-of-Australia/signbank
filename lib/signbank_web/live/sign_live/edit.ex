@@ -52,6 +52,17 @@ defmodule SignbankWeb.SignLive.Edit do
 
   @impl true
   def handle_event("save", %{"sign" => sign_params}, socket) do
+    sign_params =
+      sign_params
+      |> Map.put(
+        "keywords",
+        ~r/,(?=(?:[^\(\)]*\([^\(\)]*\))*[^\(\)]*$)/
+        |> Regex.split(sign_params["keywords_joined"])
+        |> Enum.map(&String.trim(&1))
+      )
+      |> Map.delete("keywords_joined")
+      |> IO.inspect()
+
     case Dictionary.update_sign(socket.assigns.sign, sign_params) do
       {:ok, data} ->
         {:noreply, socket |> put_flash(:info, "Updated successfully") |> init(data)}
@@ -62,6 +73,17 @@ defmodule SignbankWeb.SignLive.Edit do
   end
 
   def handle_event("validate", %{"sign" => sign_params}, socket) do
+    sign_params =
+      sign_params
+      |> Map.put(
+        "keywords",
+        ~r/,(?=(?:[^\(\)]*\([^\(\)]*\))*[^\(\)]*$)/
+        |> Regex.split(sign_params["keywords_joined"])
+        |> Enum.map(&String.trim(&1))
+      )
+      |> Map.delete("keywords_joined")
+      |> IO.inspect()
+
     changeset =
       socket.assigns.sign
       |> Dictionary.change_sign(sign_params)
