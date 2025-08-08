@@ -595,6 +595,5 @@ defmodule SignbankWeb.CoreComponents do
       x ->
         x
     end)
-    |> Enum.map(&IO.inspect(&1, label: "help?"))
   end
 end

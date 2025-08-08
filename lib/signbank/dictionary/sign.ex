@@ -177,8 +177,6 @@ defmodule Signbank.Dictionary.Sign do
   end
 
   defp put_keywords(changeset, sign, attrs) do
-    IO.inspect(attrs)
-
     keywords =
       for keyword <- Map.get(attrs, "keywords", []) do
         Enum.find(
@@ -194,6 +192,7 @@ defmodule Signbank.Dictionary.Sign do
   end
 
   defp put_regions(changeset, sign, attrs) do
+    # TODO: clean this code up, it can look like put_keywords
     case Map.get(attrs, "regions", []) do
       [] ->
         changeset

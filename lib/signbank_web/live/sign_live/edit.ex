@@ -52,6 +52,7 @@ defmodule SignbankWeb.SignLive.Edit do
 
   @impl true
   def handle_event("save", %{"sign" => sign_params}, socket) do
+    # TODO: Refactor this duplication out into function
     sign_params =
       sign_params
       |> Map.put(
@@ -61,7 +62,6 @@ defmodule SignbankWeb.SignLive.Edit do
         |> Enum.map(&String.trim(&1))
       )
       |> Map.delete("keywords_joined")
-      |> IO.inspect()
 
     case Dictionary.update_sign(socket.assigns.sign, sign_params) do
       {:ok, data} ->
@@ -73,6 +73,7 @@ defmodule SignbankWeb.SignLive.Edit do
   end
 
   def handle_event("validate", %{"sign" => sign_params}, socket) do
+    # TODO: Refactor this duplication out into function
     sign_params =
       sign_params
       |> Map.put(
@@ -82,7 +83,6 @@ defmodule SignbankWeb.SignLive.Edit do
         |> Enum.map(&String.trim(&1))
       )
       |> Map.delete("keywords_joined")
-      |> IO.inspect()
 
     changeset =
       socket.assigns.sign
