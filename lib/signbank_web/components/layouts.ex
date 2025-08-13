@@ -68,7 +68,7 @@ defmodule SignbankWeb.Layouts do
 
     <footer class="absolute b-0 w-full h-[5.3em] px-6 py-12 bg-slate-200 text-right">
       <div class="flex">
-        <%= if @current_scope && (%{role: :tech} = @current_scope.user) do %>
+        <%= if @current_scope && @current_scope.user.role == :tech do %>
           <.link class="underline text-slate-600" href={~p"/tech"}>
             Dashboard
           </.link>
