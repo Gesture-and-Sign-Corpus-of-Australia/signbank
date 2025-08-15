@@ -53,7 +53,7 @@ defmodule SignbankWeb.SignLive.Detail do
           <hr />
 
           <div :if={@sign.type == :citation and Enum.count(@sign.variants) > 0} class="box">
-            <h3 class="text-lg">Variants</h3>
+            <h3 class="text-lg mt-2">Variants</h3>
             <ol class="entry-page__variant_list">
               <%= for {variant, index} <- Enum.with_index(@sign.variants, 1) do %>
                 <li>
@@ -209,7 +209,7 @@ defmodule SignbankWeb.SignLive.Detail do
     ~H"""
     <div class="mt-2">
       <div :if={SignbankWeb.MapComponents.show_map?(@sign.regions)}>
-        <h3 class="is-size-6 has-text-weight-semibold">Dialects</h3>
+        <h3 class="text-lg mt-2">Dialects</h3>
         <%= if Enum.any?(@sign.regions) do %>
           <.australia_map selected={@sign.regions} />
         <% else %>
@@ -217,8 +217,8 @@ defmodule SignbankWeb.SignLive.Detail do
         <% end %>
       </div>
       <div>
-        <h3 class="is-size-6 has-text-weight-semibold">Usage by other factors</h3>
-        <ul class="ling-details-section__properties">
+        <h3 class="text-lg mt-2">Usage by other factors</h3>
+        <ul>
           <li>
             Technical or specialist jargon: {bool_to_word(@sign.lexis_technical_or_specialist_jargon)}
           </li>
@@ -232,8 +232,8 @@ defmodule SignbankWeb.SignLive.Detail do
         </ul>
       </div>
       <div>
-        <h3 class="is-size-6 has-text-weight-semibold">Borrowings</h3>
-        <ul class="ling-details-section__properties">
+        <h3 class="text-lg mt-2">Borrowings</h3>
+        <ul>
           <li>ASL gloss: {if @sign.asl_gloss, do: @sign.asl_gloss, else: "N/A"}</li>
           <li>ASL loan?: {bool_to_word(@sign.is_asl_loan)}</li>
           <li>BSL gloss: {if @sign.bsl_gloss, do: @sign.bsl_gloss, else: "N/A"}</li>
@@ -250,8 +250,8 @@ defmodule SignbankWeb.SignLive.Detail do
         </ul>
       </div>
       <div>
-        <h3 class="is-size-6 has-text-weight-semibold">Other</h3>
-        <ul class="ling-details-section__properties">
+        <h3 class="text-lg mt-2">Other</h3>
+        <ul>
           <li>
             Iconicity: {@sign.iconicity || gettext("unknown")}
           </li>
@@ -276,7 +276,7 @@ defmodule SignbankWeb.SignLive.Detail do
   def morph_details(assigns) do
     ~H"""
     <div class="pt-2">
-      <ul class="ling-details-section__properties">
+      <ul>
         <li>
           Blend of: {if @sign.morphology.blend_of,
             do: "‘#{@sign.morphology.blend_of}’",
@@ -311,8 +311,8 @@ defmodule SignbankWeb.SignLive.Detail do
         </li>
       </ul>
       <div>
-        <h3 class="is-size-6 has-text-weight-semibold">Spatial</h3>
-        <ul class="ling-details-section__properties">
+        <h3 class="text-lg mt-2">Spatial</h3>
+        <ul>
           <li>Directional: {bool_to_word(@sign.morphology.directional)}</li>
           <li>
             Begins directional: {bool_to_word(@sign.morphology.beginning_directional)}
@@ -327,8 +327,8 @@ defmodule SignbankWeb.SignLive.Detail do
         </ul>
       </div>
       <div>
-        <h3 class="is-size-6 has-text-weight-semibold">Lexical</h3>
-        <ul class="ling-details-section__properties">
+        <h3 class="text-lg mt-2">Lexical</h3>
+        <ul>
           <li>Initialism: {bool_to_word(@sign.morphology.is_initialism)}</li>
           <li>Alphabet: {bool_to_word(@sign.morphology.is_alphabet)}</li>
           <li>Abbreviation: {bool_to_word(@sign.morphology.is_abbreviation)}</li>
@@ -388,10 +388,10 @@ defmodule SignbankWeb.SignLive.Detail do
         </li>
       </ul>
       <div>
-        <h3 class="is-size-6 has-text-weight-semibold">
+        <h3 class="text-lg mt-2">
           Finger-hand <small>(metacarpus)</small> orientation
         </h3>
-        <ul class="ling-details-section__properties">
+        <ul>
           <li>
             Dominant finger-hand orientation: {generate_initial_final_text(
               @sign.phonology.dominant_initial_finger_hand_orientation,
@@ -409,10 +409,10 @@ defmodule SignbankWeb.SignLive.Detail do
       <%!-- TODO: the FM database has palm orientation, track down whether we need it or not --%>
 
       <div>
-        <h3 class="is-size-6 has-text-weight-semibold">
+        <h3 class="text-lg mt-2">
           Interact location <small>(not for one-handed signs)</small>
         </h3>
-        <ul class="ling-details-section__properties">
+        <ul>
           <li>
             Dominant interacting handpart: {generate_initial_final_text(
               @sign.phonology.dominant_initial_interacting_handpart,
@@ -450,7 +450,7 @@ defmodule SignbankWeb.SignLive.Detail do
       </div>
 
       <div>
-        <h3 class="is-size-6 has-text-weight-semibold">
+        <h3 class="text-lg mt-2">
           Small hand movements <small>(dominant hand)</small>
         </h3>
         <%= for {label, value} <- %{
@@ -469,7 +469,7 @@ defmodule SignbankWeb.SignLive.Detail do
       </div>
 
       <div>
-        <h3 class="is-size-6 has-text-weight-semibold">
+        <h3 class="text-lg mt-2">
           Large movements <small>(interactions of hands) — Two-handed signs only</small>
         </h3>
         <%= for {label, value} <- %{
@@ -489,10 +489,10 @@ defmodule SignbankWeb.SignLive.Detail do
       </div>
 
       <div>
-        <h3 class="is-size-6 has-text-weight-semibold">
+        <h3 class="text-lg mt-2">
           Large movements <small>(dominant hand)</small>
         </h3>
-        <ul class="ling-details-section__properties">
+        <ul>
           <li :if={@sign.phonology.movement_direction}>
             Direction: {@sign.phonology.movement_direction}
           </li>
