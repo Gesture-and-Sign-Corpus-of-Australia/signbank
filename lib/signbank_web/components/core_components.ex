@@ -444,14 +444,14 @@ defmodule SignbankWeb.CoreComponents do
   end
 
   attr :id, :string, required: true
-  attr :button_label, :string, default: "Open modal"
+  attr :button_label, :string, default: nil
   slot :inner_block, doc: "the optional inner block that renders the flash message"
 
   def modal(assigns) do
     ~H"""
     <div>
       <!-- Open the modal using ID.showModal() method -->
-      <button type="button" class="btn" onclick={"#{@id}.showModal()"}>{@button_label}</button>
+      <button :if={@button_label} type="button" class="btn" onclick={"#{@id}.showModal()"}>{@button_label}</button>
       <dialog id={@id} class="modal">
         <div class="modal-box">
           <%!-- <p class="py-4">Press ESC key or click the button below to close</p> --%>

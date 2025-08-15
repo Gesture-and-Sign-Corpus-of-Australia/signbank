@@ -96,9 +96,9 @@ defmodule SignbankWeb.SignLive.Basic do
       ~H"""
       <Layouts.app flash={@flash} current_scope={@current_scope}>
         <nav class="flex flex-row justify-between mt-4">
-          <div class="flex flex-row self-end">
+          <div class="flex flex-row gap-4 self-end">
             <.entry_nav sign={@sign} current_scope={@current_scope} />
-            <div :if={!@sign.published} class="bg-striped">This entry is not published.</div>
+            <div :if={!@sign.published} class="bg-striped p-2">This entry is not published.</div>
           </div>
           <.search_results
             current={@sign.id_gloss}
@@ -131,8 +131,8 @@ defmodule SignbankWeb.SignLive.Basic do
               version={:modal}
             />
             <div :if={Enum.count(@sign.suggested_signs) > 0} style="margin-top: 0.5em">
-              <h2 class="is-size-5">Suggested signs</h2>
-              <ul class="suggested_signs">
+              <h2>Suggested signs</h2>
+              <ul class="flex gap-2">
                 <li :for={suggestion <- @sign.suggested_signs}>
                   <.modal id={"suggesed_sign_modal_#{suggestion.id}"}>
                     <video controls autoplay muted width="400">
