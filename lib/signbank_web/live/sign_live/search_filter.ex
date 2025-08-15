@@ -284,13 +284,6 @@ defmodule SearchFilter do
       %Field{label: "ASL gloss", name: :asl_gloss, type: "text"},
       %Field{label: "BSL gloss", name: :bsl_gloss, type: "text"},
 
-      # TODO: not sure where to put this in the order
-      %Field{
-        label: "Suggested signs description",
-        name: :suggested_signs_description,
-        type: "text"
-      },
-
       # TODO: these fields don't exist yet, but this is their filter definition for when they do
       # %Field{label: "Note", name: :note, type: "text"},
       # %Field{label: "Editor note", name: :editor_note, type: "text"},

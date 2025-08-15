@@ -132,13 +132,15 @@ defmodule SignbankWeb.SignLive.Basic do
             />
             <div :if={Enum.count(@sign.suggested_signs) > 0} style="margin-top: 0.5em">
               <h2 class="is-size-5">Suggested signs</h2>
-              <p>{@sign.suggested_signs_description}</p>
               <ul class="suggested_signs">
                 <li :for={suggestion <- @sign.suggested_signs}>
                   <.modal id={"suggesed_sign_modal_#{suggestion.id}"}>
                     <video controls autoplay muted width="400">
                       <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{suggestion.url}"} />
                     </video>
+                    <p :if={suggestion.description} class="mt-2">
+                      {suggestion.description}
+                    </p>
                   </.modal>
                   <%!-- with preload="metadata" this functions as a thumbnail, although its not ideal --%>
                   <%!-- phx-click={show_modal("suggesed_sign_modal_#{suggestion.id}")} --%>

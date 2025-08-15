@@ -8,6 +8,7 @@ defmodule Signbank.Dictionary.SuggestedSign do
 
   schema "suggested_signs" do
     field :url, :string
+    field :description, :string
 
     belongs_to :sign, Signbank.Dictionary.Sign
 

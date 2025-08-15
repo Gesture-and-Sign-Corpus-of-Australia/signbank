@@ -49,7 +49,6 @@ defmodule Signbank.Dictionary.Sign do
     has_many :videos, Dictionary.SignVideo, on_replace: :delete
     has_many :regions, Dictionary.SignRegion, on_replace: :delete
 
-    field :suggested_signs_description, :string
     has_many :suggested_signs, Dictionary.SuggestedSign
 
     # If type == :citation
@@ -125,7 +124,6 @@ defmodule Signbank.Dictionary.Sign do
       :legacy_id,
       :legacy_sign_number,
       :legacy_stem_sign_number,
-      :suggested_signs_description,
       :asl_gloss,
       :bsl_gloss,
       :iconicity,
