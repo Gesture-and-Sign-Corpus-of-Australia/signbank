@@ -52,6 +52,9 @@ defmodule SignbankWeb.Search do
       </.form>
 
       <%= if @page && Enum.count(@page.entries) > 0 do %>
+        <p>
+          Results: {@page.total_entries}
+        </p>
         <.table
           id="results"
           rows={@page.entries}
