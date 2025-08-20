@@ -372,7 +372,10 @@ defmodule Signbank.Dictionary do
     )
   end
 
+  # This function currently unused
   def get_sign_by_keyword!(keyword) do
+    keyword = String.trim(keyword)
+
     case Repo.all(
            from s in Sign,
              join: k in SignKeyword,
@@ -437,6 +440,7 @@ defmodule Signbank.Dictionary do
   # TODO: this function can probably merge with get_sign_by_keyword!
   def fuzzy_find_keyword(search_term, current_scope \\ nil) do
     # TODO: sort by sign_order
+    search_term = String.trim(search_term)
 
     # Repo.all(
     #   from s in Sign,
