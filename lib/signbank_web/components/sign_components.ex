@@ -213,8 +213,8 @@ defmodule SignbankWeb.SignComponents do
       )
 
     ~H"""
-    <div class="flex flex-row gap-4">
-      <div class="shrink-0 flex gap-4">
+    <div class="flex flex-col w-full md:w-unset md:flex-row gap-4">
+      <div class="shrink-0 flex gap-4 justify-center">
         <.link
           id={"search_result_#{@sign.id_gloss}_prev"}
           disabled={@previous == nil}

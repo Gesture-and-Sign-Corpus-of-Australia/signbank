@@ -50,13 +50,13 @@ defmodule VideoScroller do
       <div :if={@next_sign_link || @previous_sign_link} class="join flex justify-between items-center">
         <.link
           id="previous_variant"
-          class="join-item btn p-2"
+          class="join-item btn p-2 w-26"
           patch={@next_sign_link}
           disabled={!@next_sign_link}
         >
-          <.icon name="hero-arrow-left" class="size-6" />
+          <.icon name="hero-arrow-left" class="size-4" />
           <span class="text-sm">
-            previous variant
+            previous
           </span>
         </.link>
         <%!-- z-index because only the border of the next button was visible --%>
@@ -65,14 +65,14 @@ defmodule VideoScroller do
         </div>
         <.link
           id="next_variant"
-          class="join-item btn p-2"
+          class="join-item btn p-2 w-26"
           patch={@previous_sign_link}
           disabled={!@previous_sign_link}
         >
           <span class="text-sm">
-            next variant
+            next
           </span>
-          <.icon name="hero-arrow-right" class="size-6" />
+          <.icon name="hero-arrow-right" class="size-4" />
         </.link>
       </div>
     </div>

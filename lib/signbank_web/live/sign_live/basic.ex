@@ -95,8 +95,8 @@ defmodule SignbankWeb.SignLive.Basic do
     if :sign in Map.keys(assigns) do
       ~H"""
       <Layouts.app flash={@flash} current_scope={@current_scope}>
-        <nav class="flex flex-row justify-between mt-4">
-          <div class="flex flex-row gap-4 self-end">
+        <nav class="flex flex-col w-full md:w-unset md:flex-row justify-between mt-4">
+          <div class="flex flex-col w-full md:w-unset md:flex-row gap-4 self-end">
             <.entry_nav sign={@sign} current_scope={@current_scope} />
             <div :if={!@sign.published} class="bg-striped p-2">This entry is not published.</div>
           </div>
@@ -120,8 +120,8 @@ defmodule SignbankWeb.SignLive.Basic do
             )}
           </p>
         </div>
-        <div class="flex gap-4">
-          <div class="w-[60vw] max-w-[450px] grow-0 shrink-0">
+        <div class="flex gap-4 flex-col md:flex-row">
+          <div class="w-full md:w-[60vw] max-w-[450px] grow-0 shrink-0">
             <.live_component module={VideoScroller} counter={0} id={@sign.id} sign={@sign} />
             <.keywords sign={@sign} search_term={assigns.query_params["q"]} />
             <.live_component
@@ -382,7 +382,7 @@ defmodule SignbankWeb.SignLive.Basic do
 
     ~H"""
     <div class="border-none flex flex-row justify-self-end justify-end items-center text-right">
-      <div :if={assigns[:search_results] && not Enum.empty?(@search_results)} class="search-matches">
+      <div :if={assigns[:search_results] && not Enum.empty?(@search_results)} class="search-matches mr-2 md:mr-unset">
         <div phx-no-format>
           Matches
           <span :if={assigns[:search_term]}>for the word <i>{@search_term}</i></span><span :if={
