@@ -46,16 +46,16 @@ defmodule SignbankWeb.SignLive.Basic do
                   assign(socket, search_results: results)
 
                 {:multiple, results} ->
-                  results
-
                   assign(socket,
                     search_results:
                       results
                       |> Enum.find(fn {kw, _, _} ->
-                        # Tream the query as an exact keyword, so skip disambiguation
+                        # Treat the query as an exact keyword, so skip disambiguation
                         kw == search_term
                       end)
                       |> elem(1)
+                      # HACK: deduplicate because a sign having two keywords with only different casing (i.e., FS:Q having "q" and "Q") it produced two results
+                      |> Enum.dedup()
                   )
               end
             else

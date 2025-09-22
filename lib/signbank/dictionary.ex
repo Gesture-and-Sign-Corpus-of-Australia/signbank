@@ -569,7 +569,7 @@ defmodule Signbank.Dictionary do
     Repo.aggregate(from(s in Sign, where: s.published == true), :count)
   end
 
-  def count_signs(%User{role: role}) when role in [:tech, :editor] do
+  def count_signs(%{user: %User{role: role}}) when role in [:tech, :editor] do
     Repo.aggregate(from(s in Sign), :count)
   end
 
