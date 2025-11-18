@@ -158,7 +158,7 @@ defmodule SearchFilter do
 
   defp filter_input(%{field: %Field{type: "boolean"}} = assigns) do
     ~H"""
-    [ = ] <.input type="hidden" form={@search_form_id} field={@f_filter[:op]} value={:equal_to} />
+    <.input type="hidden" form={@search_form_id} field={@f_filter[:op]} value={:equal_to} />
     <.input
       type="select"
       prompt="Pick a value"
@@ -175,7 +175,7 @@ defmodule SearchFilter do
 
   defp filter_input(%{field: %Field{type: "select"}} = assigns) do
     ~H"""
-    [ = ] <.input type="hidden" form={@search_form_id} field={@f_filter[:op]} value={:equal_to} />
+    <.input type="hidden" form={@search_form_id} field={@f_filter[:op]} value={:equal_to} />
     <.input
       type="select"
       prompt="Pick a value"
