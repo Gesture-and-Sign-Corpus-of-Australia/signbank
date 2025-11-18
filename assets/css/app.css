@@ -377,3 +377,30 @@
 .video-frame video {
   width: 100%;
 }
+
+/* Image flexbox styling for acknowledgements page */
+.img-flex {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.img-flex div {
+  width: 8em;
+  padding: 0.5em;
+  align-self: center;
+}
+
+.img-flex img {
+  width: 100%;
+}
+
+#sponsor-logos div {
+  width: 120px;
+  padding: 10px;
+}
+
+#previous-dictionaries div {
+  width: 120px;
+  padding: 10px;
+}

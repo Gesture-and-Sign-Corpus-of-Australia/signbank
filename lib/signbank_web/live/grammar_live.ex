@@ -22,7 +22,7 @@ defmodule SignbankWeb.GrammarLive do
 
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
-      <div class="content">
+      <div class="prose">
         <h2>Grammar: supplementary data</h2>
 
         <p>
