@@ -21,18 +21,22 @@
         <.input type="hidden" form="sign-form" field={f_active_video[:id]} />
         <.input type="hidden" form="sign-form" field={f_active_video[:url]} />
         <.input type="hidden" form="sign-form" field={f_active_video[:sign_id]} />
-        <video
-          id={"video_#{f_active_video[:id].value}"}
-          muted
-          autoplay
-          controls
-          src={
-            Path.join(
-              Application.fetch_env!(:signbank, :media_url),
-              f_active_video[:url].value
-            )
-          }
-        />
+        <%= if f_active_video[:url].value do %>
+          <video
+            id={"video_#{f_active_video[:id].value}"}
+            muted
+            autoplay
+            controls
+            src={
+              Path.join(
+                Application.fetch_env!(:signbank, :media_url),
+                f_active_video[:url].value
+              )
+            }
+          />
+        <% else %>
+          No video to display.
+        <% end %>
       </.inputs_for>
       <div>
         We have {@form[:videos].value |> Enum.count()} videos for this sign.

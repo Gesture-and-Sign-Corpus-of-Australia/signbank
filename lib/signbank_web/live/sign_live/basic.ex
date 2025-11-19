@@ -382,7 +382,10 @@ defmodule SignbankWeb.SignLive.Basic do
 
     ~H"""
     <div class="border-none flex flex-row justify-self-end justify-end items-center text-right">
-      <div :if={assigns[:search_results] && not Enum.empty?(@search_results)} class="search-matches mr-2 md:mr-unset">
+      <div
+        :if={assigns[:search_results] && not Enum.empty?(@search_results)}
+        class="search-matches mr-2 md:mr-unset"
+      >
         <div phx-no-format>
           Matches
           <span :if={assigns[:search_term]}>for the word <i>{@search_term}</i></span><span :if={
