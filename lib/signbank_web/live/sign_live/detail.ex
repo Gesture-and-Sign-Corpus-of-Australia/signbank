@@ -44,7 +44,11 @@ defmodule SignbankWeb.SignLive.Detail do
           <div class={["video-frame", video_frame_class(@sign)]}>
             <div class="video-frame__video_wrapper">
               <video controls muted autoplay width="600" id={"#{@sign.id}_video"}>
-                <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{@sign.active_video.url}"} />
+                <%= if @sign.active_video do %>
+                  <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{@sign.active_video.url}"} />
+                <% else %>
+                  No video to display.
+                <% end %>
               </video>
               <p class="video-frame__sign-type">{video_frame_type(@sign)}</p>
             </div>
