@@ -52,16 +52,28 @@
           <th colspan="2" class="bg-green-300">GLOSSING</th>
         </tr>
         <tr>
-          <th>ID gloss ANNOTATION</th>
-          <td>{@sign.id_gloss_annotation}</td>
-        </tr>
-        <tr>
           <th>ID gloss</th>
           <td>{@sign.id_gloss}</td>
         </tr>
         <tr>
+          <th>ID gloss ANNOTATION</th>
+          <td>
+            <.input
+              type="text"
+              form="sign-form"
+              field={@form[:id_gloss_annotation]}
+            />
+          </td>
+        </tr>
+        <tr>
           <th>Morphemic analysis gloss</th>
-          <td>{@sign.id_gloss_variant_analysis}</td>
+          <td>
+            <.input
+              type="text"
+              form="sign-form"
+              field={@form[:id_gloss_variant_analysis]}
+            />
+          </td>
         </tr>
       </table>
 
