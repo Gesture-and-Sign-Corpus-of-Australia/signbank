@@ -416,3 +416,71 @@
   padding-left: 2em;
   text-indent: -2em;
 }
+
+/* Terms of Use */
+
+/* Reset counter at top-level list */
+ol.sections {
+  counter-reset: section;
+  list-style: none;
+  padding-left: 0;
+}
+
+/* Number each top-level section (1, 2, 3...) */
+ol.sections > li {
+  counter-increment: section;
+  counter-reset: subsection;
+  margin: 1.5rem 0;
+}
+
+ol.sections > li > h2::before {
+  content: counter(section) ". ";
+  font-weight: bold;
+}
+
+/* Subsections: 1.1, 1.2, 1.3... */
+ol.subsections {
+  list-style: none;
+  padding-left: 1rem;
+  counter-reset: subsubsection;
+}
+
+ol.subsections > li {
+  counter-increment: subsection;
+}
+
+ol.subsections > li::before {
+  content: counter(section) "." counter(subsection) " ";
+  font-weight: bold;
+}
+
+/* Lettered list inside subsection: a), b), c)... */
+ol.letters {
+  list-style: none;
+  padding-left: 2rem;
+}
+
+ol.letters > li {
+  counter-increment: subsubsection;
+}
+
+ol.letters > li::before {
+  content: counter(subsubsection, lower-alpha) ") ";
+  font-weight: bold;
+}
+
+/* Roman numeral list for deeper nesting: i), ii), iii)... */
+ol.romans {
+  list-style: none;
+  padding-left: 2rem;
+  counter-reset: romanItem;
+}
+
+ol.romans > li {
+  counter-increment: romanItem;
+}
+
+ol.romans > li::before {
+  content: counter(romanItem, lower-roman) ") ";
+  font-weight: bold;
+}

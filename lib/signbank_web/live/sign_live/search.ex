@@ -43,7 +43,10 @@ defmodule SignbankWeb.Search do
               field_select_form={Enum.at(@filter_states, f_filter.index).form}
               is_deletable={Enum.count(@form[:filters].value) > 1}
             />
-            <hr :if={f_filter.index < Enum.count(@form[:filters].value) - 1} class="mt-4 border-gray-300" />
+            <hr
+              :if={f_filter.index < Enum.count(@form[:filters].value) - 1}
+              class="mt-4 border-gray-300"
+            />
           </div>
         </.inputs_for>
       </div>
