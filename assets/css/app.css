@@ -404,3 +404,15 @@
   width: 120px;
   padding: 10px;
 }
+
+/* Bibliography styling */
+.bibliography {
+  list-style: none;
+  padding-left: 0;
+}
+
+.bibliography li {
+  margin-bottom: 1em;
+  padding-left: 2em;
+  text-indent: -2em;
+}
