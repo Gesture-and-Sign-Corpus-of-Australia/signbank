@@ -67,7 +67,7 @@ defmodule SearchFilter do
       )
 
     ~H"""
-    <div class="flex gap-4">
+    <div class="flex flex-wrap gap-2 items-center">
       <.form
         class="hidden"
         id={@field_select_form_id}

@@ -28,20 +28,25 @@ defmodule SignbankWeb.Search do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
-      <.inputs_for :let={f_filter} field={@form[:filters]}>
-        <SearchFilter.control
-          id={f_filter.id}
-          index={f_filter.index}
-          module={SearchFilter}
-          f_filter={f_filter}
-          search_form_id={@id}
-          search_form={@form}
-          selection={Enum.at(@filter_states, f_filter.index).selection}
-          field_select_form_id={"field_select_#{f_filter.id}"}
-          field_select_form={Enum.at(@filter_states, f_filter.index).form}
-          is_deletable={Enum.count(@form[:filters].value) > 1}
-        />
-      </.inputs_for>
+      <div class="space-y-6">
+        <.inputs_for :let={f_filter} field={@form[:filters]}>
+          <div>
+            <SearchFilter.control
+              id={f_filter.id}
+              index={f_filter.index}
+              module={SearchFilter}
+              f_filter={f_filter}
+              search_form_id={@id}
+              search_form={@form}
+              selection={Enum.at(@filter_states, f_filter.index).selection}
+              field_select_form_id={"field_select_#{f_filter.id}"}
+              field_select_form={Enum.at(@filter_states, f_filter.index).form}
+              is_deletable={Enum.count(@form[:filters].value) > 1}
+            />
+            <hr :if={f_filter.index < Enum.count(@form[:filters].value) - 1} class="mt-4 border-gray-300" />
+          </div>
+        </.inputs_for>
+      </div>
 
       <.form id={@id} for={@form} phx-change="validate" phx-submit="search">
         <.button type="button" phx-click="add-filter">
