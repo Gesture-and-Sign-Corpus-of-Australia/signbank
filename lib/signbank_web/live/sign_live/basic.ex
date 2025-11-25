@@ -133,7 +133,7 @@ defmodule SignbankWeb.SignLive.Basic do
             <div :if={Enum.count(@sign.suggested_signs) > 0} style="margin-top: 0.5em">
               <h2>Suggested signs</h2>
               <ul class="flex gap-2">
-                <li :for={suggestion <- Enum.sort_by(@sign.suggested_signs, &(&1.url))}>
+                <li :for={suggestion <- Enum.sort_by(@sign.suggested_signs, & &1.url)}>
                   <.modal id={"suggesed_sign_modal_#{suggestion.id}"}>
                     <video controls autoplay muted width="400">
                       <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{suggestion.url}"} />
