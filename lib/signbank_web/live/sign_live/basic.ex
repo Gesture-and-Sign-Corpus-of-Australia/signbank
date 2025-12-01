@@ -104,6 +104,8 @@ defmodule SignbankWeb.SignLive.Basic do
             current={@sign.id_gloss}
             search_results={assigns[:search_results]}
             query_params={@query_params}
+            sign={@sign}
+            current_scope={@current_scope}
           />
         </nav>
 
@@ -196,7 +198,7 @@ defmodule SignbankWeb.SignLive.Basic do
             </p>
           </div>
         <% else %>
-          <%= if not Enum.empty?(@inexact_matches) do %>
+          <%= if not Enum.empty?(@inexact_matches) and @search_term != nil and @search_term != "" do %>
             <div>
               {Enum.count(@inexact_matches)} close matches found <hr />
               <ul class="keyword-disambig">
@@ -373,18 +375,56 @@ defmodule SignbankWeb.SignLive.Basic do
     handshape = Map.get(assigns.query_params, "hs")
     location = Map.get(assigns.query_params, "loc")
 
+    # Check if current sign's keywords contain the search term
+    current_sign_has_search_term =
+      search_term && assigns[:sign] &&
+      Enum.any?(assigns.sign.keywords, fn %{text: keyword} ->
+        String.downcase(keyword) == String.downcase(search_term)
+      end)
+
+    # Find the first sign in search results that has the search term in its keywords
+    first_matching_sign =
+      if search_term && assigns[:search_results] && not current_sign_has_search_term do
+        Enum.find(assigns.search_results, fn id_gloss ->
+          case Dictionary.get_sign_by_id_gloss(id_gloss, assigns.current_scope) do
+            %Dictionary.Sign{keywords: keywords} ->
+              Enum.any?(keywords, fn %{text: keyword} ->
+                String.downcase(keyword) == String.downcase(search_term)
+              end)
+            _ -> false
+          end
+        end)
+      end
+
     assigns =
       assign(assigns,
         search_term: search_term,
         handshape: handshape,
-        location: location
+        location: location,
+        current_sign_has_search_term: current_sign_has_search_term,
+        first_matching_sign: first_matching_sign
       )
 
     ~H"""
     <div class="border-none flex flex-row justify-self-end justify-end items-center text-right">
+      <!-- Go back to matches button when current sign doesn't contain the search term -->
       <div
-        :if={assigns[:search_results] && not Enum.empty?(@search_results)}
-        class="search-matches mr-2 md:mr-unset"
+        :if={@search_term && @first_matching_sign && not @current_sign_has_search_term}
+        class="mr-2 md:mr-unset"
+      >
+        <.link
+          class="btn btn-secondary"
+          href={~p"/dictionary/sign/#{@first_matching_sign}?#{@query_params}"}
+        >
+          ← Go back to matches for
+          <i>"{@search_term}"</i>
+        </.link>
+      </div>
+
+      <!-- Show normal matches when current sign contains the search term or no specific match to go back to -->
+      <div
+        :if={assigns[:search_results] && not Enum.empty?(@search_results) && (@current_sign_has_search_term || is_nil(@first_matching_sign) || is_nil(@search_term))}
+        class="mr-2 md:mr-unset"
       >
         <div phx-no-format>
           Matches

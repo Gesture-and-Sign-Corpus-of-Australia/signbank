@@ -130,7 +130,14 @@ defmodule SignbankWeb.SignComponents do
               <div>
                 {Phoenix.HTML.raw(bold_english_keyword(definition.text))}
               </div>
-              <video :if={definition.url} id={definition.url} controls muted width="200">
+              <video
+                :if={definition.url}
+                id={definition.url}
+                controls
+                muted
+                width="200"
+                phx-hook="VideoAutoplay"
+              >
                 <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{definition.url}"} />
               </video>
             </div>

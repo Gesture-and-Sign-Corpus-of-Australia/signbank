@@ -114,13 +114,14 @@ defmodule SignbankWeb.Layouts do
     ~H"""
     <ul class={[@base_class, @class]} {@rest}>
       <li>
-        <form action="/dictionary/sign" method="GET">
+        <form action="/dictionary/sign" method="GET" onsubmit="return validateSearchForm(event)">
           <div class="join flex text-black">
             <div class="join-item">
               <input
                 class="input"
                 type="text"
                 name="q"
+                id="main-search-input"
                 placeholder={gettext("Search by English keyword…")}
               />
             </div>

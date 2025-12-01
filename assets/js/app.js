@@ -30,6 +30,18 @@ let Hooks = {}
 
 Hooks.InitSorting = InitSorting
 
+Hooks.VideoAutoplay = {
+  mounted() {
+    this.el.addEventListener('mouseenter', () => {
+      this.el.play()
+    })
+    
+    this.el.addEventListener('mouseleave', () => {
+      this.el.pause()
+    })
+  }
+}
+
 Uploaders.S3 = function (entries, onViewError) {
   entries.forEach(entry => {
     let formData = new FormData()
@@ -83,6 +95,15 @@ window.addHandshapeFilter = (value) => {
   }
   // <input id="search-handshape-filter" type="hidden" name="handshape" value="" />
 
+}
+
+window.validateSearchForm = (event) => {
+  const searchInput = document.getElementById('main-search-input');
+  if (!searchInput || !searchInput.value || searchInput.value.trim() === '') {
+    event.preventDefault();
+    return false;
+  }
+  return true;
 }
 
 // TODO: use this to highlight the current selected phonological search handshape/location
