@@ -11,6 +11,8 @@ defmodule SignbankWeb.SignLive.Basic do
     search_term = Map.get(params, "q")
     handshape = Map.get(params, "hs")
     location = Map.get(params, "loc")
+    # Default to false (hide crude signs) until we get the actual localStorage value
+    allow_crude_signs = false
 
     socket =
       assign(socket,
@@ -19,8 +21,12 @@ defmodule SignbankWeb.SignLive.Basic do
         query_params: persist_query_params(params),
         search_term: search_term,
         handshape: handshape,
-        location: location
+        location: location,
+        allow_crude_signs: allow_crude_signs
       )
+
+    # Request the localStorage value from the client
+    socket = push_event(socket, "get_crude_preference", %{})
 
     socket =
       cond do
@@ -40,7 +46,7 @@ defmodule SignbankWeb.SignLive.Basic do
         id_gloss ->
           socket =
             if search_term do
-              case keyword_search(search_term, socket.assigns.current_scope) do
+              case keyword_search(search_term, socket.assigns.current_scope, socket.assigns.allow_crude_signs) do
                 # We don't care if results is [], the page will look fine either way
                 {:ok, results} ->
                   assign(socket, search_results: results)
@@ -66,7 +72,7 @@ defmodule SignbankWeb.SignLive.Basic do
 
         # If we have an ID, then `q` is already an exact keyword and we're viewing a result
         true ->
-          case keyword_search(Map.get(params, "q"), socket.assigns.current_scope) do
+          case keyword_search(Map.get(params, "q"), socket.assigns.current_scope, socket.assigns.allow_crude_signs) do
             {:ok, []} ->
               assign(
                 socket,
@@ -95,6 +101,7 @@ defmodule SignbankWeb.SignLive.Basic do
     if :sign in Map.keys(assigns) do
       ~H"""
       <Layouts.app flash={@flash} current_scope={@current_scope}>
+        <div id="crude-preference-handler" phx-hook="CrudePreferenceHandler"></div>
         <nav class="flex flex-col w-full md:w-unset md:flex-row justify-between mt-4">
           <div class="flex flex-col w-full md:w-unset md:flex-row gap-4 self-end">
             <.entry_nav sign={@sign} current_scope={@current_scope} />
@@ -171,6 +178,7 @@ defmodule SignbankWeb.SignLive.Basic do
     else
       ~H"""
       <Layouts.app flash={@flash} current_scope={@current_scope}>
+        <div id="crude-preference-handler" phx-hook="CrudePreferenceHandler"></div>
         <%= if @error do %>
           <%!-- TODO: this needs styling --%>
           <div class="prose lg:prose-xl">
@@ -272,7 +280,7 @@ defmodule SignbankWeb.SignLive.Basic do
 
       # TODO: we need to use `n` to get to a specific match number, but right now we can't
       # see other matches and they're not sorted properly anyway
-      case Dictionary.fuzzy_find_keyword(search_term, socket.assigns.current_scope) do
+      case Dictionary.fuzzy_find_keyword(search_term, socket.assigns.current_scope, socket.assigns.allow_crude_signs) do
         # if we match a keyword exactly, and its the only match, jump straight to results
         [{^search_term, matches, all_published}] ->
           socket =
@@ -294,6 +302,32 @@ defmodule SignbankWeb.SignLive.Basic do
           {:noreply, assign(socket, :inexact_matches, inexact_matches)}
       end
     end
+  end
+
+  @impl true
+  def handle_event("update_crude_preference", %{"allow_crude" => allow_crude}, socket) do
+    crude_preference = allow_crude == "true"
+    {:noreply, assign(socket, :allow_crude_signs, crude_preference)}
+  end
+
+  @impl true
+  def handle_event("crude_preference_received", %{"allow_crude_signs" => allow_crude_signs}, socket) do
+    # Update the preference and re-run search if we have a search term
+    socket = assign(socket, :allow_crude_signs, allow_crude_signs)
+
+    socket = if socket.assigns.search_term && socket.assigns.search_term != "" do
+      case keyword_search(socket.assigns.search_term, socket.assigns.current_scope, allow_crude_signs) do
+        {:ok, results} ->
+          assign(socket, search_results: results)
+        {:multiple, inexact_matches} ->
+          assign(socket, inexact_matches: inexact_matches)
+        _ -> socket
+      end
+    else
+      socket
+    end
+
+    {:noreply, socket}
   end
 
   @impl true
@@ -323,8 +357,8 @@ defmodule SignbankWeb.SignLive.Basic do
     {:noreply, socket}
   end
 
-  def keyword_search(search_term, current_scope) do
-    case Dictionary.fuzzy_find_keyword(search_term, current_scope) do
+  def keyword_search(search_term, current_scope, allow_crude_signs \\ false) do
+    case Dictionary.fuzzy_find_keyword(search_term, current_scope, allow_crude_signs) do
       # if we match a keyword exactly, and its the only match, jump straight to results
       [{^search_term, matches, _all_published}] ->
         {:ok, matches}

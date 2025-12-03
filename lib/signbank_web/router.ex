@@ -33,6 +33,7 @@ defmodule SignbankWeb.Router do
     get "/about/dictionary", PageController, :dictionary
     live "/about/grammar", GrammarLive
     get "/research/vocabulary", PageController, :vocabulary
+    get "/settings", PageController, :settings
 
     live "/dictionary/search", Search, :show
     live "/dictionary/phonological-search", SignLive.PhonologicalSearch, :show

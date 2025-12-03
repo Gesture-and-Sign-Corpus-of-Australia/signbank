@@ -42,6 +42,37 @@ Hooks.VideoAutoplay = {
   }
 }
 
+Hooks.CrudePreferenceHandler = {
+  mounted() {
+    // Send the current localStorage value to the LiveView
+    const allowCrudeSigns = localStorage.getItem('allowCrudeSigns') === 'true';
+    this.pushEvent("crude_preference_received", { allow_crude_signs: allowCrudeSigns });
+    
+    // Listen for preference changes from settings page
+    this.handleEvent("get_crude_preference", () => {
+      const allowCrudeSigns = localStorage.getItem('allowCrudeSigns') === 'true';
+      this.pushEvent("crude_preference_received", { allow_crude_signs: allowCrudeSigns });
+    });
+    
+    // Listen for global preference changes
+    const handleSettingsChange = (event) => {
+      const allowCrudeSigns = event.detail.allowCrudeSigns;
+      this.pushEvent("crude_preference_received", { allow_crude_signs: allowCrudeSigns });
+    };
+    
+    window.addEventListener('crudeSettingsChanged', handleSettingsChange);
+    
+    // Store reference for cleanup
+    this._handleSettingsChange = handleSettingsChange;
+  },
+  
+  destroyed() {
+    if (this._handleSettingsChange) {
+      window.removeEventListener('crudeSettingsChanged', this._handleSettingsChange);
+    }
+  }
+}
+
 Uploaders.S3 = function (entries, onViewError) {
   entries.forEach(entry => {
     let formData = new FormData()
@@ -104,6 +135,11 @@ window.validateSearchForm = (event) => {
     return false;
   }
   return true;
+}
+
+// Helper function to check if crude signs should be shown
+window.allowCrudeSigns = () => {
+  return localStorage.getItem('allowCrudeSigns') === 'true';
 }
 
 // TODO: use this to highlight the current selected phonological search handshape/location
