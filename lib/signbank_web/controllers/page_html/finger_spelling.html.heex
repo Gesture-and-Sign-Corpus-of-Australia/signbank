@@ -1,0 +1,30 @@
+<Layouts.app flash={@flash} current_scope={@current_scope}>
+  <div class="prose max-w-none">
+    <h2>Auslan Finger Spelling</h2>
+    <p class="mb-6">Practice finger spelling with interactive 3D hand models. Type text in the input field to see it spelled out in Auslan.</p>
+  </div>
+  
+  <div class="container-wrapper w-full">
+    <div id="auslan-spell-container" class="min-h-[600px] w-full border border-gray-300 rounded-lg bg-gray-50"></div>
+  </div>
+  
+  <div class="prose max-w-none mt-8">
+    <h3>How to Use</h3>
+    <ul class="space-y-2">
+      <li>Type text in the input field and press <kbd class="kbd kbd-sm">ENTER</kbd> to submit</li>
+      <li>Use <kbd class="kbd kbd-sm">[</kbd> and <kbd class="kbd kbd-sm">]</kbd> to navigate frame by frame</li>
+      <li>Use <kbd class="kbd kbd-sm">-</kbd> and <kbd class="kbd kbd-sm">=</kbd> to jump multiple frames</li>
+      <li>Left-click and drag to rotate the camera</li>
+      <li>Right-click and drag to pan the camera</li>
+      <li>Scroll to zoom the camera</li>
+      <li>Access settings using the Settings button for model options</li>
+    </ul>
+    
+    <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+      <p class="text-sm text-blue-800 mb-2">
+        <strong>Contact:</strong> For feedback or questions, email us at 
+        <a href="mailto:auslan.spell@gmail.com" class="underline">auslan.spell@gmail.com</a>
+      </p>
+    </div>
+  </div>
+</Layouts.app>

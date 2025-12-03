@@ -1,0 +1,10 @@
+{
+  "name": "signbank-assets",
+  "version": "1.0.0",
+  "description": "Assets for Signbank",
+  "private": true,
+  "dependencies": {
+    "auslan-spell": "file:../../auslan-spell-web-package/auslan-spell",
+    "three": "^0.159.0"
+  }
+}
