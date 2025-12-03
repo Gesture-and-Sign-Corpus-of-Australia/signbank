@@ -99,12 +99,6 @@ function saveSettings() {
   indicator.classList.add('hidden');
   saveButton.disabled = true;
   resetButton.style.display = 'none';
-  
-  // Show success feedback (optional)
-  saveButton.textContent = 'Saved!';
-  setTimeout(() => {
-    saveButton.textContent = 'Save Changes';
-  }, 2000);
 }
 
 function resetSettings() {
