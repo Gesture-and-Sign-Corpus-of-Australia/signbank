@@ -35,10 +35,6 @@ Hooks.VideoAutoplay = {
     this.el.addEventListener('mouseenter', () => {
       this.el.play()
     })
-    
-    this.el.addEventListener('mouseleave', () => {
-      this.el.pause()
-    })
   }
 }
 

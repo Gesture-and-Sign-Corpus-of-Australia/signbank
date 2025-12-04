@@ -9,8 +9,7 @@ defmodule SignbankWeb.UserLive.Settings do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
       <.header class="text-center">
-        Account Settings
-        <:subtitle>Manage your account email address and password settings</:subtitle>
+        Settings
       </.header>
 
       <.form for={@email_form} id="email_form" phx-submit="update_email" phx-change="validate_email">
