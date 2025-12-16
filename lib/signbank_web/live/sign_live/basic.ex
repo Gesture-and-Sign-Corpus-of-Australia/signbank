@@ -131,7 +131,7 @@ defmodule SignbankWeb.SignLive.Basic do
         </div>
         <div class="flex gap-4 flex-col md:flex-row">
           <div class="w-full md:w-[60vw] max-w-[450px] grow-0 shrink-0">
-            <.live_component module={VideoScroller} counter={0} id={@sign.id} sign={@sign} />
+            <.live_component module={VideoScroller} counter={0} id={@sign.id} sign={@sign} query_params={@query_params} />
             <.keywords sign={@sign} search_term={assigns.query_params["q"]} />
             <.live_component
               module={SignbankWeb.CorpusExamples}
@@ -447,7 +447,7 @@ defmodule SignbankWeb.SignLive.Basic do
         class="mr-2 md:mr-unset"
       >
         <.link
-          class="btn btn-secondary"
+          class="btn btn-secondary py-7 border"
           href={~p"/dictionary/sign/#{@first_matching_sign}?#{@query_params}"}
         >
           ← Go back to matches for
@@ -469,7 +469,13 @@ defmodule SignbankWeb.SignLive.Basic do
         </div>
         <div class="input join gap-0 w-min p-0 border-none">
           <% len = Enum.count(@search_results) %>
-          <% cur_i = (Enum.find_index(@search_results, &(&1 == @current)) || 0) + 1 %>
+          <% current_for_index =
+               if @sign && @sign.type == :variant && @sign.citation do
+                 @sign.citation.id_gloss
+               else
+                 @current
+               end %>
+          <% cur_i = (Enum.find_index(@search_results, &(&1 == current_for_index)) || 0) + 1 %>
           <% lower_bound = min(cur_i - 2, len - 4) %>
           <% upper_bound = max(cur_i + 2, 5) %>
           <.search_result
