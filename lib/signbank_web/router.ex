@@ -42,6 +42,12 @@ defmodule SignbankWeb.Router do
     live "/dictionary/sign/", SignLive.Basic, :search
     live "/dictionary/sign/:id", SignLive.Basic, :show
     live "/dictionary/sign/:id/detail", SignLive.Detail, :show
+
+    get "learning/number-signs", PageController, :number_signs
+    get "learning/finger-spelling", PageController, :finger_spelling
+    get "learning/auslan-spell", PageController, :auslan_spell
+    get "learning/finger-spelling/one-handed", PageController, :one_handed
+    get "learning/finger-spelling/practice", PageController, :practice
   end
 
   # Editor routes

@@ -1,0 +1,457 @@
+<Layouts.app flash={@flash} current_scope={@current_scope}>
+    <div id="fingerspellblock" class="not-prose">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Left column: Hand image, controls, and info -->
+            <div class="lg:col-span-4">
+                <div id="leftblock">
+                    <div id="handcontainer" class="">
+                        <div id="handimage" class="text-center">
+                            <img id="mainimg" src="/images/twohanded/transition.jpg" alt=""
+                                class="w-full max-w-xs sm:max-w-sm lg:max-w-full mx-auto" />
+                        </div>
+                    </div>
+
+                    <div id="fsinput" class="mt-4 border rounded p-4">
+                        <div class="mb-4 p-3 border border-gray-300 rounded bg-gray-50">
+                            <div class="text-sm font-medium mb-2">The word is:</div>
+                            <div id="currentword" class="text-2xl font-bold text-blue-600">
+                                (click New Word)
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 mb-4">
+                            <button
+                                class="w-full btn btn-primary px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                                type="button" id="newwordBtn">
+                                New Word
+                            </button>
+                            <button
+                                class="w-full btn btn-secondary px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                                type="button" id="repeatBtn" disabled>
+                                Repeat
+                            </button>
+                            <button
+                                class="w-full btn btn-secondary px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
+                                type="button" id="revealBtn" disabled>
+                                Reveal Answer
+                            </button>
+                        </div>
+
+                        <form name="speedform" class="mt-4">
+                            <fieldset>
+                                <legend class="text-sm font-medium mb-2">Playback Speed</legend>
+                                <div class="space-y-2">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="speed" id="speed-slow" value="1500" class="mr-2">
+                                        <span>Slow</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="speed" id="speed-medium" value="1000" checked
+                                            class="mr-2">
+                                        <span>Medium</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="speed" id="speed-fast" value="500" class="mr-2">
+                                        <span>Fast</span>
+                                    </label>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+
+                    <div id="info" class="mt-4 text-sm">
+                        <p class="mb-2">
+                            <a href="/learning/finger-spelling" class="text-blue-500 hover:underline">Two handed
+                                fingerspelling signs for American Sign Language</a> are available for reference.
+                        </p>
+                        <p>
+                            <a href="/learning/finger-spelling/one-handed" class="text-blue-500 hover:underline">One
+                                handed fingerspelling signs</a> are also available.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right column: Fingerspelling table -->
+            <div class="lg:col-span-8">
+                <table id="fstable" class="border-collapse">
+                    <tbody>
+                        <!-- Row 1: A-E -->
+                        <tr>
+                            <td id="A" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_a.jpg" alt="A" class="block w-full">
+                                <div class="text-center text-sm font-medium">A</div>
+                            </td>
+                            <td id="B" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_b.jpg" alt="B" class="block w-full">
+                                <div class="text-center text-sm font-medium">B</div>
+                            </td>
+                            <td id="C" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_c.jpg" alt="C" class="block w-full">
+                                <div class="text-center text-sm font-medium">C</div>
+                            </td>
+                            <td id="D" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_d.jpg" alt="D" class="block w-full">
+                                <div class="text-center text-sm font-medium">D</div>
+                            </td>
+                            <td id="E" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_e.jpg" alt="E" class="block w-full">
+                                <div class="text-center text-sm font-medium">E</div>
+                            </td>
+                        </tr>
+                        <!-- Row 2: F-J -->
+                        <tr>
+                            <td id="F" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_f.jpg" alt="F" class="block w-full">
+                                <div class="text-center text-sm font-medium">F</div>
+                            </td>
+                            <td id="G" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_g.jpg" alt="G" class="block w-full">
+                                <div class="text-center text-sm font-medium">G</div>
+                            </td>
+                            <td id="H" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_h0.jpg" alt="H" class="block w-full">
+                                <div class="text-center text-sm font-medium">H</div>
+                            </td>
+                            <td id="I" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_i.jpg" alt="I" class="block w-full">
+                                <div class="text-center text-sm font-medium">I</div>
+                            </td>
+                            <td id="J" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_j0.jpg" alt="J" class="block w-full">
+                                <div class="text-center text-sm font-medium">J</div>
+                            </td>
+                        </tr>
+                        <!-- Row 3: K-O -->
+                        <tr>
+                            <td id="K" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_k.jpg" alt="K" class="block w-full">
+                                <div class="text-center text-sm font-medium">K</div>
+                            </td>
+                            <td id="L" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_l.jpg" alt="L" class="block w-full">
+                                <div class="text-center text-sm font-medium">L</div>
+                            </td>
+                            <td id="M" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_m.jpg" alt="M" class="block w-full">
+                                <div class="text-center text-sm font-medium">M</div>
+                            </td>
+                            <td id="N" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_n.jpg" alt="N" class="block w-full">
+                                <div class="text-center text-sm font-medium">N</div>
+                            </td>
+                            <td id="O" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_o.jpg" alt="O" class="block w-full">
+                                <div class="text-center text-sm font-medium">O</div>
+                            </td>
+                        </tr>
+                        <!-- Row 4: P-T -->
+                        <tr>
+                            <td id="P" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_p.jpg" alt="P" class="block w-full">
+                                <div class="text-center text-sm font-medium">P</div>
+                            </td>
+                            <td id="Q" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_q.jpg" alt="Q" class="block w-full">
+                                <div class="text-center text-sm font-medium">Q</div>
+                            </td>
+                            <td id="R" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_r.jpg" alt="R" class="block w-full">
+                                <div class="text-center text-sm font-medium">R</div>
+                            </td>
+                            <td id="S" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_s.jpg" alt="S" class="block w-full">
+                                <div class="text-center text-sm font-medium">S</div>
+                            </td>
+                            <td id="T" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_t.jpg" alt="T" class="block w-full">
+                                <div class="text-center text-sm font-medium">T</div>
+                            </td>
+                        </tr>
+                        <!-- Row 5: U-Y -->
+                        <tr>
+                            <td id="U" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_u.jpg" alt="U" class="block w-full">
+                                <div class="text-center text-sm font-medium">U</div>
+                            </td>
+                            <td id="V" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_v.jpg" alt="V" class="block w-full">
+                                <div class="text-center text-sm font-medium">V</div>
+                            </td>
+                            <td id="W" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_w.jpg" alt="W" class="block w-full">
+                                <div class="text-center text-sm font-medium">W</div>
+                            </td>
+                            <td id="X" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_x.jpg" alt="X" class="block w-full">
+                                <div class="text-center text-sm font-medium">X</div>
+                            </td>
+                            <td id="Y" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_y.jpg" alt="Y" class="block w-full">
+                                <div class="text-center text-sm font-medium">Y</div>
+                            </td>
+                        </tr>
+                        <!-- Row 6: Z -->
+                        <tr>
+                            <td colspan="4" class="p-2 text-center text-sm">Click on letters to view.</td>
+                            <td id="Z" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                                <img src="/images/twohanded/th_z.jpg" alt="Z" class="block w-full">
+                                <div class="text-center text-sm font-medium">Z</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var twohanded = {
+            "A": "twohanded/th_a.jpg",
+            "B": "twohanded/th_b.jpg",
+            "C": "twohanded/th_c.jpg",
+            "D": "twohanded/th_d.jpg",
+            "E": "twohanded/th_e.jpg",
+            "F": "twohanded/th_f.jpg",
+            "G": "twohanded/th_g.jpg",
+            "H": ["twohanded/th_h0.jpg", "twohanded/th_h1.jpg", "twohanded/th_h2.jpg", "twohanded/th_h3.jpg", "twohanded/th_h4.jpg"],
+            "I": "twohanded/th_i.jpg",
+            "J": ["twohanded/th_j0.jpg", "twohanded/th_j1.jpg", "twohanded/th_j2.jpg"],
+            "K": "twohanded/th_k.jpg",
+            "L": "twohanded/th_l.jpg",
+            "M": "twohanded/th_m.jpg",
+            "N": "twohanded/th_n.jpg",
+            "O": "twohanded/th_o.jpg",
+            "P": "twohanded/th_p.jpg",
+            "Q": "twohanded/th_q.jpg",
+            "R": "twohanded/th_r.jpg",
+            "S": "twohanded/th_s.jpg",
+            "T": "twohanded/th_t.jpg",
+            "U": "twohanded/th_u.jpg",
+            "V": "twohanded/th_v.jpg",
+            "W": "twohanded/th_w.jpg",
+            "X": "twohanded/th_x.jpg",
+            "Y": "twohanded/th_y.jpg",
+            "Z": "twohanded/th_z.jpg",
+            "transition": "twohanded/transition.jpg"
+        };
+
+        let animationTimer = null;
+        let currentWord = null;
+
+        function updateImage(imageId, imageSrc) {
+            document.getElementById(imageId).src = imageSrc;
+        }
+
+        function planTransition(speed, baseUrl) {
+            return [{ src: baseUrl + "twohanded/transition.jpg", time: speed / 5 }];
+        }
+
+        function planLetter(letter, speed, baseUrl, images) {
+            letter = letter.toUpperCase();
+
+            if (images[letter] === undefined) {
+                return planTransition(speed, baseUrl);
+            }
+
+            if (typeof images[letter] === "object") {
+                const imgList = images[letter];
+                const result = [];
+                const briefTime = speed / 4;
+
+                for (let i = 0; i < imgList.length; i++) {
+                    result.push({ src: baseUrl + imgList[i], time: briefTime });
+                }
+
+                return result;
+            } else {
+                return [{ src: baseUrl + images[letter], time: speed }];
+            }
+        }
+
+        function planString(str, speed, baseUrl, images) {
+            let plan = planTransition(speed, baseUrl);
+
+            for (let i = 0; i < str.length; i++) {
+                plan = plan.concat(planLetter(str[i], speed, baseUrl, images));
+
+                if (i < str.length - 1) {
+                    plan = plan.concat(planTransition(speed, baseUrl));
+                }
+            }
+
+            return plan;
+        }
+
+        function animatePlan(imageId, plan) {
+            if (animationTimer) {
+                clearTimeout(animationTimer);
+            }
+
+            if (plan.length === 0) {
+                return;
+            }
+
+            const step = plan.shift();
+            updateImage(imageId, step.src);
+
+            animationTimer = setTimeout(() => {
+                animatePlan(imageId, plan);
+            }, step.time);
+        }
+
+        function displayLetter(imageId, letter, speed, baseUrl, images) {
+            const plan = planLetter(letter, speed, baseUrl, images);
+            animatePlan(imageId, plan);
+        }
+
+        function displayString(imageId, text, speed, baseUrl, images) {
+            const plan = planString(text, speed, baseUrl, images);
+            animatePlan(imageId, plan);
+        }
+
+        function getWordList() {
+            return [
+                "hostel", "dazzling", "overseas", "sternness", "America", "black", "testimony", "not believe",
+                "spin", "coronate", "heal", "film", "bream", "provocation", "manufacture", "last",
+                "district", "word order", "mass", "prophecy", "reproduction", "tram", "German", "basis",
+                "spillage", "flame", "cause", "threaten", "lie", "remote", "found out", "divergence",
+                "expressiveness", "Perth", "pianist", "seasoning", "criss-cross", "talented", "shift", "horror",
+                "captioned", "hospitalise", "colander", "squish", "label", "manager", "violet", "energy",
+                "dampness", "sadness", "perilous", "few", "Tuesday", "tolerant", "rearing", "perfumed",
+                "problem", "ESP", "imagine", "grasshopper", "eagle", "Pharisee", "company", "thumb tacks",
+                "half-time", "syringe", "how", "suspect", "toss out", "tantrum", "driver", "splash",
+                "divide", "poster", "loneliness", "surroundings", "casino", "Scots", "surrender", "microwave oven",
+                "pantihose", "country", "following", "spare", "scoundrel", "advantage", "icy-pole", "meshed",
+                "football", "lift up", "bulldozer", "speak", "hat", "stairs", "pretence", "liturgy",
+                "strike off", "next week", "cross", "puritanical", "frustrate", "oblivious", "crucify", "unite",
+                "monkey", "gaol", "plait", "amenities", "billet", "sociology", "jolly", "connected",
+                "establishment", "convince", "mobile phone", "grease", "toil", "studies", "harshness", "harp",
+                "mountainous", "blow", "badge", "helicopter", "noise", "confuse", "ludicrous", "spirit",
+                "important", "singles", "reel", "not have", "picket", "dry out", "freezing", "cheeky",
+                "company", "liquid paper", "depend on", "brightness", "apology", "scare", "advance", "crawler",
+                "heroin", "jockey", "flea", "dots", "paddle", "discussion", "caught out", "last week",
+                "uncouthness", "idol", "blood sample", "corridor", "extremely", "disseminate", "defend", "wander",
+                "headphone", "jack", "wink", "aside", "jam", "both", "concern", "immigrant",
+                "lowering", "screw", "blank", "continually", "little", "stoicism", "loony", "handshake",
+                "snobby", "opposed", "roundabout", "whiskey", "changeover", "topless", "pulsate", "laugh",
+                "twist", "possible", "three more", "effort", "tummy", "retraction", "grab", "risky",
+                "interviewed", "horse racing", "discover", "turkey", "TTY", "successively", "turn down", "underwear",
+                "humiliated", "merciful", "peel banana", "tithe", "shove", "Orient", "congratulations", "lame",
+                "grandfather", "finish", "pumpkin", "advent", "resemble", "wacky", "progress", "judge",
+                "rub", "cheer", "sacked", "ignition", "fishing hook", "perspective", "calm", "how old",
+                "spouse", "coffee", "lawyer", "noise", "dish", "not have", "hallelujah", "pursuit",
+                "witch", "whisking", "wink", "balls", "cane", "frightening", "unlock", "tail",
+                "provision", "doff", "earth", "antiseptic", "polo-necked", "game", "bottom", "successively",
+                "prevention", "disruption", "sequence", "desirable", "secret", "stash", "comic", "break away",
+                "rubbing", "deodorant", "bedridden", "hunger", "booze", "enslave", "agony", "ignorant",
+                "please yourself", "avoid", "bricklayer", "imagine", "obsession", "usual", "sprint", "triviality",
+                "good", "qualify", "already", "squander", "best friends", "dolly", "jest", "bumpy",
+                "accumulation", "harmonise", "Asia", "dejected", "additionally", "stopover", "doorbell", "disappoint",
+                "self", "avoidance", "hard hat", "spotted", "usually", "lastly", "centre half-forward", "engraving",
+                "grace", "script", "factory", "quietness", "pliers", "betrayal", "surround", "rifle",
+                "resignation", "confession", "lending", "who", "scribble", "scrape", "celebration", "speculate",
+                "fund raise", "wring", "threaten", "exhibit", "school report", "strive", "mischievous", "sew",
+                "bark", "must", "sluggard", "burn", "nun", "embellish", "audition", "chums",
+                "traffic lights", "bear", "ice-skates", "niggle", "fork-lift", "rowing boat", "linked", "loosen",
+                "backstroke", "hungry", "town", "satisfied", "behind", "user", "weigh up", "failure",
+                "cool", "creed", "dolphin", "bewildered", "good-looking", "score-board", "mow", "mouth-watering",
+                "hide away", "boulevard", "video", "flower", "vegetarian", "demonstration", "wet the bed", "soccer club",
+                "exit", "brainy", "drip", "browse", "trolley", "saucepan", "culture", "support",
+                "Canberra", "hostel", "mainland", "attain", "taxi", "craziness", "anniversary", "annoying",
+                "transfer", "rugged", "betrayal", "V8 engine", "current", "pussy-cat", "hers", "although",
+                "wise", "next week", "scrounger", "horror", "syringe", "joke", "commit", "budgeting",
+                "stray", "AFL", "fairness", "one-eyed", "demonstrate", "engagement ring", "boy band", "vegetables",
+                "act", "cooperate", "turn left", "herself", "fret", "brainy", "operate", "knot",
+                "crane", "bond", "canoeing", "parking bay", "department", "electrician", "dejected", "taunt",
+                "virtuous", "wipe off", "snooker", "heaped", "result", "sympathise", "business card", "inebriated",
+                "stolen", "mop", "contact lenses", "microwave oven", "important", "disruption", "sour", "disappear",
+                "rude", "near", "unaccompanied", "lost", "week", "right arm", "churchgoer", "rewind",
+                "criss-crossed", "solicitor", "blink", "beside", "announce", "whisky", "silent", "touch up",
+                "secateurs", "second rower", "knob", "internet", "thieve", "cut-throat", "expensive", "UFO",
+                "unimportant", "disgust", "unfasten", "bookshelf", "bell", "tea", "sacking", "apostle",
+                "everlasting", "courage", "leg", "reek", "busybody", "deceit", "cobra", "missionary",
+                "access", "gears", "may", "fundamental", "flu", "Australia", "matched", "knead",
+                "Scottish", "salad", "speaking", "tambourine", "sunroof", "straight-laced", "commitment", "step off",
+                "dictionary", "addiction", "profundity", "naughty", "compare", "abide", "snapper", "stir-crazy",
+                "indoors", "idiotic", "blank mind", "regionally"
+            ];
+        }
+
+        function getRandomWord() {
+            const words = getWordList();
+            const rand = Math.floor(Math.random() * words.length);
+            return words[rand];
+        }
+
+        function playWord(word) {
+            currentWord = word;
+            document.getElementById('currentword').textContent = "?";
+            document.getElementById('repeatBtn').disabled = false;
+            document.getElementById('revealBtn').disabled = false;
+
+            const speedRadio = document.querySelector('input[type="radio"][name="speed"]:checked');
+            const speedVal = speedRadio ? speedRadio.value : '1000';
+            const speed = parseInt(speedVal, 10);
+
+            try {
+                displayString('mainimg', word, speed, '/images/', twohanded);
+            } catch (err) {
+                console.error('Practice playback error:', err);
+            }
+        }
+
+        function revealAnswer() {
+            if (currentWord) {
+                document.getElementById('currentword').textContent = currentWord.toUpperCase();
+            }
+        }
+
+        function repeatWord() {
+            if (currentWord) {
+                const speedRadio = document.querySelector('input[type="radio"][name="speed"]:checked');
+                const speedVal = speedRadio ? speedRadio.value : '1000';
+                const speed = parseInt(speedVal, 10);
+
+                try {
+                    displayString('mainimg', currentWord, speed, '/images/', twohanded);
+                } catch (err) {
+                    console.error('Practice playback error:', err);
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Handle New Word button
+            document.getElementById('newwordBtn').addEventListener('click', function () {
+                const word = getRandomWord();
+                playWord(word);
+            });
+
+            // Handle Repeat button
+            document.getElementById('repeatBtn').addEventListener('click', function () {
+                repeatWord();
+            });
+
+            // Handle Reveal Answer button
+            document.getElementById('revealBtn').addEventListener('click', function () {
+                revealAnswer();
+            });
+
+            // Handle letter clicks
+            const fstable = document.getElementById('fstable');
+            const rows = fstable.querySelectorAll('tr');
+
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                cells.forEach(cell => {
+                    if (cell.id && cell.id !== '' && cell.className !== 'p-2 text-center text-sm') {
+                        cell.addEventListener('click', function () {
+                            displayLetter('mainimg', cell.id, 1500, '/images/', twohanded);
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</Layouts.app>

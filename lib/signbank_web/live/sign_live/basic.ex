@@ -46,7 +46,11 @@ defmodule SignbankWeb.SignLive.Basic do
         id_gloss ->
           socket =
             if search_term do
-              case keyword_search(search_term, socket.assigns.current_scope, socket.assigns.allow_crude_signs) do
+              case keyword_search(
+                     search_term,
+                     socket.assigns.current_scope,
+                     socket.assigns.allow_crude_signs
+                   ) do
                 # We don't care if results is [], the page will look fine either way
                 {:ok, results} ->
                   assign(socket, search_results: results)
@@ -72,7 +76,11 @@ defmodule SignbankWeb.SignLive.Basic do
 
         # If we have an ID, then `q` is already an exact keyword and we're viewing a result
         true ->
-          case keyword_search(Map.get(params, "q"), socket.assigns.current_scope, socket.assigns.allow_crude_signs) do
+          case keyword_search(
+                 Map.get(params, "q"),
+                 socket.assigns.current_scope,
+                 socket.assigns.allow_crude_signs
+               ) do
             {:ok, []} ->
               assign(
                 socket,
@@ -280,7 +288,11 @@ defmodule SignbankWeb.SignLive.Basic do
 
       # TODO: we need to use `n` to get to a specific match number, but right now we can't
       # see other matches and they're not sorted properly anyway
-      case Dictionary.fuzzy_find_keyword(search_term, socket.assigns.current_scope, socket.assigns.allow_crude_signs) do
+      case Dictionary.fuzzy_find_keyword(
+             search_term,
+             socket.assigns.current_scope,
+             socket.assigns.allow_crude_signs
+           ) do
         # if we match a keyword exactly, and its the only match, jump straight to results
         [{^search_term, matches, all_published}] ->
           socket =
@@ -311,21 +323,33 @@ defmodule SignbankWeb.SignLive.Basic do
   end
 
   @impl true
-  def handle_event("crude_preference_received", %{"allow_crude_signs" => allow_crude_signs}, socket) do
+  def handle_event(
+        "crude_preference_received",
+        %{"allow_crude_signs" => allow_crude_signs},
+        socket
+      ) do
     # Update the preference and re-run search if we have a search term
     socket = assign(socket, :allow_crude_signs, allow_crude_signs)
 
-    socket = if socket.assigns.search_term && socket.assigns.search_term != "" do
-      case keyword_search(socket.assigns.search_term, socket.assigns.current_scope, allow_crude_signs) do
-        {:ok, results} ->
-          assign(socket, search_results: results)
-        {:multiple, inexact_matches} ->
-          assign(socket, inexact_matches: inexact_matches)
-        _ -> socket
+    socket =
+      if socket.assigns.search_term && socket.assigns.search_term != "" do
+        case keyword_search(
+               socket.assigns.search_term,
+               socket.assigns.current_scope,
+               allow_crude_signs
+             ) do
+          {:ok, results} ->
+            assign(socket, search_results: results)
+
+          {:multiple, inexact_matches} ->
+            assign(socket, inexact_matches: inexact_matches)
+
+          _ ->
+            socket
+        end
+      else
+        socket
       end
-    else
-      socket
-    end
 
     {:noreply, socket}
   end
@@ -412,9 +436,9 @@ defmodule SignbankWeb.SignLive.Basic do
     # Check if current sign's keywords contain the search term
     current_sign_has_search_term =
       search_term && assigns[:sign] &&
-      Enum.any?(assigns.sign.keywords, fn %{text: keyword} ->
-        String.downcase(keyword) == String.downcase(search_term)
-      end)
+        Enum.any?(assigns.sign.keywords, fn %{text: keyword} ->
+          String.downcase(keyword) == String.downcase(search_term)
+        end)
 
     # Find the first sign in search results that has the search term in its keywords
     first_matching_sign =
@@ -425,7 +449,9 @@ defmodule SignbankWeb.SignLive.Basic do
               Enum.any?(keywords, fn %{text: keyword} ->
                 String.downcase(keyword) == String.downcase(search_term)
               end)
-            _ -> false
+
+            _ ->
+              false
           end
         end)
       end
@@ -450,14 +476,16 @@ defmodule SignbankWeb.SignLive.Basic do
           class="btn btn-secondary"
           href={~p"/dictionary/sign/#{@first_matching_sign}?#{@query_params}"}
         >
-          ← Go back to matches for
-          <i>"{@search_term}"</i>
+          ← Go back to matches for <i>"{@search_term}"</i>
         </.link>
       </div>
-
-      <!-- Show normal matches when current sign contains the search term or no specific match to go back to -->
+      
+    <!-- Show normal matches when current sign contains the search term or no specific match to go back to -->
       <div
-        :if={assigns[:search_results] && not Enum.empty?(@search_results) && (@current_sign_has_search_term || is_nil(@first_matching_sign) || is_nil(@search_term))}
+        :if={
+          assigns[:search_results] && not Enum.empty?(@search_results) &&
+            (@current_sign_has_search_term || is_nil(@first_matching_sign) || is_nil(@search_term))
+        }
         class="mr-2 md:mr-unset"
       >
         <div phx-no-format>
