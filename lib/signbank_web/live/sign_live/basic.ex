@@ -11,8 +11,9 @@ defmodule SignbankWeb.SignLive.Basic do
     search_term = Map.get(params, "q")
     handshape = Map.get(params, "hs")
     location = Map.get(params, "loc")
-    # Default to false (hide crude signs) until we get the actual localStorage value
-    allow_crude_signs = false
+
+    # Logged-in users always see crude signs; anonymous users default to hidden until client preference arrives
+    allow_crude_signs = if socket.assigns[:current_scope], do: true, else: false
 
     socket =
       assign(socket,
@@ -109,7 +110,12 @@ defmodule SignbankWeb.SignLive.Basic do
     if :sign in Map.keys(assigns) do
       ~H"""
       <Layouts.app flash={@flash} current_scope={@current_scope}>
-        <div id="crude-preference-handler" phx-hook="CrudePreferenceHandler"></div>
+        <div
+          id="crude-preference-handler"
+          phx-hook="CrudePreferenceHandler"
+          data-logged-in={@current_scope != nil}
+        >
+        </div>
         <nav class="flex flex-col w-full md:w-unset md:flex-row justify-between mt-4">
           <div class="flex flex-col w-full md:w-unset md:flex-row gap-4 self-end">
             <.entry_nav sign={@sign} current_scope={@current_scope} />
@@ -139,7 +145,13 @@ defmodule SignbankWeb.SignLive.Basic do
         </div>
         <div class="flex gap-4 flex-col md:flex-row">
           <div class="w-full md:w-[60vw] max-w-[450px] grow-0 shrink-0">
-            <.live_component module={VideoScroller} counter={0} id={@sign.id} sign={@sign} />
+            <.live_component
+              module={VideoScroller}
+              counter={0}
+              id={@sign.id}
+              sign={@sign}
+              query_params={@query_params}
+            />
             <.keywords sign={@sign} search_term={assigns.query_params["q"]} />
             <.live_component
               module={SignbankWeb.CorpusExamples}
@@ -186,7 +198,12 @@ defmodule SignbankWeb.SignLive.Basic do
     else
       ~H"""
       <Layouts.app flash={@flash} current_scope={@current_scope}>
-        <div id="crude-preference-handler" phx-hook="CrudePreferenceHandler"></div>
+        <div
+          id="crude-preference-handler"
+          phx-hook="CrudePreferenceHandler"
+          data-logged-in={@current_scope != nil}
+        >
+        </div>
         <%= if @error do %>
           <%!-- TODO: this needs styling --%>
           <div class="prose lg:prose-xl">
@@ -328,16 +345,14 @@ defmodule SignbankWeb.SignLive.Basic do
         %{"allow_crude_signs" => allow_crude_signs},
         socket
       ) do
-    # Update the preference and re-run search if we have a search term
-    socket = assign(socket, :allow_crude_signs, allow_crude_signs)
+    # Logged-in users always see crude signs; ignore client/localStorage
+    allow = if socket.assigns[:current_scope], do: true, else: allow_crude_signs
+
+    socket = assign(socket, :allow_crude_signs, allow)
 
     socket =
       if socket.assigns.search_term && socket.assigns.search_term != "" do
-        case keyword_search(
-               socket.assigns.search_term,
-               socket.assigns.current_scope,
-               allow_crude_signs
-             ) do
+        case keyword_search(socket.assigns.search_term, socket.assigns.current_scope, allow) do
           {:ok, results} ->
             assign(socket, search_results: results)
 
@@ -473,13 +488,13 @@ defmodule SignbankWeb.SignLive.Basic do
         class="mr-2 md:mr-unset"
       >
         <.link
-          class="btn btn-secondary"
+          class="btn btn-secondary py-7 border"
           href={~p"/dictionary/sign/#{@first_matching_sign}?#{@query_params}"}
         >
           ← Go back to matches for <i>"{@search_term}"</i>
         </.link>
       </div>
-      
+
     <!-- Show normal matches when current sign contains the search term or no specific match to go back to -->
       <div
         :if={
@@ -497,7 +512,13 @@ defmodule SignbankWeb.SignLive.Basic do
         </div>
         <div class="input join gap-0 w-min p-0 border-none">
           <% len = Enum.count(@search_results) %>
-          <% cur_i = (Enum.find_index(@search_results, &(&1 == @current)) || 0) + 1 %>
+          <% current_for_index =
+            if @sign && @sign.type == :variant && @sign.citation do
+              @sign.citation.id_gloss
+            else
+              @current
+            end %>
+          <% cur_i = (Enum.find_index(@search_results, &(&1 == current_for_index)) || 0) + 1 %>
           <% lower_bound = min(cur_i - 2, len - 4) %>
           <% upper_bound = max(cur_i + 2, 5) %>
           <.search_result

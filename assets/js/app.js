@@ -40,20 +40,39 @@ Hooks.VideoAutoplay = {
 
 Hooks.CrudePreferenceHandler = {
   mounted() {
-    // Send the current localStorage value to the LiveView
+    const isLoggedIn = this.el.dataset.loggedIn === 'true';
+
+    if (isLoggedIn) {
+      // Force crude signs on for authenticated users and mark as forced
+      localStorage.setItem('allowCrudeSigns', 'true');
+      localStorage.setItem('allowCrudeForced', 'true');
+      this.pushEvent("crude_preference_received", { allow_crude_signs: true });
+      // No listeners needed because the user cannot change this setting when logged in
+      return;
+    }
+
+    // Anonymous users: Check if the forced flag is set (indicates logout)
+    const wasForced = localStorage.getItem('allowCrudeForced') === 'true';
+    if (wasForced) {
+      // User just logged out, clear the forced flag and reset to hidden
+      localStorage.setItem('allowCrudeForced', 'false');
+      localStorage.setItem('allowCrudeSigns', 'false');
+    }
+
+    // Honor existing anonymous preference (default hidden)
     const allowCrudeSigns = localStorage.getItem('allowCrudeSigns') === 'true';
     this.pushEvent("crude_preference_received", { allow_crude_signs: allowCrudeSigns });
     
     // Listen for preference changes from settings page
     this.handleEvent("get_crude_preference", () => {
-      const allowCrudeSigns = localStorage.getItem('allowCrudeSigns') === 'true';
-      this.pushEvent("crude_preference_received", { allow_crude_signs: allowCrudeSigns });
+      const allowCrude = localStorage.getItem('allowCrudeSigns') === 'true';
+      this.pushEvent("crude_preference_received", { allow_crude_signs: allowCrude });
     });
     
     // Listen for global preference changes
     const handleSettingsChange = (event) => {
-      const allowCrudeSigns = event.detail.allowCrudeSigns;
-      this.pushEvent("crude_preference_received", { allow_crude_signs: allowCrudeSigns });
+      const allowCrude = event.detail.allowCrudeSigns;
+      this.pushEvent("crude_preference_received", { allow_crude_signs: allowCrude });
     };
     
     window.addEventListener('crudeSettingsChanged', handleSettingsChange);

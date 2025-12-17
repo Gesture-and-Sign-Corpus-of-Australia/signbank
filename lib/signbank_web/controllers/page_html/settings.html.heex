@@ -1,4 +1,6 @@
 <Layouts.app flash={@flash} current_scope={@current_scope}>
+  <div id="crude-preference-handler" phx-hook="CrudePreferenceHandler" data-logged-in="false">
+  </div>
   <.header class="text-center">
     Settings<span id="unsaved-indicator" class="text-red-500 hidden"> *</span>
   </.header>
@@ -7,37 +9,21 @@
     <fieldset class="fieldset mb-2">
       <label>
         <span class="label">
-          <input
-            type="checkbox"
-            name="allow_crude_signs"
-            id="allow_crude_signs"
-            class="toggle"
-            onchange="handleSettingChange()"
-          />
+          <input type="checkbox" name="allow_crude_signs" id="allow_crude_signs" class="toggle"
+            onchange="handleSettingChange()" />
           <span id="crude-label">Hide crude signs</span>
         </span>
       </label>
     </fieldset>
-    
-<!-- Add more settings here in the future -->
+
+    <!-- Add more settings here in the future -->
 
     <div class="text-center mt-8">
-      <button
-        type="button"
-        id="save-button"
-        class="btn btn-primary"
-        onclick="saveSettings()"
-        disabled
-      >
+      <button type="button" id="save-button" class="btn btn-primary" onclick="saveSettings()" disabled>
         Save Changes
       </button>
-      <button
-        type="button"
-        id="reset-button"
-        class="btn btn-secondary ml-4"
-        onclick="resetSettings()"
-        style="display: none;"
-      >
+      <button type="button" id="reset-button" class="btn btn-secondary ml-4" onclick="resetSettings()"
+        style="display: none;">
         Reset
       </button>
     </div>
@@ -56,15 +42,15 @@
   function handleSettingChange() {
     const toggle = document.getElementById('allow_crude_signs');
     updateCrudeLabel(toggle);
-    
+
     // Check if settings have changed from original
     hasUnsavedChanges = (originalSettings.allowCrudeSigns !== toggle.checked);
-    
+
     // Update UI to show unsaved changes
     const indicator = document.getElementById('unsaved-indicator');
     const saveButton = document.getElementById('save-button');
     const resetButton = document.getElementById('reset-button');
-    
+
     if (hasUnsavedChanges) {
       indicator.classList.remove('hidden');
       saveButton.disabled = false;
@@ -78,24 +64,24 @@
 
   function saveSettings() {
     const toggle = document.getElementById('allow_crude_signs');
-    
+
     // Save to localStorage
     localStorage.setItem('allowCrudeSigns', toggle.checked);
-    
+
     // Update original settings
     originalSettings.allowCrudeSigns = toggle.checked;
-    
+
     // Dispatch custom event to notify other parts of the app
-    window.dispatchEvent(new CustomEvent('crudeSettingsChanged', { 
-      detail: { allowCrudeSigns: toggle.checked } 
+    window.dispatchEvent(new CustomEvent('crudeSettingsChanged', {
+      detail: { allowCrudeSigns: toggle.checked }
     }));
-    
+
     // Reset unsaved changes state
     hasUnsavedChanges = false;
     const indicator = document.getElementById('unsaved-indicator');
     const saveButton = document.getElementById('save-button');
     const resetButton = document.getElementById('reset-button');
-    
+
     indicator.classList.add('hidden');
     saveButton.disabled = true;
     resetButton.style.display = 'none';
@@ -103,42 +89,41 @@
 
   function resetSettings() {
     const toggle = document.getElementById('allow_crude_signs');
-    
+
     // Reset to original values
     toggle.checked = originalSettings.allowCrudeSigns;
     updateCrudeLabel(toggle);
-    
+
     // Reset unsaved changes state
     hasUnsavedChanges = false;
     const indicator = document.getElementById('unsaved-indicator');
     const saveButton = document.getElementById('save-button');
     const resetButton = document.getElementById('reset-button');
-    
     indicator.classList.add('hidden');
     saveButton.disabled = true;
     resetButton.style.display = 'none';
   }
 
   // Initialize settings from localStorage on page load
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     const toggle = document.getElementById('allow_crude_signs');
     const savedPreference = localStorage.getItem('allowCrudeSigns');
-    
+
     // Set initial state
     if (savedPreference !== null) {
       toggle.checked = savedPreference === 'true';
     } else {
       toggle.checked = false; // Default to false (hide crude signs)
     }
-    
+
     // Store original settings
     originalSettings.allowCrudeSigns = toggle.checked;
-    
+
     // Update label
     updateCrudeLabel(toggle);
-    
+
     // Warn user about unsaved changes when leaving page
-    window.addEventListener('beforeunload', function(e) {
+    window.addEventListener('beforeunload', function (e) {
       if (hasUnsavedChanges) {
         e.preventDefault();
         e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
