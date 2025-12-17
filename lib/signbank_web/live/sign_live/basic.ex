@@ -11,8 +11,8 @@ defmodule SignbankWeb.SignLive.Basic do
     search_term = Map.get(params, "q")
     handshape = Map.get(params, "hs")
     location = Map.get(params, "loc")
-    # Default to false (hide crude signs) until we get the actual localStorage value
-    allow_crude_signs = false
+    # Logged-in users always see crude signs; anonymous users default to hidden until client preference arrives
+    allow_crude_signs = if socket.assigns[:current_scope], do: true, else: false
 
     socket =
       assign(socket,
@@ -101,7 +101,7 @@ defmodule SignbankWeb.SignLive.Basic do
     if :sign in Map.keys(assigns) do
       ~H"""
       <Layouts.app flash={@flash} current_scope={@current_scope}>
-        <div id="crude-preference-handler" phx-hook="CrudePreferenceHandler"></div>
+        <div id="crude-preference-handler" phx-hook="CrudePreferenceHandler" data-logged-in={@current_scope != nil}></div>
         <nav class="flex flex-col w-full md:w-unset md:flex-row justify-between mt-4">
           <div class="flex flex-col w-full md:w-unset md:flex-row gap-4 self-end">
             <.entry_nav sign={@sign} current_scope={@current_scope} />
@@ -178,7 +178,7 @@ defmodule SignbankWeb.SignLive.Basic do
     else
       ~H"""
       <Layouts.app flash={@flash} current_scope={@current_scope}>
-        <div id="crude-preference-handler" phx-hook="CrudePreferenceHandler"></div>
+        <div id="crude-preference-handler" phx-hook="CrudePreferenceHandler" data-logged-in={@current_scope != nil}></div>
         <%= if @error do %>
           <%!-- TODO: this needs styling --%>
           <div class="prose lg:prose-xl">
@@ -312,8 +312,10 @@ defmodule SignbankWeb.SignLive.Basic do
 
   @impl true
   def handle_event("crude_preference_received", %{"allow_crude_signs" => allow_crude_signs}, socket) do
-    # Update the preference and re-run search if we have a search term
-    socket = assign(socket, :allow_crude_signs, allow_crude_signs)
+    # Logged-in users always see crude signs; ignore client/localStorage
+    allow = if socket.assigns[:current_scope], do: true, else: allow_crude_signs
+
+    socket = assign(socket, :allow_crude_signs, allow)
 
     socket = if socket.assigns.search_term && socket.assigns.search_term != "" do
       case keyword_search(socket.assigns.search_term, socket.assigns.current_scope, allow_crude_signs) do
