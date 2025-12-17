@@ -8,7 +8,8 @@ defmodule SignbankWeb.UserLive.Settings do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
-      <div id="crude-preference-handler" phx-hook="CrudePreferenceHandler" data-logged-in="true"></div>
+      <div id="crude-preference-handler" phx-hook="CrudePreferenceHandler" data-logged-in="true">
+      </div>
       <.header class="text-center">
         Settings
       </.header>

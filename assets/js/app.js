@@ -43,18 +43,19 @@ Hooks.CrudePreferenceHandler = {
     const isLoggedIn = this.el.dataset.loggedIn === 'true';
 
     if (isLoggedIn) {
-      // Force crude signs on for authenticated users
+      // Force crude signs on for authenticated users and mark as forced
       localStorage.setItem('allowCrudeSigns', 'true');
+      localStorage.setItem('allowCrudeForced', 'true');
       this.pushEvent("crude_preference_received", { allow_crude_signs: true });
       // No listeners needed because the user cannot change this setting when logged in
       return;
     }
 
-    // Anonymous users: Check if they just logged out
-    // If localStorage shows true but they're not logged in, reset to false
-    const currentValue = localStorage.getItem('allowCrudeSigns');
-    if (currentValue === 'true') {
-      // User likely just logged out, reset to hidden
+    // Anonymous users: Check if the forced flag is set (indicates logout)
+    const wasForced = localStorage.getItem('allowCrudeForced') === 'true';
+    if (wasForced) {
+      // User just logged out, clear the forced flag and reset to hidden
+      localStorage.setItem('allowCrudeForced', 'false');
       localStorage.setItem('allowCrudeSigns', 'false');
     }
 

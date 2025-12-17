@@ -458,19 +458,20 @@ defmodule Signbank.Dictionary do
         get_in(current_scope, [Access.key(:user), Access.key(:role)]) in [:tech, :editor]
       )
 
-    query = from(s in Sign,
-      join: so in subquery(sign_order),
-      on: [sign_id: s.id],
-      join: k in subquery(keywords),
-      on: [sign_id: s.id],
-      where: s.type == :citation,
-      select: {
-        k.text,
-        fragment("array_agg(? ORDER BY ?)", s.id_gloss, so.position),
-        fragment("bool_or(?)", s.published)
-      },
-      group_by: [k.text]
-    )
+    query =
+      from(s in Sign,
+        join: so in subquery(sign_order),
+        on: [sign_id: s.id],
+        join: k in subquery(keywords),
+        on: [sign_id: s.id],
+        where: s.type == :citation,
+        select: {
+          k.text,
+          fragment("array_agg(? ORDER BY ?)", s.id_gloss, so.position),
+          fragment("bool_or(?)", s.published)
+        },
+        group_by: [k.text]
+      )
 
     query =
       if allow_crude_signs do

@@ -11,6 +11,7 @@ defmodule SignbankWeb.SignLive.Basic do
     search_term = Map.get(params, "q")
     handshape = Map.get(params, "hs")
     location = Map.get(params, "loc")
+
     # Logged-in users always see crude signs; anonymous users default to hidden until client preference arrives
     allow_crude_signs = if socket.assigns[:current_scope], do: true, else: false
 
@@ -46,7 +47,11 @@ defmodule SignbankWeb.SignLive.Basic do
         id_gloss ->
           socket =
             if search_term do
-              case keyword_search(search_term, socket.assigns.current_scope, socket.assigns.allow_crude_signs) do
+              case keyword_search(
+                     search_term,
+                     socket.assigns.current_scope,
+                     socket.assigns.allow_crude_signs
+                   ) do
                 # We don't care if results is [], the page will look fine either way
                 {:ok, results} ->
                   assign(socket, search_results: results)
@@ -72,7 +77,11 @@ defmodule SignbankWeb.SignLive.Basic do
 
         # If we have an ID, then `q` is already an exact keyword and we're viewing a result
         true ->
-          case keyword_search(Map.get(params, "q"), socket.assigns.current_scope, socket.assigns.allow_crude_signs) do
+          case keyword_search(
+                 Map.get(params, "q"),
+                 socket.assigns.current_scope,
+                 socket.assigns.allow_crude_signs
+               ) do
             {:ok, []} ->
               assign(
                 socket,
@@ -101,7 +110,12 @@ defmodule SignbankWeb.SignLive.Basic do
     if :sign in Map.keys(assigns) do
       ~H"""
       <Layouts.app flash={@flash} current_scope={@current_scope}>
-        <div id="crude-preference-handler" phx-hook="CrudePreferenceHandler" data-logged-in={@current_scope != nil}></div>
+        <div
+          id="crude-preference-handler"
+          phx-hook="CrudePreferenceHandler"
+          data-logged-in={@current_scope != nil}
+        >
+        </div>
         <nav class="flex flex-col w-full md:w-unset md:flex-row justify-between mt-4">
           <div class="flex flex-col w-full md:w-unset md:flex-row gap-4 self-end">
             <.entry_nav sign={@sign} current_scope={@current_scope} />
@@ -131,7 +145,13 @@ defmodule SignbankWeb.SignLive.Basic do
         </div>
         <div class="flex gap-4 flex-col md:flex-row">
           <div class="w-full md:w-[60vw] max-w-[450px] grow-0 shrink-0">
-            <.live_component module={VideoScroller} counter={0} id={@sign.id} sign={@sign} query_params={@query_params} />
+            <.live_component
+              module={VideoScroller}
+              counter={0}
+              id={@sign.id}
+              sign={@sign}
+              query_params={@query_params}
+            />
             <.keywords sign={@sign} search_term={assigns.query_params["q"]} />
             <.live_component
               module={SignbankWeb.CorpusExamples}
@@ -178,7 +198,12 @@ defmodule SignbankWeb.SignLive.Basic do
     else
       ~H"""
       <Layouts.app flash={@flash} current_scope={@current_scope}>
-        <div id="crude-preference-handler" phx-hook="CrudePreferenceHandler" data-logged-in={@current_scope != nil}></div>
+        <div
+          id="crude-preference-handler"
+          phx-hook="CrudePreferenceHandler"
+          data-logged-in={@current_scope != nil}
+        >
+        </div>
         <%= if @error do %>
           <%!-- TODO: this needs styling --%>
           <div class="prose lg:prose-xl">
@@ -280,7 +305,11 @@ defmodule SignbankWeb.SignLive.Basic do
 
       # TODO: we need to use `n` to get to a specific match number, but right now we can't
       # see other matches and they're not sorted properly anyway
-      case Dictionary.fuzzy_find_keyword(search_term, socket.assigns.current_scope, socket.assigns.allow_crude_signs) do
+      case Dictionary.fuzzy_find_keyword(
+             search_term,
+             socket.assigns.current_scope,
+             socket.assigns.allow_crude_signs
+           ) do
         # if we match a keyword exactly, and its the only match, jump straight to results
         [{^search_term, matches, all_published}] ->
           socket =
@@ -311,23 +340,31 @@ defmodule SignbankWeb.SignLive.Basic do
   end
 
   @impl true
-  def handle_event("crude_preference_received", %{"allow_crude_signs" => allow_crude_signs}, socket) do
+  def handle_event(
+        "crude_preference_received",
+        %{"allow_crude_signs" => allow_crude_signs},
+        socket
+      ) do
     # Logged-in users always see crude signs; ignore client/localStorage
     allow = if socket.assigns[:current_scope], do: true, else: allow_crude_signs
 
     socket = assign(socket, :allow_crude_signs, allow)
 
-    socket = if socket.assigns.search_term && socket.assigns.search_term != "" do
-      case keyword_search(socket.assigns.search_term, socket.assigns.current_scope, allow_crude_signs) do
-        {:ok, results} ->
-          assign(socket, search_results: results)
-        {:multiple, inexact_matches} ->
-          assign(socket, inexact_matches: inexact_matches)
-        _ -> socket
+    socket =
+      if socket.assigns.search_term && socket.assigns.search_term != "" do
+        case keyword_search(socket.assigns.search_term, socket.assigns.current_scope, allow) do
+          {:ok, results} ->
+            assign(socket, search_results: results)
+
+          {:multiple, inexact_matches} ->
+            assign(socket, inexact_matches: inexact_matches)
+
+          _ ->
+            socket
+        end
+      else
+        socket
       end
-    else
-      socket
-    end
 
     {:noreply, socket}
   end
@@ -414,9 +451,9 @@ defmodule SignbankWeb.SignLive.Basic do
     # Check if current sign's keywords contain the search term
     current_sign_has_search_term =
       search_term && assigns[:sign] &&
-      Enum.any?(assigns.sign.keywords, fn %{text: keyword} ->
-        String.downcase(keyword) == String.downcase(search_term)
-      end)
+        Enum.any?(assigns.sign.keywords, fn %{text: keyword} ->
+          String.downcase(keyword) == String.downcase(search_term)
+        end)
 
     # Find the first sign in search results that has the search term in its keywords
     first_matching_sign =
@@ -427,7 +464,9 @@ defmodule SignbankWeb.SignLive.Basic do
               Enum.any?(keywords, fn %{text: keyword} ->
                 String.downcase(keyword) == String.downcase(search_term)
               end)
-            _ -> false
+
+            _ ->
+              false
           end
         end)
       end
@@ -452,14 +491,16 @@ defmodule SignbankWeb.SignLive.Basic do
           class="btn btn-secondary py-7 border"
           href={~p"/dictionary/sign/#{@first_matching_sign}?#{@query_params}"}
         >
-          ← Go back to matches for
-          <i>"{@search_term}"</i>
+          ← Go back to matches for <i>"{@search_term}"</i>
         </.link>
       </div>
-
-      <!-- Show normal matches when current sign contains the search term or no specific match to go back to -->
+      
+    <!-- Show normal matches when current sign contains the search term or no specific match to go back to -->
       <div
-        :if={assigns[:search_results] && not Enum.empty?(@search_results) && (@current_sign_has_search_term || is_nil(@first_matching_sign) || is_nil(@search_term))}
+        :if={
+          assigns[:search_results] && not Enum.empty?(@search_results) &&
+            (@current_sign_has_search_term || is_nil(@first_matching_sign) || is_nil(@search_term))
+        }
         class="mr-2 md:mr-unset"
       >
         <div phx-no-format>
@@ -472,11 +513,11 @@ defmodule SignbankWeb.SignLive.Basic do
         <div class="input join gap-0 w-min p-0 border-none">
           <% len = Enum.count(@search_results) %>
           <% current_for_index =
-               if @sign && @sign.type == :variant && @sign.citation do
-                 @sign.citation.id_gloss
-               else
-                 @current
-               end %>
+            if @sign && @sign.type == :variant && @sign.citation do
+              @sign.citation.id_gloss
+            else
+              @current
+            end %>
           <% cur_i = (Enum.find_index(@search_results, &(&1 == current_for_index)) || 0) + 1 %>
           <% lower_bound = min(cur_i - 2, len - 4) %>
           <% upper_bound = max(cur_i + 2, 5) %>
