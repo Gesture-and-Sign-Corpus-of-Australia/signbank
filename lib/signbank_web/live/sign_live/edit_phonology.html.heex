@@ -1,0 +1,513 @@
+# edit_phonology.html.heex
+
+<.inputs_for :let={phonology_f} field={@form[:phonology]}>
+    <div id="phonology_section">
+        <table>
+            <thead>
+                <tr>
+                    <th>Phonology:</th>
+                    <th>handshape</th>
+                    <th>allophone</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{gettext("Initial dom hand")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:dominant_initial_handshape]} options={[nil] ++
+                            Signbank.Dictionary.Sign.handshape_values()} />
+                    </td>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:dominant_initial_handshape_variant]} options={[nil] ++
+                            Signbank.Dictionary.Sign.handshape_allophone_values()} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("Final dom hand")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:dominant_final_handshape]} options={[nil] ++
+                            Signbank.Dictionary.Sign.handshape_values()} />
+                    </td>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:dominant_final_handshape_variant]} options={[nil] ++
+                            Signbank.Dictionary.Sign.handshape_allophone_values()} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("Initial sub hand")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:subordinate_initial_handshape]} options={[nil] ++
+                            Signbank.Dictionary.Sign.handshape_values()} />
+                    </td>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:subordinate_initial_handshape_variant]} options={[nil] ++
+                            Signbank.Dictionary.Sign.handshape_allophone_values()} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("Final sub hand")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:subordinate_final_handshape]} options={[nil] ++
+                            Signbank.Dictionary.Sign.handshape_values()} />
+                    </td>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:subordinate_final_handshape_variant]} options={[nil] ++
+                            Signbank.Dictionary.Sign.handshape_allophone_values()} />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">Phonology: primary location</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{gettext("Initial primary loc")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:initial_primary_location]} options={[nil] ++
+                            Signbank.Dictionary.Sign.location_values()} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("Final primary loc")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:final_primary_location]} options={[nil] ++
+                            Signbank.Dictionary.Sign.location_values()} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("Loc rightside or leftside")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:location_rightside_or_leftside]} options={[nil, "right" , "left"
+                            , "both" ]} />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="3">
+                        Phonology: finger hand orientation (pointing)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{gettext("Initial dom finger hand ori")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:dominant_initial_finger_hand_orientation]} options={[nil] ++
+                            Signbank.Dictionary.Sign.orientation_values()} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("Final dom finger hand ori")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:dominant_final_finger_hand_orientation]} options={[nil] ++
+                            Signbank.Dictionary.Sign.orientation_values()} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("Initial sub finger hand ori")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:subordinate_initial_finger_hand_orientation]} options={[nil] ++
+                            Signbank.Dictionary.Sign.orientation_values()} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("Final sub finger hand ori")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:subordinate_final_finger_hand_orientation]} options={[nil] ++
+                            Signbank.Dictionary.Sign.orientation_values()} />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="3">Phonology: palm orientation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{gettext("Initial dom palm ori")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:dominant_initial_palm_orientation]} options={[nil] ++
+                            Signbank.Dictionary.Sign.orientation_values()} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("Final dom palm ori")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:dominant_final_palm_orientation]} options={[nil] ++
+                            Signbank.Dictionary.Sign.orientation_values()} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("Initial sub palm ori")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:subordinate_initial_palm_orientation]} options={[nil] ++
+                            Signbank.Dictionary.Sign.orientation_values()} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("Final sub palm ori")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:subordinate_final_palm_orientation]} options={[nil] ++
+                            Signbank.Dictionary.Sign.orientation_values()} />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="3">Phonology: interact location <small>(not for 1H signs)</small></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{gettext("Initial dom interact handpart")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:dominant_initial_interacting_handpart]} options={[nil] ++
+                            Signbank.Dictionary.Sign.handpart_values()} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("Final dom interact handpart")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:dominant_final_interacting_handpart]} options={[nil] ++
+                            Signbank.Dictionary.Sign.handpart_values()} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("Initial sub interact handpart")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:subordinate_initial_interacting_handpart]} options={[nil] ++
+                            Signbank.Dictionary.Sign.handpart_values()} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("Final sub interact handpart")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={phonology_f[:subordinate_final_interacting_handpart]} options={[nil] ++
+                            Signbank.Dictionary.Sign.handpart_values()} />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="3">
+                        Phonology: contact
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{gettext("contact start")}</th>
+                    <td>
+                        <.input form="sign-form" type="select" field={phonology_f[:contact_start]} options={[nil, true,
+                            false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("contact end")}</th>
+                    <td>
+                        <.input form="sign-form" type="select" field={phonology_f[:contact_end]} options={[nil, true,
+                            false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("contact during")}</th>
+                    <td>
+                        <.input form="sign-form" type="select" field={phonology_f[:contact_during]} options={[nil, true,
+                            false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("contact body")}</th>
+                    <td>
+                        <.input form="sign-form" type="select" field={phonology_f[:contact_body]} options={[nil, true,
+                            false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("contact hands")}</th>
+                    <td>
+                        <.input form="sign-form" type="select" field={phonology_f[:contact_hands]} options={[nil, true,
+                            false]} />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="3">
+                        Phonology: change
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{gettext("change handshape")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={phonology_f[:change_handshape]}
+                            options={[nil, true, false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("change open")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={phonology_f[:change_open]}
+                            options={[nil, true, false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("change close")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={phonology_f[:change_close]}
+                            options={[nil, true, false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("change orientation")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={phonology_f[:change_orientation]}
+                            options={[nil, true, false]} />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="3">
+                        Phonology: articulation
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{gettext("forearm rotation")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={phonology_f[:forearm_rotation]}
+                            options={[nil, true, false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("wrist nod")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={phonology_f[:wrist_nod]}
+                            options={[nil, true, false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("fingers bend")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={phonology_f[:fingers_bend]}
+                            options={[nil, true, false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("fingers wiggle")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={phonology_f[:fingers_wiggle]}
+                            options={[nil, true, false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("fingers straight")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={phonology_f[:fingers_straight]}
+                            options={[nil, true, false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("fingers spread")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={phonology_f[:fingers_spread]}
+                            options={[nil, true, false]} />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="3">
+                        Phonology: hand relationship (for 2H signs)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{gettext("movement_symmetrical")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={phonology_f[:movement_symmetrical]}
+                            options={[nil, true, false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("movement_parallel")}</th>
+                    <td>
+                        <.input form="sign-form" type="select" field={phonology_f[:movement_parallel]} options={[nil,
+                            true, false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("movement_alternating")}</th>
+                    <td>
+                        <.input form="sign-form" type="select" field={phonology_f[:movement_alternating]} options={[nil,
+                            true, false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("movement_separating")}</th>
+                    <td>
+                        <.input form="sign-form" type="select" field={phonology_f[:movement_separating]} options={[nil,
+                            true, false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("movement_approaching")}</th>
+                    <td>
+                        <.input form="sign-form" type="select" field={phonology_f[:movement_approaching]} options={[nil,
+                            true, false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("movement_cross")}</th>
+                    <td>
+                        <.input form="sign-form" type="select" field={phonology_f[:movement_cross]} options={[nil, true,
+                            false]} />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="3">
+                        Phonology: movement (can have multiple)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{gettext("movement_direction")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={phonology_f[:movement_direction]}
+                            options={[nil] ++ Signbank.Dictionary.Sign.movement_direction_values()} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("movement_path")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={phonology_f[:movement_path]}
+                            options={[nil] ++ Signbank.Dictionary.Sign.movement_path_values()} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("movement_repeated")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={phonology_f[:movement_repeated]}
+                            options={[nil, true, false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("repetition_type")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={phonology_f[:repetition_type]}
+                            options={[nil] ++ Signbank.Dictionary.Sign.repetition_type_values()} />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="3">
+                        Phonology: non manual features
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>
+                        {gettext("non_manual_mouth_gesture")}
+                    </th>
+                    <td>
+                        <.input type="text" field={phonology_f[:non_manual_mouth_gesture]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        {gettext("non_manual_other")}
+                    </th>
+                    <td>
+                        <.input type="text" class="textarea" rows="4" field={phonology_f[:non_manual_other]} />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="3">{gettext("Phonology: other")}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>
+                        {gettext("one_or_two_handed")}
+                    </th>
+                    <td>
+                        <.input form="sign-form" type="select" field={phonology_f[:one_or_two_handed]}
+                            options={[nil, "1H" , "2H" ]} />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</.inputs_for>

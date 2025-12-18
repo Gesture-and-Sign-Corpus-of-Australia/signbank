@@ -1,0 +1,178 @@
+<div id="vocabulary_section">
+    <table>
+        <thead>
+            <tr>
+                <th colspan="2">
+                    {gettext("Vocabulary: dictionary entry type (box colour = frame colour)")}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <%!-- TODO: use classes here instead --%>
+                    <td style="text-align: center;" class={[ if(@sign.type==:citation, do: "bg-yellow-300" ,
+                        else: "bg-orange-300" ) ]}>
+                        {cond do
+                        @sign.type == :citation -> "citation"
+                        @sign.type == :variant -> "variant"
+                        end}
+                    </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table>
+        <thead>
+            <tr>
+                <th colspan="3">
+                    Vocabulary: usage by dialects (for map)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <.regions_checkgroup form="sign-form" field={@form[:regions]} regions={@regions} sign={@sign} />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table>
+        <thead>
+            <tr>
+                <th colspan="2">{gettext("Vocabulary: usage by other factors")}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>{gettext("Technical/specialist jargon")}</th>
+                <td>
+                    <.input form="sign-form" type="select" field={@form[:is_jargon]} options={[nil, true, false]} />
+                </td>
+            </tr>
+            <tr>
+                <th>{gettext("Marginal/minority")}</th>
+                <td>
+                    <.input form="sign-form" type="select" field={@form[:is_marginal]} options={[nil, true, false]} />
+                </td>
+            </tr>
+            <tr>
+                <th>{gettext("Obsolete")}</th>
+                <td>
+                    <.input form="sign-form" type="select" field={@form[:is_obsolete]} options={[nil, true, false]} />
+                </td>
+            </tr>
+            <tr>
+                <th>{gettext("Anglican/state school")}</th>
+                <td>
+                    <.input form="sign-form" type="select" field={@form[:is_anglican_or_state]} options={[nil, true,
+                        false]} />
+                </td>
+            </tr>
+            <tr>
+                <th>{gettext("Catholic school")}</th>
+                <td>
+                    <.input form="sign-form" type="select" field={@form[:is_catholic]} options={[nil, true, false]} />
+                </td>
+            </tr>
+            <tr>
+                <th>{gettext("Crude & offensive")}</th>
+                <td>
+                    <.input form="sign-form" type="select" field={@form[:crude]} options={[nil, true, false]} />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <%!-- TODO: because of how the other frame color fields can be calculated from other data, we need a dedicated place
+        for is_signed_english_only --%>
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">{gettext("Vocabulary: other SLs")}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{gettext("BSL recent loan sign")}</th>
+                    <td>
+                        <.input form="sign-form" type="select" field={@form[:is_bsl_loan]} options={[nil, true,
+                            false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("BSL gloss")}</th>
+                    <td>
+                        <.input type="text" field={@form[:bsl_gloss]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("ASL recent loan sign")}</th>
+                    <td>
+                        <.input form="sign-form" type="select" field={@form[:is_asl_loan]} options={[nil, true,
+                            false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("ASL gloss")}</th>
+                    <td>
+                        <.input type="text" field={@form[:asl_gloss]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("SE based on Auslan")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={@form[:is_signed_english_based_on_auslan]} options={[nil, true, false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("SE Gloss")}</th>
+                    <td>
+                        <.input type="text" field={@form[:signed_english_gloss]} />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">{gettext("Vocabulary: Iconicity & folklore")}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{gettext("Iconicity")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={@form[:iconicity]} options={[nil]
+                            ++ Signbank.Dictionary.Sign.iconicity_values()} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("Popular explanation")}</th>
+                    <%!-- TODO: textareas need styling --%>
+                        <td>
+                            <.input type="textarea" field={@form[:popular_explanation]} options={[nil, true, false]} />
+                        </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">{gettext("Vocabulary: semantics (topic, theme)")}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{gettext("Semantic categories")}</th>
+                    <%!-- TODO: need form control here --%>
+                        <td>
+                            selection UI TBD
+                        </td>
+                </tr>
+            </tbody>
+        </table>
+</div>
