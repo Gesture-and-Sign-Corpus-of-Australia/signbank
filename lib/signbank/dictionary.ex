@@ -438,7 +438,7 @@ defmodule Signbank.Dictionary do
   end
 
   # TODO: this function can probably merge with get_sign_by_keyword!
-  def fuzzy_find_keyword(search_term, current_scope \\ nil) do
+  def fuzzy_find_keyword(search_term, current_scope \\ nil, allow_crude_signs \\ false) do
     # TODO: sort by sign_order
     search_term = String.trim(search_term)
 
@@ -458,19 +458,29 @@ defmodule Signbank.Dictionary do
         get_in(current_scope, [Access.key(:user), Access.key(:role)]) in [:tech, :editor]
       )
 
-    from(s in Sign,
-      join: so in subquery(sign_order),
-      on: [sign_id: s.id],
-      join: k in subquery(keywords),
-      on: [sign_id: s.id],
-      where: s.type == :citation,
-      select: {
-        k.text,
-        fragment("array_agg(? ORDER BY ?)", s.id_gloss, so.position),
-        fragment("bool_or(?)", s.published)
-      },
-      group_by: [k.text]
-    )
+    query =
+      from(s in Sign,
+        join: so in subquery(sign_order),
+        on: [sign_id: s.id],
+        join: k in subquery(keywords),
+        on: [sign_id: s.id],
+        where: s.type == :citation,
+        select: {
+          k.text,
+          fragment("array_agg(? ORDER BY ?)", s.id_gloss, so.position),
+          fragment("bool_or(?)", s.published)
+        },
+        group_by: [k.text]
+      )
+
+    query =
+      if allow_crude_signs do
+        query
+      else
+        from s in query, where: s.crude != true or is_nil(s.crude)
+      end
+
+    query
     |> filter_visibility(current_scope)
     |> Repo.all()
   end

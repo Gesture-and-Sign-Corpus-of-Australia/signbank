@@ -23,6 +23,8 @@ defmodule VideoScroller do
     index_of_current_sign =
       Enum.find_index(citation_and_variants, &(&1.id_gloss == assigns.sign.id_gloss))
 
+    query_params = assigns[:query_params] || %{}
+
     assigns =
       assign(
         assigns,
@@ -31,7 +33,7 @@ defmodule VideoScroller do
         next_sign_link:
           if index_of_current_sign > 0 do
             case Enum.fetch(citation_and_variants, index_of_current_sign - 1) do
-              {:ok, s} -> ~p"/dictionary/sign/#{s.id_gloss}"
+              {:ok, s} -> ~p"/dictionary/sign/#{s.id_gloss}?#{query_params}"
               :error -> nil
             end
           else
@@ -39,7 +41,7 @@ defmodule VideoScroller do
           end,
         previous_sign_link:
           case Enum.fetch(citation_and_variants, index_of_current_sign + 1) do
-            {:ok, s} -> ~p"/dictionary/sign/#{s.id_gloss}"
+            {:ok, s} -> ~p"/dictionary/sign/#{s.id_gloss}?#{query_params}"
             :error -> nil
           end
       )
