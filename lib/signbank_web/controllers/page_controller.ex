@@ -12,4 +12,9 @@ defmodule SignbankWeb.PageController do
   def vocabulary(conn, _params), do: render(conn, :vocabulary)
   def terms_and_conditions(conn, _params), do: render(conn, :terms_and_conditions)
   def settings(conn, _params), do: render(conn, :settings)
+  def number_signs(conn, _params), do: render(conn, :number_signs)
+  def finger_spelling(conn, _params), do: render(conn, :finger_spelling)
+  def auslan_spell(conn, _params), do: render(conn, :auslan_spell)
+  def one_handed(conn, _params), do: render(conn, :one_handed)
+  def practice(conn, _params), do: render(conn, :practice)
 end

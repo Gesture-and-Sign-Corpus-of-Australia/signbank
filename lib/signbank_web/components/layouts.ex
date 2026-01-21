@@ -159,6 +159,14 @@ defmodule SignbankWeb.Layouts do
           <.nav_item href={~p"/dictionary/search"}>{gettext("Advanced search")}</.nav_item>
         </:children>
       </.nav_item>
+
+      <.nav_item mobile={@mobile}>
+        {gettext("Learning")}
+        <:children>
+          <.nav_item href={~p"/learning/number-signs"}>{gettext("Number signs")}</.nav_item>
+          <.nav_item href={~p"/learning/finger-spelling"}>{gettext("Finger spelling")}</.nav_item>
+        </:children>
+      </.nav_item>
     </ul>
     """
   end

@@ -494,7 +494,7 @@ defmodule SignbankWeb.SignLive.Basic do
           ← Go back to matches for <i>"{@search_term}"</i>
         </.link>
       </div>
-      
+
     <!-- Show normal matches when current sign contains the search term or no specific match to go back to -->
       <div
         :if={
