@@ -85,6 +85,20 @@ window.addHandshapeFilter = (value) => {
 
 }
 
+const VideoPlayer = {
+  mounted() {
+    this.handleEvent("seek_video", ({video_id, time}) => {
+      const video = document.getElementById(video_id);
+      if (video) {
+        video.currentTime = time;
+        video.play();
+      }
+    });
+  }
+};
+
+export default VideoPlayer;
+
 // TODO: use this to highlight the current selected phonological search handshape/location
 window.addEventListener("phx:phon-filter-highlight", (e) => {
   if (e.detail.hasOwnProperty('location')) {

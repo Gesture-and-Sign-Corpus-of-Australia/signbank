@@ -15,9 +15,9 @@ defmodule SignbankWeb.MaintenanceLive do
         <li>
           <.link class="btn" href={~p"/tech/dashboard"}>LiveDashboard (VM metrics)</.link>
         </li>
-        <%!-- <li>
+        <li>
           <button class="btn" phx-click="load-corpus" }>Process corpus</button>
-        </li> --%>
+        </li>
       </ul>
       <%!-- <h2>UAT testing checklist</h2> --%>
       <%!-- TODO: generate a checklist from `/priv/testing_checklist.json` --%>
@@ -30,12 +30,12 @@ defmodule SignbankWeb.MaintenanceLive do
     {:noreply, socket}
   end
 
-  # @impl true
-  # def handle_event("load-corpus", _, socket) do
-  #   %{}
-  #   |> Signbank.Workers.CorpusLoader.new()
-  #   |> Oban.insert()
+  @impl true
+  def handle_event("load-corpus", _, socket) do
+    %{"backfill" => true}
+    |> Signbank.Workers.CorpusLoader.new()
+    |> Oban.insert()
 
-  #   {:noreply, socket}
-  # end
+    {:noreply, socket}
+  end
 end

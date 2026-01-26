@@ -49,3 +49,7 @@ s3/
 .env.*
 
 uploads/
+
+upload_staging/
+
+*.eaf
