@@ -16,16 +16,6 @@
   <%!-- Section Navigation --%>
   <nav role="tablist" class="tabs tabs-lifted tabs-lg w-full">
     <.link
-      patch={~p"/dictionary/sign/#{@sign.id_gloss}/edit"}
-      role="tab"
-      class={[
-        "tab",
-        if(@current_section == :main, do: "tab-active")
-      ]}
-    >
-      Main & Video
-    </.link>
-    <.link
       patch={~p"/dictionary/sign/#{@sign.id_gloss}/edit/phonology"}
       role="tab"
       class={[
@@ -193,13 +183,6 @@
 
     <%!-- Right Content Area - Tabs --%>
     <main class="edit_main">
-      <%!-- MAIN SECTION (empty - glossing/keywords now in sidebar) --%>
-      <%= if @current_section == :main do %>
-        <div id="main_section">
-          <p class="text-gray-500">Main content is in the left sidebar.</p>
-        </div>
-      <% end %>
-
       <%!-- PHONOLOGY SECTION --%>
       <%= if @current_section == :phonology do %>
         <.form for={@form} id="phonology-form" phx-change="validate" phx-submit="save">

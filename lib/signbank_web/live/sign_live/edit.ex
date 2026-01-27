@@ -56,12 +56,9 @@ defmodule SignbankWeb.SignLive.Edit do
     sign = Dictionary.get_sign_by_id_gloss(id_gloss, socket.assigns.current_scope)
 
     {:noreply,
-    socket
-    |> assign(:page_title, "edit entry")
-    |> assign(:sign, sign)
-    |> assign(:current_section, :main)
-    |> assign(:regions, Dictionary.SignRegion.regions())
-    |> init(sign)}
+     push_patch(socket,
+       to: ~p"/dictionary/sign/#{id_gloss}/edit/phonology"
+     )}
   end
 
   @impl true
