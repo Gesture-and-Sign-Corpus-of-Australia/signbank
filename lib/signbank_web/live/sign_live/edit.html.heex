@@ -100,11 +100,6 @@
           <label for={@uploads.video.ref}>Upload new video:</label>
           <.live_file_input class="file-input" form="video-form" upload={@uploads.video} />
 
-          <div class="mt-4">
-            <button form="video-form" class="btn">
-              {gettext("Save")}{if assigns[:touched], do: "*"}
-            </button>
-          </div>
         </.form>
       </div>
 
@@ -142,12 +137,6 @@
                 value={@sign.keywords |> Enum.map(& &1.text) |> Enum.join(", ")}
               />
             </div>
-          </div>
-
-          <div class="mt-4">
-            <button form="glossing-form" class="btn">
-              {gettext("Save")}{if assigns[:touched], do: "*"}
-            </button>
           </div>
         </.form>
       </div>
