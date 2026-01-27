@@ -8,9 +8,10 @@ defmodule SignbankWeb.UserLive.Settings do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
+      <div id="crude-preference-handler" phx-hook="CrudePreferenceHandler" data-logged-in="true">
+      </div>
       <.header class="text-center">
-        Account Settings
-        <:subtitle>Manage your account email address and password settings</:subtitle>
+        Settings
       </.header>
 
       <.form for={@email_form} id="email_form" phx-submit="update_email" phx-change="validate_email">
@@ -148,5 +149,10 @@ defmodule SignbankWeb.UserLive.Settings do
       changeset ->
         {:noreply, assign(socket, password_form: to_form(changeset, action: :insert))}
     end
+  end
+
+  # Acknowledge crude preference hook events (used to force localStorage to true when logged in)
+  def handle_event("crude_preference_received", _params, socket) do
+    {:noreply, socket}
   end
 end

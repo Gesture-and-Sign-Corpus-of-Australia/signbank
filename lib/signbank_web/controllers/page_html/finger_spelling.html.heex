@@ -1,0 +1,347 @@
+<Layouts.app flash={@flash} current_scope={@current_scope}>
+  <div id="fingerspellblock" class="not-prose">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- Left column: Hand image, input form, and info -->
+      <div class="lg:col-span-4">
+        <div id="leftblock">
+          <div id="handcontainer" class="">
+            <div id="handimage" class="text-center">
+              <img id="mainimg" src="/images/twohanded/transition.jpg" alt=""
+                class="w-full max-w-xs sm:max-w-sm lg:max-w-full mx-auto" />
+            </div>
+          </div>
+
+          <div id="fsinput" class="mt-4 border rounded p-4">
+            <form class="inline-form" id="inputarea" role="form">
+              <div class="form-group mb-3">
+                <label class="block text-sm font-medium mb-1" for="text">Enter Text</label>
+                <input class="form-control w-full px-2 py-1 border rounded" type="text" id="text"
+                  placeholder="Enter Text" />
+              </div>
+              <button class="btn btn-primary px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" type="submit">
+                Show
+              </button>
+            </form>
+
+            <form name="speedform" class="mt-4">
+              <fieldset>
+                <legend class="text-sm font-medium mb-2">Playback Speed</legend>
+                <div class="space-y-2">
+                  <label class="flex items-center">
+                    <input type="radio" name="speed" id="speed-slow" value="1500" class="mr-2" />
+                    <span>Slow</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="radio" name="speed" id="speed-medium" value="1000" checked class="mr-2" />
+                    <span>Medium</span>
+                  </label>
+                  <label class="flex items-center">
+                    <input type="radio" name="speed" id="speed-fast" value="500" class="mr-2" />
+                    <span>Fast</span>
+                  </label>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+
+          <div id="info" class="mt-4 text-sm">
+            <p class="mb-2">
+              <a href="/learning/finger-spelling/one-handed" class="text-blue-500 hover:underline">
+                One handed
+                fingerspelling signs for American Sign Language
+              </a>
+              are also available.
+            </p>
+            <p>
+              <a href="/learning/finger-spelling/practice" class="text-blue-500 hover:underline">
+                Practice your
+                fingerspelling
+              </a>
+              with randomly generated words.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right column: Fingerspelling table -->
+      <div class="lg:col-span-8">
+        <table id="fstable" class="border-collapse">
+          <tbody>
+            <!-- Row 1: A-E -->
+            <tr>
+              <td id="A" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_a.jpg" alt="A" class="block w-full" />
+                <div class="text-center text-sm font-medium">A</div>
+              </td>
+              <td id="B" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_b.jpg" alt="B" class="block w-full" />
+                <div class="text-center text-sm font-medium">B</div>
+              </td>
+              <td id="C" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_c.jpg" alt="C" class="block w-full" />
+                <div class="text-center text-sm font-medium">C</div>
+              </td>
+              <td id="D" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_d.jpg" alt="D" class="block w-full" />
+                <div class="text-center text-sm font-medium">D</div>
+              </td>
+              <td id="E" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_e.jpg" alt="E" class="block w-full" />
+                <div class="text-center text-sm font-medium">E</div>
+              </td>
+            </tr>
+            <!-- Row 2: F-J -->
+            <tr>
+              <td id="F" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_f.jpg" alt="F" class="block w-full" />
+                <div class="text-center text-sm font-medium">F</div>
+              </td>
+              <td id="G" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_g.jpg" alt="G" class="block w-full" />
+                <div class="text-center text-sm font-medium">G</div>
+              </td>
+              <td id="H" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_h0.jpg" alt="H" class="block w-full" />
+                <div class="text-center text-sm font-medium">H</div>
+              </td>
+              <td id="I" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_i.jpg" alt="I" class="block w-full" />
+                <div class="text-center text-sm font-medium">I</div>
+              </td>
+              <td id="J" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_j0.jpg" alt="J" class="block w-full" />
+                <div class="text-center text-sm font-medium">J</div>
+              </td>
+            </tr>
+            <!-- Row 3: K-O -->
+            <tr>
+              <td id="K" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_k.jpg" alt="K" class="block w-full" />
+                <div class="text-center text-sm font-medium">K</div>
+              </td>
+              <td id="L" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_l.jpg" alt="L" class="block w-full" />
+                <div class="text-center text-sm font-medium">L</div>
+              </td>
+              <td id="M" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_m.jpg" alt="M" class="block w-full" />
+                <div class="text-center text-sm font-medium">M</div>
+              </td>
+              <td id="N" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_n.jpg" alt="N" class="block w-full" />
+                <div class="text-center text-sm font-medium">N</div>
+              </td>
+              <td id="O" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_o.jpg" alt="O" class="block w-full" />
+                <div class="text-center text-sm font-medium">O</div>
+              </td>
+            </tr>
+            <!-- Row 4: P-T -->
+            <tr>
+              <td id="P" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_p.jpg" alt="P" class="block w-full" />
+                <div class="text-center text-sm font-medium">P</div>
+              </td>
+              <td id="Q" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_q.jpg" alt="Q" class="block w-full" />
+                <div class="text-center text-sm font-medium">Q</div>
+              </td>
+              <td id="R" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_r.jpg" alt="R" class="block w-full" />
+                <div class="text-center text-sm font-medium">R</div>
+              </td>
+              <td id="S" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_s.jpg" alt="S" class="block w-full" />
+                <div class="text-center text-sm font-medium">S</div>
+              </td>
+              <td id="T" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_t.jpg" alt="T" class="block w-full" />
+                <div class="text-center text-sm font-medium">T</div>
+              </td>
+            </tr>
+            <!-- Row 5: U-Y -->
+            <tr>
+              <td id="U" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_u.jpg" alt="U" class="block w-full" />
+                <div class="text-center text-sm font-medium">U</div>
+              </td>
+              <td id="V" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_v.jpg" alt="V" class="block w-full" />
+                <div class="text-center text-sm font-medium">V</div>
+              </td>
+              <td id="W" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_w.jpg" alt="W" class="block w-full" />
+                <div class="text-center text-sm font-medium">W</div>
+              </td>
+              <td id="X" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_x.jpg" alt="X" class="block w-full" />
+                <div class="text-center text-sm font-medium">X</div>
+              </td>
+              <td id="Y" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_y.jpg" alt="Y" class="block w-full" />
+                <div class="text-center text-sm font-medium">Y</div>
+              </td>
+            </tr>
+            <!-- Row 6: Z -->
+            <tr>
+              <td colspan="4" class="p-2 text-center text-sm">Click on letters to view.</td>
+              <td id="Z" class="p-0 cursor-pointer border border-gray-300 hover:bg-gray-100">
+                <img src="/images/twohanded/th_z.jpg" alt="Z" class="block w-full" />
+                <div class="text-center text-sm font-medium">Z</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var twohanded = {
+      "A": "twohanded/th_a.jpg",
+      "B": "twohanded/th_b.jpg",
+      "C": "twohanded/th_c.jpg",
+      "D": "twohanded/th_d.jpg",
+      "E": "twohanded/th_e.jpg",
+      "F": "twohanded/th_f.jpg",
+      "G": "twohanded/th_g.jpg",
+      "H": ["twohanded/th_h0.jpg", "twohanded/th_h1.jpg", "twohanded/th_h2.jpg", "twohanded/th_h3.jpg", "twohanded/th_h4.jpg"],
+      "I": "twohanded/th_i.jpg",
+      "J": ["twohanded/th_j0.jpg", "twohanded/th_j1.jpg", "twohanded/th_j2.jpg"],
+      "K": "twohanded/th_k.jpg",
+      "L": "twohanded/th_l.jpg",
+      "M": "twohanded/th_m.jpg",
+      "N": "twohanded/th_n.jpg",
+      "O": "twohanded/th_o.jpg",
+      "P": "twohanded/th_p.jpg",
+      "Q": "twohanded/th_q.jpg",
+      "R": "twohanded/th_r.jpg",
+      "S": "twohanded/th_s.jpg",
+      "T": "twohanded/th_t.jpg",
+      "U": "twohanded/th_u.jpg",
+      "V": "twohanded/th_v.jpg",
+      "W": "twohanded/th_w.jpg",
+      "X": "twohanded/th_x.jpg",
+      "Y": "twohanded/th_y.jpg",
+      "Z": "twohanded/th_z.jpg",
+      "transition": "twohanded/transition.jpg"
+    };
+
+    let animationTimer = null;
+
+    function updateImage(imageId, imageSrc) {
+      document.getElementById(imageId).src = imageSrc;
+    }
+
+    function planTransition(speed, baseUrl) {
+      return [{ src: baseUrl + "twohanded/transition.jpg", time: speed / 5 }];
+    }
+
+    function planLetter(letter, speed, baseUrl, images) {
+      letter = letter.toUpperCase();
+
+      if (images[letter] === undefined) {
+        return planTransition(speed, baseUrl);
+      }
+
+      if (typeof images[letter] === "object") {
+        const imgList = images[letter];
+        const result = [];
+        const briefTime = speed / 4;
+
+        for (let i = 0; i < imgList.length; i++) {
+          result.push({ src: baseUrl + imgList[i], time: briefTime });
+        }
+
+        return result;
+      } else {
+        return [{ src: baseUrl + images[letter], time: speed }];
+      }
+    }
+
+    function planString(str, speed, baseUrl, images) {
+      let plan = planTransition(speed, baseUrl);
+
+      for (let i = 0; i < str.length; i++) {
+        plan = plan.concat(planLetter(str[i], speed, baseUrl, images));
+
+        if (i < str.length - 1) {
+          plan = plan.concat(planTransition(speed, baseUrl));
+        }
+      }
+
+      return plan;
+    }
+
+    function animatePlan(imageId, plan) {
+      if (animationTimer) {
+        clearTimeout(animationTimer);
+      }
+
+      if (plan.length === 0) {
+        return;
+      }
+
+      const step = plan.shift();
+      updateImage(imageId, step.src);
+
+      animationTimer = setTimeout(() => {
+        animatePlan(imageId, plan);
+      }, step.time);
+    }
+
+    function displayLetter(imageId, letter, speed, baseUrl, images) {
+      const plan = planLetter(letter, speed, baseUrl, images);
+      animatePlan(imageId, plan);
+    }
+
+    function displayString(imageId, text, speed, baseUrl, images) {
+      const plan = planString(text, speed, baseUrl, images);
+      animatePlan(imageId, plan);
+    }
+
+    function fingerspellPlay(baseUrl, images) {
+      const inputEl = document.getElementById('text');
+      inputEl.blur();
+      const speedRadio = document.querySelector('input[type="radio"][name="speed"]:checked');
+      const speedVal = speedRadio ? speedRadio.value : '1000';
+      const speed = parseInt(speedVal, 10);
+      const textRaw = inputEl.value || "";
+      const text = textRaw.trim();
+
+      if (text.length === 0) {
+        return false;
+      }
+
+      try {
+        displayString('mainimg', text, speed, baseUrl, images);
+      } catch (err) {
+        console.error('Fingerspell playback error:', err);
+      }
+      return false;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      // Handle form submission
+      document.getElementById('inputarea').addEventListener('submit', function (e) {
+        e.preventDefault();
+        fingerspellPlay('/images/', twohanded);
+      });
+
+      // Handle letter clicks
+      const fstable = document.getElementById('fstable');
+      const rows = fstable.querySelectorAll('tr');
+
+      rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        cells.forEach(cell => {
+          if (cell.id && cell.id !== '' && cell.className !== 'p-2 text-center text-sm') {
+            cell.addEventListener('click', function () {
+              displayLetter('mainimg', cell.id, 1500, '/images/', twohanded);
+            });
+          }
+        });
+      });
+    });
+  </script>
+</Layouts.app>

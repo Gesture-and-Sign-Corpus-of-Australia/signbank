@@ -1,0 +1,155 @@
+<Layouts.app flash={@flash} current_scope={@current_scope}>
+  <div id="numbersigns" class="not-prose">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- Left column: Video player and description -->
+      <div class="lg:col-span-4">
+        <div id="leftblock">
+          <div id="videocontainer">
+            <div id="player">
+              <div class="video-wrapper">
+                <video id="number-video" class="video-js w-full max-w-sm lg:max-w-full" controls preload="auto"
+                  style="display: none;">
+                  <source id="video-source" src="" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            </div>
+          </div>
+
+          <p class="mt-4">
+            To view signs used to express numbers from ten to
+            one billion, click a sign
+            in the table, the corresponding video will
+            then play.
+          </p>
+        </div>
+      </div>
+      <!-- Right column: Number signs table -->
+      <div class="lg:col-span-8">
+        <table class="border-collapse">
+          <tbody>
+            <!-- Row 1: 0-4 -->
+            <tr>
+              <%= for num <- 0..4 do %>
+                <td class="p-0">
+                  <img src={"/images/numbersigns/ns_#{num}.jpg"} alt={"sign for #{num}"} class="block" />
+                </td>
+                <% end %>
+            </tr>
+            <!-- Row 2: 5-9 -->
+            <tr>
+              <%= for num <- 5..9 do %>
+                <td class="p-0">
+                  <img src={"/images/numbersigns/ns_#{num}.jpg"} alt={"sign for #{num}"} class="block" />
+                </td>
+                <% end %>
+            </tr>
+            <!-- Row 3: 10, 11-19, 20-90, 22-99, 200-900 -->
+            <tr>
+              <td class="p-0">
+                <a href="javascript:void(0)" class="selectable-sign-link" data-index="0">
+                  <img id="ns_010" src={~p"/images/numbersigns/ns_010.jpg"} width="95" height="91" alt=""
+                    class="border-0 block" data-number="010" data-video={~p"/images/numbersigns/ns_010.mp4"} />
+                </a>
+              </td>
+              <td class="p-0">
+                <a href="javascript:void(0)" class="selectable-sign-link" data-index="1">
+                  <img id="ns_011-019" src={~p"/images/numbersigns/ns_011-019.jpg"} width="94" height="91" alt=""
+                    class="border-0 block" data-number="011-019" data-video={~p"/images/numbersigns/ns_011-019.mp4"} />
+                </a>
+              </td>
+              <td class="p-0">
+                <a href="javascript:void(0)" class="selectable-sign-link" data-index="2">
+                  <img id="ns_020-090" src={~p"/images/numbersigns/ns_020-090.jpg"} width="94" height="91" alt=""
+                    class="border-0 block" data-number="020-090" data-video={~p"/images/numbersigns/ns_020-090.mp4"} />
+                </a>
+              </td>
+              <td class="p-0">
+                <a href="javascript:void(0)" class="selectable-sign-link" data-index="3">
+                  <img id="ns_022-099" src={~p"/images/numbersigns/ns_022-099.jpg"} width="94" height="91" alt=""
+                    class="border-0 block" data-number="022-099" data-video={~p"/images/numbersigns/ns_022-099.mp4"} />
+                </a>
+              </td>
+              <td class="p-0">
+                <a href="javascript:void(0)" class="selectable-sign-link" data-index="4">
+                  <img id="ns_200-900" src={~p"/images/numbersigns/ns_200-900.jpg"} width="93" height="91" alt=""
+                    class="border-0 block" data-number="200-900" data-video={~p"/images/numbersigns/ns_200-900.mp4"} />
+                </a>
+              </td>
+            </tr>
+            <!-- Row 4: 100, 1000, 1000000, 1000000000 -->
+            <tr>
+              <td class="p-0">
+                <a href="javascript:void(0)" class="selectable-sign-link" data-index="5">
+                  <img id="ns_100" src={~p"/images/numbersigns/ns_100.jpg"} width="95" height="92" alt=""
+                    class="border-0 block" data-number="100" data-video={~p"/images/numbersigns/ns_100.mp4"} />
+                </a>
+              </td>
+              <td class="p-0">
+                <a href="javascript:void(0)" class="selectable-sign-link" data-index="6">
+                  <img id="ns_1k" src={~p"/images/numbersigns/ns_1k.jpg"} width="94" height="92" alt=""
+                    class="border-0 block" data-number="1k" data-video={~p"/images/numbersigns/ns_1k.mp4"} />
+                </a>
+              </td>
+              <td class="p-0">
+                <a href="javascript:void(0)" class="selectable-sign-link" data-index="7">
+                  <img id="ns_1m" src={~p"/images/numbersigns/ns_1m.jpg"} width="94" height="92" alt=""
+                    class="border-0 block" data-number="1m" data-video={~p"/images/numbersigns/ns_1m.mp4"} />
+                </a>
+              </td>
+              <td class="p-0">
+                <a href="javascript:void(0)" class="selectable-sign-link" data-index="8">
+                  <img id="ns_1g" src={~p"/images/numbersigns/ns_1g.jpg"} width="94" height="92" alt=""
+                    class="border-0 block" data-number="1g" data-video={~p"/images/numbersigns/ns_1g.mp4"} />
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const selectableLinks = document.querySelectorAll('.selectable-sign-link');
+      const video = document.getElementById('number-video');
+      const videoSource = document.getElementById('video-source');
+      let currentSelected = null;
+
+      selectableLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          const img = this.querySelector('img');
+          const number = img.dataset.number;
+          const videoUrl = img.dataset.video;
+
+          // Deselect previous selection
+          if (currentSelected && currentSelected !== img) {
+            const prevNumber = currentSelected.dataset.number;
+            currentSelected.src = `/images/numbersigns/ns_${prevNumber}.jpg`;
+          }
+
+          // Toggle selection
+          if (currentSelected === img) {
+            // Deselect
+            img.src = `/images/numbersigns/ns_${number}.jpg`;
+            currentSelected = null;
+            video.style.display = 'none';
+            video.pause();
+          } else {
+            // Select
+            img.src = `/images/numbersigns/ns_${number}_select.jpg`;
+            currentSelected = img;
+
+            // Show and play video
+            videoSource.src = videoUrl;
+            video.load();
+            video.style.display = 'block';
+            video.play();
+          }
+        });
+      });
+    });
+  </script>
+</Layouts.app>

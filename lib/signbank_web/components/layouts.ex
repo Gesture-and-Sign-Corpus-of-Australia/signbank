@@ -114,13 +114,14 @@ defmodule SignbankWeb.Layouts do
     ~H"""
     <ul class={[@base_class, @class]} {@rest}>
       <li>
-        <form action="/dictionary/sign" method="GET">
+        <form action="/dictionary/sign" method="GET" onsubmit="return validateSearchForm(event)">
           <div class="join flex text-black">
             <div class="join-item">
               <input
                 class="input"
                 type="text"
                 name="q"
+                id="main-search-input"
                 placeholder={gettext("Search by English keyword…")}
               />
             </div>
@@ -156,6 +157,14 @@ defmodule SignbankWeb.Layouts do
           <.nav_item href={~p"/research/vocabulary"}>{gettext("Vocabulary")}</.nav_item>
           <.nav_item href={~p"/about/grammar"}>{gettext("Grammar")}</.nav_item>
           <.nav_item href={~p"/dictionary/search"}>{gettext("Advanced search")}</.nav_item>
+        </:children>
+      </.nav_item>
+
+      <.nav_item mobile={@mobile}>
+        {gettext("Learning")}
+        <:children>
+          <.nav_item href={~p"/learning/number-signs"}>{gettext("Number signs")}</.nav_item>
+          <.nav_item href={~p"/learning/finger-spelling"}>{gettext("Finger spelling")}</.nav_item>
         </:children>
       </.nav_item>
     </ul>

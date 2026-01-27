@@ -33,6 +33,7 @@ defmodule SignbankWeb.Router do
     get "/about/dictionary", PageController, :dictionary
     live "/about/grammar", GrammarLive
     get "/research/vocabulary", PageController, :vocabulary
+    get "/settings", PageController, :settings
 
     live "/dictionary/search", Search, :show
     live "/dictionary/phonological-search", SignLive.PhonologicalSearch, :show
@@ -41,6 +42,12 @@ defmodule SignbankWeb.Router do
     live "/dictionary/sign/", SignLive.Basic, :search
     live "/dictionary/sign/:id", SignLive.Basic, :show
     live "/dictionary/sign/:id/detail", SignLive.Detail, :show
+
+    get "learning/number-signs", PageController, :number_signs
+    get "learning/finger-spelling", PageController, :finger_spelling
+    get "learning/auslan-spell", PageController, :auslan_spell
+    get "learning/finger-spelling/one-handed", PageController, :one_handed
+    get "learning/finger-spelling/practice", PageController, :practice
   end
 
   # Editor routes
