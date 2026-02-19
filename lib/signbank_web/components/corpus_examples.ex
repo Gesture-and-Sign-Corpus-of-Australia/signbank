@@ -1,7 +1,7 @@
 # TODO: this is not namespaced correctly
 defmodule SignbankWeb.CorpusExamples do
   @moduledoc """
-  Shows a list of examples from the Auslan corpus.
+  Shows a single example from the Auslan corpus.
   """
   use SignbankWeb, :live_component
   alias Signbank.Corpus
@@ -11,42 +11,50 @@ defmodule SignbankWeb.CorpusExamples do
   attr :gloss, :atom, default: :inline
 
   def render(assigns) do
-    assigns =
-      assign(
-        assigns,
-        examples: Corpus.examples_for_gloss(assigns.gloss)
-      )
-
     ~H"""
     <div>
       <%= if !Enum.empty?(@examples) do %>
         <%= if @version == :inline do %>
           inline version
           <div :for={example <- @examples}>
-            <%!-- <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{example.video_url}"} /> --%>
             {example.video_url}
           </div>
         <% else %>
-          <%!-- <.button
-            onclick={"corpus_examples_modal__#{@gloss}.showModal()"}
-          >Show examples for {@gloss}</.button> --%>
-
-          <.modal_examples gloss={@gloss} examples={@examples} />
+          <button
+            type="button"
+            class="btn"
+            phx-click="randomize_example"
+            phx-target={@myself}
+          >
+            Show corpus examples
+          </button>
+          <dialog id={"corpus_examples_modal__#{@gloss}"} class="modal">
+            <div class="modal-box">
+              <%= if @current_example do %>
+                <.example_with_elan
+                  example={@current_example}
+                  id={"example_#{@current_example.id}"}
+                />
+              <% end %>
+              <div class="modal-action">
+                <button
+                  :if={length(@examples) > 1}
+                  type="button"
+                  class="btn btn-ghost"
+                  phx-click="randomize_example"
+                  phx-target={@myself}
+                >
+                  Show another
+                </button>
+                <form method="dialog">
+                  <button class="btn">Close</button>
+                </form>
+              </div>
+            </div>
+          </dialog>
         <% end %>
       <% end %>
     </div>
-    """
-  end
-
-  def modal_examples(assigns) do
-    ~H"""
-    <.modal id={"corpus_examples_modal__#{@gloss}"} button_label="Show corpus examples">
-      <div class="space-y-6">
-        <div :for={example <- @examples}>
-          <.example_with_elan example={example} id={"example_#{example.id}"} />
-        </div>
-      </div>
-    </.modal>
     """
   end
 
@@ -58,8 +66,6 @@ defmodule SignbankWeb.CorpusExamples do
       assigns
       |> assign_new(:id, fn -> "example_#{assigns.example.id}" end)
       |> assign_new(:elan_data, fn -> load_elan_for_example(assigns.example) end)
-      # For quick testing, fall back to demo ELAN data if none is found on disk
-      |> then(fn a -> assign(a, :elan_data, a.elan_data || demo_elan_data()) end)
 
     ~H"""
     <div class="space-y-4 mb-8">
@@ -84,6 +90,7 @@ defmodule SignbankWeb.CorpusExamples do
             tiers={@elan_data.tiers}
             duration={@elan_data.duration}
             video_id={"video_#{@id}"}
+            highlight={@example.annotation_text}
           />
         </div>
       <% end %>
@@ -92,7 +99,24 @@ defmodule SignbankWeb.CorpusExamples do
   end
 
   def update(assigns, socket) do
-    {:ok, assign(socket, assigns)}
+    examples = Corpus.examples_for_gloss(assigns.gloss)
+
+    {:ok,
+     socket
+     |> assign(assigns)
+     |> assign(:examples, examples)
+     |> assign_new(:current_example, fn -> nil end)}
+  end
+
+  def handle_event("randomize_example", _params, socket) do
+    example = Enum.random(socket.assigns.examples)
+
+    socket =
+      socket
+      |> assign(:current_example, example)
+      |> push_event("open_modal", %{id: "corpus_examples_modal__#{socket.assigns.gloss}"})
+
+    {:noreply, socket}
   end
 
   def handle_info({:seek_video, time_ms}, socket) do
@@ -104,91 +128,42 @@ defmodule SignbankWeb.CorpusExamples do
      })}
   end
 
-  # Load ELAN data for a specific example
+  # Clip padding in ms — must match @clip_padding_ms in CorpusExampleTrimmer
+  @clip_padding_ms 2_500
+
+  # Load ELAN data for a specific example, filtered to relevant tiers and time range.
+  # The actual video clip has @clip_padding_ms of padding on each side of the annotation,
+  # so we use the full clip boundaries for filtering and time-shifting.
   defp load_elan_for_example(example) do
-    # Try to find corresponding .eaf file based on video_url
     case example do
-      %{video_url: video_url} when is_binary(video_url) ->
-        # Replace video extension with .eaf
-        eaf_path = String.replace(video_url, ~r/\.(mp4|mov|avi)$/i, ".eaf")
-        load_elan_file(eaf_path)
+      %{source_video_id: source_video_id, start_ms: start_ms, end_ms: end_ms}
+      when is_binary(source_video_id) ->
+        eaf_filename = String.replace(source_video_id, ~r/\.(mp4|mov|avi)$/i, ".eaf")
+        clip_start = max(start_ms - @clip_padding_ms, 0)
+        clip_end = end_ms + @clip_padding_ms
+        load_elan_file(eaf_filename, start_ms: clip_start, end_ms: clip_end)
 
       _ ->
         nil
     end
   end
 
-  defp load_elan_file(path) do
+  defp load_elan_file(filename, opts) do
     media_dir = Application.get_env(:signbank, :media_dir, "priv/static/media")
-    full_path = Path.join(media_dir, path)
+    full_path = Path.join(media_dir, filename)
 
     case File.read(full_path) do
       {:ok, content} ->
-        ElanParser.parse(content)
+        ElanParser.parse(content,
+          tiers: ElanParser.relevant_tiers(),
+          start_ms: Keyword.get(opts, :start_ms),
+          end_ms: Keyword.get(opts, :end_ms)
+        )
 
       {:error, _reason} ->
-        # No ELAN file found
         nil
     end
   rescue
-    _ ->
-      # If parsing fails, return nil
-      nil
+    _ -> nil
   end
-
-  # Demo data to render the ELAN viewer even if no .eaf is available
-  defp demo_elan_data do
-    %{
-      duration: 60_000,
-      tiers: [
-        %{name: "RH-IDgloss", annotations: [
-          %{start: 0, end: 1_500, text: "HELLO"},
-          %{start: 2_000, end: 3_500, text: "WORLD"}
-        ]},
-        %{name: "LH-IDgloss", annotations: [
-          %{start: 0, end: 1_500, text: "HELLO"},
-          %{start: 2_000, end: 3_500, text: "WORLD"}
-        ]},
-        %{name: "LitTransl", annotations: [
-          %{start: 0, end: 3_500, text: "Hello world"}
-        ]},
-        %{name: "FreeTransl", annotations: [
-          %{start: 0, end: 3_500, text: "Hello world"}
-        ]}
-      ]
-    }
-  end
-
-  # TODO: delete commented out code
-  # def render(assigns) do
-  #   examples = :ets.lookup(:corpus_annotations_index, assigns.gloss)
-  #   IO.inspect(examples)
-
-  #   assigns =
-  #     if Enum.count(examples) > 0 do
-  #       [{_gloss, _transcription_filename, [start_ms, end_ms]}|_] = examples
-  #       assign(
-  #         assigns,
-  #         example: %{
-  #           start_ms: start_ms,
-  #           end_ms: end_ms
-  #         }
-  #       )
-  #     else
-  #       assign(
-  #         assigns,
-  #         example: %{}
-  #       )
-  #     end
-  #   ~H"""
-  #   <div>
-  #   <%= if @version == :inline do%>
-  #     inline version
-  #       {Map.get(@example, :start_ms, "nothing")}
-  #   <% else %>
-  #     <button>See examples for {@gloss}</button>
-  #   <% end %>
-  #   </div>
-  #   """
-  # end
 end

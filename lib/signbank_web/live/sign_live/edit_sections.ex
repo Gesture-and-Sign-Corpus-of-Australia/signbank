@@ -22,7 +22,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Initial dom hand")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   field={phonology_f[:dominant_initial_handshape]}
@@ -31,7 +30,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               </td>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand! allophone_field"
                   type="select"
                   field={phonology_f[:dominant_initial_handshape_allophone]}
@@ -43,7 +41,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Final dom hand")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   field={phonology_f[:dominant_final_handshape]}
@@ -52,7 +49,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               </td>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand! allophone_field"
                   type="select"
                   field={phonology_f[:dominant_final_handshape_allophone]}
@@ -64,7 +60,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Initial sub hand")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-subordinate-hand!"
                   type="select"
                   field={phonology_f[:subordinate_initial_handshape]}
@@ -73,7 +68,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               </td>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-subordinate-hand! allophone_field"
                   type="select"
                   field={phonology_f[:subordinate_initial_handshape_allophone]}
@@ -85,7 +79,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Final sub hand")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-subordinate-hand!"
                   type="select"
                   field={phonology_f[:subordinate_final_handshape]}
@@ -94,7 +87,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               </td>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-subordinate-hand! allophone_field"
                   type="select"
                   field={phonology_f[:subordinate_final_handshape_allophone]}
@@ -116,7 +108,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Initial primary loc")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select"
                   type="select"
                   field={phonology_f[:initial_primary_location]}
@@ -128,7 +119,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Final primary loc")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select"
                   type="select"
                   field={phonology_f[:final_primary_location]}
@@ -140,7 +130,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Loc rightside or leftside")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select"
                   type="select"
                   field={phonology_f[:location_rightside_or_leftside]}
@@ -164,7 +153,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Initial dom finger hand ori")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   field={phonology_f[:dominant_initial_finger_hand_orientation]}
@@ -176,7 +164,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Final dom finger hand ori")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   field={phonology_f[:dominant_final_finger_hand_orientation]}
@@ -188,7 +175,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Initial sub finger hand ori")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-subordinate-hand!"
                   type="select"
                   field={phonology_f[:subordinate_initial_finger_hand_orientation]}
@@ -200,7 +186,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Final sub finger hand ori")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-subordinate-hand!"
                   type="select"
                   field={phonology_f[:subordinate_final_finger_hand_orientation]}
@@ -222,7 +207,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Initial dom palm ori")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   field={phonology_f[:dominant_initial_palm_orientation]}
@@ -234,7 +218,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Final dom palm ori")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   field={phonology_f[:dominant_final_palm_orientation]}
@@ -246,7 +229,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Initial sub palm ori")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-subordinate-hand!"
                   type="select"
                   field={phonology_f[:subordinate_initial_palm_orientation]}
@@ -258,7 +240,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Final sub palm ori")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-subordinate-hand!"
                   type="select"
                   field={phonology_f[:subordinate_final_palm_orientation]}
@@ -280,7 +261,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Initial dom interact handpart")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   field={phonology_f[:dominant_initial_interacting_handpart]}
@@ -292,7 +272,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Final dom interact handpart")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   field={phonology_f[:dominant_final_interacting_handpart]}
@@ -304,7 +283,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Initial sub interact handpart")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-subordinate-hand!"
                   type="select"
                   field={phonology_f[:subordinate_initial_interacting_handpart]}
@@ -316,7 +294,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Final sub interact handpart")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-subordinate-hand!"
                   type="select"
                   field={phonology_f[:subordinate_final_interacting_handpart]}
@@ -378,7 +355,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("change handshape")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   options={[nil, true, false]}
@@ -390,7 +366,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("change open")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   options={[nil, true, false]}
@@ -402,7 +377,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("change close")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   options={[nil, true, false]}
@@ -414,7 +388,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("change orientation")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   options={[nil, true, false]}
@@ -436,7 +409,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("forearm rotation")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   options={[nil, true, false]}
@@ -448,7 +420,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("wrist nod")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   options={[nil, true, false]}
@@ -460,7 +431,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("fingers bend")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   options={[nil, true, false]}
@@ -472,7 +442,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("fingers straighten")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   options={[nil, true, false]}
@@ -484,7 +453,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("fingers wiggle")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   options={[nil, true, false]}
@@ -496,7 +464,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("fingers crumble")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   options={[nil, true, false]}
@@ -518,7 +485,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("movement_dominant_hand_only")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   options={[nil, true, false]}
@@ -576,7 +542,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("movement_direction")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   options={[nil] ++ Signbank.Dictionary.Phonology.directions()}
@@ -588,7 +553,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("movement_path")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   options={[nil] ++ Signbank.Dictionary.Phonology.paths()}
@@ -600,7 +564,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("movement_repeated")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   options={[nil, true, false]}
@@ -612,7 +575,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("repetition_type")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select w-full bg-dominant-hand!"
                   type="select"
                   options={[nil] ++ Signbank.Dictionary.Phonology.repetition_types()}
@@ -640,7 +602,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{"hamnosys (variant analysis)"}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="hamnosys"
                   type="text"
                   field={phonology_f[:hamnosys_variant_analysis]}
@@ -720,7 +681,6 @@ defmodule SignbankWeb.SignLive.EditSections do
           <tr>
             <td>
               <.regions_checkgroup
-                form="sign-form"
                 field={@form[:regions]}
                 options={
                   Signbank.Dictionary.SignRegion.regions()
@@ -743,7 +703,6 @@ defmodule SignbankWeb.SignLive.EditSections do
             <th>{gettext("Technical/specialist jargon")}</th>
             <td>
               <.input
-                form="sign-form"
                 class="select"
                 type="select"
                 field={@form[:lexis_technical_or_specialist_jargon]}
@@ -755,7 +714,6 @@ defmodule SignbankWeb.SignLive.EditSections do
             <th>{gettext("Marginal/minority")}</th>
             <td>
               <.input
-                form="sign-form"
                 class="select"
                 type="select"
                 field={@form[:lexis_marginal_or_minority]}
@@ -766,14 +724,12 @@ defmodule SignbankWeb.SignLive.EditSections do
           <tr>
             <th>{gettext("Obsolete")}</th>
             <td>
-              <.input form="sign-form" type="select" field={@form[:lexis_obsolete]} options={[nil, true, false]} />
             </td>
           </tr>
           <tr>
             <th>{gettext("Anglican/state school")}</th>
             <td>
               <.input
-                form="sign-form"
                 class="select"
                 type="select"
                 field={@form[:school_anglican_or_state]}
@@ -785,7 +741,6 @@ defmodule SignbankWeb.SignLive.EditSections do
             <th>{gettext("Catholic school")}</th>
             <td>
               <.input
-                form="sign-form"
                 class="select"
                 type="select"
                 field={@form[:school_catholic]}
@@ -796,7 +751,6 @@ defmodule SignbankWeb.SignLive.EditSections do
           <tr>
             <th>{gettext("Crude & offensive")}</th>
             <td>
-              <.input form="sign-form" type="select" field={@form[:crude]} options={[nil, true, false]} />
             </td>
           </tr>
         </tbody>
@@ -812,7 +766,6 @@ defmodule SignbankWeb.SignLive.EditSections do
           <tr>
             <th>{gettext("BSL recent loan sign")}</th>
             <td>
-              <.input form="sign-form" type="select" field={@form[:is_bsl_loan]} options={[nil, true, false]} />
             </td>
           </tr>
           <tr>
@@ -824,7 +777,6 @@ defmodule SignbankWeb.SignLive.EditSections do
           <tr>
             <th>{gettext("ASL recent loan sign")}</th>
             <td>
-              <.input form="sign-form" type="select" field={@form[:is_asl_loan]} options={[nil, true, false]} />
             </td>
           </tr>
           <tr>
@@ -837,7 +789,6 @@ defmodule SignbankWeb.SignLive.EditSections do
             <th>{gettext("SE based on Auslan")}</th>
             <td>
               <.input
-                form="sign-form"
                 class="select"
                 type="select"
                 field={@form[:is_signed_english_based_on_auslan]}
@@ -865,7 +816,6 @@ defmodule SignbankWeb.SignLive.EditSections do
             <th>{gettext("Iconicity")}</th>
             <td>
               <.input
-                form="sign-form"
                 class="select"
                 type="select"
                 field={@form[:iconicity]}
@@ -915,7 +865,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Directional")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select"
                   type="select"
                   field={morphology_f[:directional]}
@@ -927,7 +876,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Begin directional sign")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select"
                   type="select"
                   field={morphology_f[:beginning_directional]}
@@ -939,7 +887,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("End directional sign")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select"
                   type="select"
                   field={morphology_f[:end_directional]}
@@ -951,7 +898,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Orientating sign")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select"
                   type="select"
                   field={morphology_f[:orientating]}
@@ -963,7 +909,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("Body locating sign")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select"
                   type="select"
                   field={morphology_f[:body_locating]}
@@ -985,7 +930,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("is_fingerspelled_word")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select"
                   type="select"
                   field={morphology_f[:is_fingerspelled_word]}
@@ -997,7 +941,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("is_alphabet")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select"
                   type="select"
                   field={morphology_f[:is_alphabet]}
@@ -1009,7 +952,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("is_abbreviation")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select"
                   type="select"
                   field={morphology_f[:is_abbreviation]}
@@ -1021,7 +963,6 @@ defmodule SignbankWeb.SignLive.EditSections do
               <th>{gettext("is_initialism")}</th>
               <td>
                 <.input
-                  form="sign-form"
                   class="select"
                   type="select"
                   field={morphology_f[:is_initialism]}

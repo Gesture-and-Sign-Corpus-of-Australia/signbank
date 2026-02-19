@@ -30,6 +30,34 @@ let Hooks = {}
 
 Hooks.InitSorting = InitSorting
 
+Hooks.UnsavedChanges = {
+  mounted() {
+    this.beforeUnload = (e) => {
+      if (this.el.dataset.touched === "true") {
+        e.preventDefault();
+        e.returnValue = "";
+      }
+    };
+    window.addEventListener("beforeunload", this.beforeUnload);
+
+    // Intercept LiveView patch navigation (tab switches, back nav)
+    this.handleBeforeNav = (e) => {
+      if (this.el.dataset.touched === "true") {
+        if (!window.confirm("You have unsaved changes. Leave without saving?")) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+      }
+    };
+    window.addEventListener("phx:page-loading-start", this.handleBeforeNav);
+  },
+
+  destroyed() {
+    window.removeEventListener("beforeunload", this.beforeUnload);
+    window.removeEventListener("phx:page-loading-start", this.handleBeforeNav);
+  }
+}
+
 Hooks.VideoAutoplay = {
   mounted() {
     this.el.addEventListener('mouseenter', () => {
@@ -143,19 +171,187 @@ window.addHandshapeFilter = (value) => {
 
 }
 
-const VideoPlayer = {
+Hooks.VideoPlayer = {
   mounted() {
+    const video = this.el;
+    const videoId = video.id;
+
     this.handleEvent("seek_video", ({video_id, time}) => {
-      const video = document.getElementById(video_id);
-      if (video) {
-        video.currentTime = time;
-        video.play();
+      const v = document.getElementById(video_id);
+      if (v) {
+        v.currentTime = time;
+        v.play();
       }
     });
+
+    // Broadcast timeupdate so ElanPlayhead hooks can follow along
+    const onTimeUpdate = () => {
+      window.dispatchEvent(new CustomEvent("video_timeupdate", {
+        detail: { video_id: videoId, time: video.currentTime }
+      }));
+    };
+    video.addEventListener("timeupdate", onTimeUpdate);
+
+    // Spacebar to toggle play/pause (only when this video's viewer area is in focus)
+    const onKeyDown = (e) => {
+      if (e.code !== "Space" || e.repeat) return;
+      // Don't intercept if user is typing in an input/textarea
+      const tag = document.activeElement?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+      e.preventDefault();
+      e.stopPropagation();
+      // Blur the video so native controls don't also toggle on keyup
+      if (document.activeElement === video || video.contains(document.activeElement)) {
+        document.activeElement.blur();
+      }
+      if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    };
+    // Prevent the browser from firing a native "click" on the focused video on key release,
+    // which would undo our toggle.
+    const onKeyUp = (e) => {
+      if (e.code !== "Space") return;
+      const tag = document.activeElement?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+      e.preventDefault();
+      e.stopPropagation();
+    };
+    document.addEventListener("keydown", onKeyDown, true);
+    document.addEventListener("keyup", onKeyUp, true);
+
+    this._cleanup = () => {
+      video.removeEventListener("timeupdate", onTimeUpdate);
+      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("keyup", onKeyUp);
+    };
+  },
+
+  destroyed() {
+    if (this._cleanup) this._cleanup();
   }
 };
 
-export default VideoPlayer;
+Hooks.ElanPlayhead = {
+  mounted() {
+    const el = this.el;
+    const videoId = el.dataset.videoId;
+    const duration = parseFloat(el.dataset.duration);        // ms
+    const pxPerMs = parseFloat(el.dataset.pixelsPerMs);
+    const playhead = el.querySelector("[id$='-playhead']");
+    const ruler = el.querySelector("[id$='-ruler']");
+
+    if (!playhead || !ruler) return;
+
+    // Show the playhead
+    playhead.style.display = "";
+
+    // ---- Follow video playback ----
+    const onTimeUpdate = (e) => {
+      if (e.detail.video_id !== videoId) return;
+      const timeMs = e.detail.time * 1000;
+      const x = timeMs * pxPerMs;
+      playhead.style.left = x + "px";
+
+      // Auto-scroll to keep the playhead visible within the container
+      const viewLeft = el.scrollLeft;
+      const viewRight = viewLeft + el.clientWidth;
+      // Use a margin so the playhead doesn't hug the very edge
+      const margin = el.clientWidth * 0.2;
+      if (x > viewRight - margin) {
+        el.scrollLeft = x - margin;
+      } else if (x < viewLeft) {
+        el.scrollLeft = Math.max(0, x - margin);
+      }
+    };
+    window.addEventListener("video_timeupdate", onTimeUpdate);
+
+    // ---- Helper: compute time from mouse x position ----
+    // getBoundingClientRect() is viewport-relative and already accounts for scroll,
+    // so we must NOT add el.scrollLeft (that would double-count).
+    const timeFromMouseEvent = (e) => {
+      const rect = ruler.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const clampedX = Math.max(0, Math.min(x, duration * pxPerMs));
+      return { x: clampedX, timeSec: (clampedX / pxPerMs) / 1000 };
+    };
+
+    // ---- Click on ruler to seek ----
+    const onRulerClick = (e) => {
+      const { x, timeSec } = timeFromMouseEvent(e);
+      const video = document.getElementById(videoId);
+      if (video) {
+        video.currentTime = timeSec;
+        video.play();
+      }
+      playhead.style.left = x + "px";
+    };
+    ruler.addEventListener("click", onRulerClick);
+
+    // ---- Drag on ruler to scrub (mousedown on ruler starts drag) ----
+    let dragging = false;
+
+    const onRulerMouseDown = (e) => {
+      // Only left-click
+      if (e.button !== 0) return;
+      e.preventDefault();
+      dragging = true;
+      document.body.style.cursor = "grabbing";
+      document.body.style.userSelect = "none";
+
+      // Immediately seek to click position
+      const { x, timeSec } = timeFromMouseEvent(e);
+      playhead.style.left = x + "px";
+      const video = document.getElementById(videoId);
+      if (video) video.currentTime = timeSec;
+    };
+    ruler.addEventListener("mousedown", onRulerMouseDown);
+
+    // Also allow starting a drag from the playhead handle
+    const handle = playhead.querySelector("div");
+    const onHandleMouseDown = (e) => {
+      e.preventDefault();
+      dragging = true;
+      document.body.style.cursor = "grabbing";
+      document.body.style.userSelect = "none";
+    };
+    if (handle) handle.addEventListener("mousedown", onHandleMouseDown);
+
+    const onMouseMove = (e) => {
+      if (!dragging) return;
+      const { x, timeSec } = timeFromMouseEvent(e);
+      playhead.style.left = x + "px";
+      const video = document.getElementById(videoId);
+      if (video) video.currentTime = timeSec;
+    };
+
+    const onMouseUp = () => {
+      if (!dragging) return;
+      dragging = false;
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+    };
+
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+
+    // Store references for cleanup
+    this._cleanup = () => {
+      window.removeEventListener("video_timeupdate", onTimeUpdate);
+      ruler.removeEventListener("click", onRulerClick);
+      ruler.removeEventListener("mousedown", onRulerMouseDown);
+      if (handle) handle.removeEventListener("mousedown", onHandleMouseDown);
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+    };
+  },
+
+  destroyed() {
+    if (this._cleanup) this._cleanup();
+  }
+};
 
 window.validateSearchForm = (event) => {
   const searchInput = document.getElementById('main-search-input');
@@ -194,6 +390,12 @@ window.addEventListener("phx:phon-filter-highlight", (e) => {
 topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
 window.addEventListener("phx:page-loading-start", _info => topbar.show(300))
 window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
+
+// Open a <dialog> modal from a server-pushed event
+window.addEventListener("phx:open_modal", (e) => {
+  const dialog = document.getElementById(e.detail.id);
+  if (dialog && !dialog.open) dialog.showModal();
+});
 
 // connect if there are any LiveViews on the page
 liveSocket.connect()

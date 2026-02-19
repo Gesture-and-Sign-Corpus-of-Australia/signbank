@@ -53,3 +53,5 @@ uploads/
 upload_staging/
 
 *.eaf
+
+lib/signbank/corpus/*.mp4

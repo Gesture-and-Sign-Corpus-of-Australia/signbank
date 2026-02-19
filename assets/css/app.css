@@ -38,10 +38,14 @@
 
   @font-face {
     font-family: hamnosys;
-    src: url("/fonts/hamnosysunicode-webfont.woff2") format("woff2"), url("/fonts/hamnosysunicode-webfont.ttf") format("ttf");
+    src: url("/fonts/hamnosysunicode-webfont.woff2") format("woff2"), url("/fonts/hamnosysunicode-webfont.ttf") format("truetype");
     font-style: normal;
     font-weight: normal;
   }
+}
+
+.hamnosys {
+  font-family: hamnosys, sans-serif;
 }
 
 @theme {

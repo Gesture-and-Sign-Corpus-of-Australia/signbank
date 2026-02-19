@@ -175,18 +175,26 @@ defmodule Signbank.Dictionary.Sign do
   end
 
   defp put_keywords(changeset, sign, attrs) do
-    keywords =
-      for keyword <- Map.get(attrs, "keywords", []) do
-        Enum.find(
-          sign.keywords,
-          sign
-          |> Ecto.build_assoc(:keywords)
-          |> Ecto.Changeset.cast(%{text: keyword}, [:text]),
-          &(&1.text == keyword)
-        )
-      end
+    if Map.has_key?(attrs, "keywords") do
+      keywords =
+        attrs
+        |> Map.get("keywords", [])
+        |> Enum.map(&String.trim/1)
+        |> Enum.reject(&(&1 == ""))
+        |> Enum.uniq_by(&String.downcase/1)
+        |> Enum.map(fn keyword ->
+          Enum.find(sign.keywords, fn existing ->
+            String.downcase(existing.text) == String.downcase(keyword)
+          end) ||
+            (sign
+             |> Ecto.build_assoc(:keywords)
+             |> Dictionary.SignKeyword.changeset(%{text: keyword}))
+        end)
 
-    put_assoc(changeset, :keywords, keywords)
+      put_assoc(changeset, :keywords, keywords)
+    else
+      changeset
+    end
   end
 
   defp put_regions(changeset, sign, attrs) do

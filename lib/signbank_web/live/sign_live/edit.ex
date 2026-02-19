@@ -80,11 +80,12 @@ defmodule SignbankWeb.SignLive.Edit do
     end
   end
 
-  defp maybe_preserve_keywords(sign_params, socket) do
-    # Preserve existing keywords if keywords_joined was empty
+  defp maybe_preserve_keywords(sign_params, _socket) do
+    # If no keywords were provided (e.g. saving from a non-glossing form),
+    # remove the key entirely so existing keywords are left untouched.
     case sign_params do
       %{"keywords" => []} ->
-        Map.put(sign_params, "keywords", socket.assigns.sign.keywords)
+        Map.delete(sign_params, "keywords")
       _ ->
         sign_params
     end
@@ -92,11 +93,27 @@ defmodule SignbankWeb.SignLive.Edit do
 
   defp filter_by_section(sign_params, current_section) do
     # Always include glossing and keyword fields
-    glossing_fields = ["id_gloss_annotation", "id_gloss_variant_analysis", "keywords"]
+    glossing_fields = ["id_gloss_annotation", "id_gloss_variant_analysis", "keywords", "active_video"]
 
     section_fields = case current_section do
       :phonology -> ["phonology"]
-      :vocabulary -> ["regions"]
+      :vocabulary -> [
+        "regions",
+        "lexis_technical_or_specialist_jargon",
+        "lexis_marginal_or_minority",
+        "lexis_obsolete",
+        "school_anglican_or_state",
+        "school_catholic",
+        "crude",
+        "is_bsl_loan",
+        "bsl_gloss",
+        "is_asl_loan",
+        "asl_gloss",
+        "is_signed_english_based_on_auslan",
+        "signed_english_gloss",
+        "iconicity",
+        "popular_explanation"
+      ]
       :morphology -> ["morphology"]
       :definitions -> ["definitions", "definitions_position"]
       :editorial -> [
@@ -175,15 +192,19 @@ defmodule SignbankWeb.SignLive.Edit do
   end
 
   defp process_sign_params(sign_params) do
-    sign_params
-    |> Map.put(
-      "keywords",
-      ~r/,(?=(?:[^\(\)]*\([^\(\)]*\))*[^\(\)]*$)/
-      |> Regex.split(sign_params["keywords_joined"] || "")
-      |> Enum.map(&String.trim(&1))
-      |> Enum.filter(&(&1 != ""))
-    )
-    |> Map.delete("keywords_joined")
+    if Map.has_key?(sign_params, "keywords_joined") do
+      sign_params
+      |> Map.put(
+        "keywords",
+        ~r/,(?=(?:[^\(\)]*\([^\(\)]*\))*[^\(\)]*$)/
+        |> Regex.split(sign_params["keywords_joined"] || "")
+        |> Enum.map(&String.trim(&1))
+        |> Enum.filter(&(&1 != ""))
+      )
+      |> Map.delete("keywords_joined")
+    else
+      sign_params
+    end
   end
 
   defp presign_upload(entry, %{assigns: %{uploads: uploads}} = socket) do

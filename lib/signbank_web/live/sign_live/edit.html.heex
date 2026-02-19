@@ -67,7 +67,7 @@
     </.link>
   </nav>
 
-  <div class="edit_layout">
+  <div id="edit-unsaved-guard" class="edit_layout" phx-hook="UnsavedChanges" data-touched={to_string(@touched)}>
     <%!-- Left Sidebar - Always visible --%>
     <aside class="edit_sidebar">
       <div id="video_section">
@@ -94,7 +94,7 @@
             <% end %>
           </.inputs_for>
           <div>
-            We have {@form[:videos].value |> Enum.count()} videos for this sign.
+            We have {@form[:videos].value |> Enum.count()} video(s) for this sign.
           </div>
 
           <label for={@uploads.video.ref}>Upload new video:</label>
@@ -138,6 +138,12 @@
               />
             </div>
           </div>
+
+          <div class="flex flex-col">
+            <button form="glossing-form" class="btn">
+              {gettext("Save glossing/keywords")}
+            </button>
+          </div>
         </.form>
       </div>
 
@@ -178,7 +184,7 @@
           <SignbankWeb.SignLive.EditSections.phonology_section form={@form} sign={@sign} />
           <div class="mt-4">
             <button form="phonology-form" class="btn">
-              {gettext("Save")}{if assigns[:touched], do: "*"}
+              {gettext("Save")}
             </button>
           </div>
         </.form>
@@ -190,7 +196,7 @@
           <SignbankWeb.SignLive.EditSections.vocabulary_section form={@form} sign={@sign} />
           <div class="mt-4">
             <button form="vocabulary-form" class="btn">
-              {gettext("Save")}{if assigns[:touched], do: "*"}
+              {gettext("Save")}
             </button>
           </div>
         </.form>
@@ -202,7 +208,7 @@
           <SignbankWeb.SignLive.EditSections.morphology_section form={@form} />
           <div class="mt-4">
             <button form="morphology-form" class="btn">
-              {gettext("Save")}{if assigns[:touched], do: "*"}
+              {gettext("Save")}
             </button>
           </div>
         </.form>
@@ -225,7 +231,7 @@
 
           <div class="mt-4">
             <button form="definitions-form" class="btn">
-              {gettext("Save")}{if assigns[:touched], do: "*"}
+              {gettext("Save")}
             </button>
           </div>
         </.form>
@@ -319,7 +325,7 @@
 
           <div class="mt-4">
             <button form="editorial-form" class="btn">
-              {gettext("Save")}{if assigns[:touched], do: "*"}
+              {gettext("Save")}
             </button>
           </div>
         </.form>
