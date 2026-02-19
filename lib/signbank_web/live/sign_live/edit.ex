@@ -39,29 +39,37 @@ defmodule SignbankWeb.SignLive.Edit do
   end
 
   @impl true
+  def handle_params(%{"id" => id_gloss, "section" => section}, _, socket) do
+    sign = Dictionary.get_sign_by_id_gloss(id_gloss, socket.assigns.current_scope)
+
+    result = socket
+      |> assign(:page_title, "edit entry - #{section}")
+      |> assign(:sign, sign)
+      |> assign(:regions, Dictionary.SignRegion.regions())
+      |> init(sign)
+      |> assign(:current_section, String.to_atom(section))
+
+    {:noreply, result}
+  end
+
   def handle_params(%{"id" => id_gloss}, _, socket) do
     sign = Dictionary.get_sign_by_id_gloss(id_gloss, socket.assigns.current_scope)
 
     {:noreply,
-     socket
-     |> assign(:page_title, "edit entry")
-     |> assign(:sign, sign)
-     |> assign(:regions, Dictionary.SignRegion.regions())
-     |> init(sign)}
+     push_patch(socket,
+       to: ~p"/dictionary/sign/#{id_gloss}/edit/phonology"
+     )}
   end
 
   @impl true
   def handle_event("save", %{"sign" => sign_params}, socket) do
-    # TODO: Refactor this duplication out into function
+    # Glossing and keywords are always saved (they're in the sidebar)
+    # Also handle section-specific saves
     sign_params =
       sign_params
-      |> Map.put(
-        "keywords",
-        ~r/,(?=(?:[^\(\)]*\([^\(\)]*\))*[^\(\)]*$)/
-        |> Regex.split(sign_params["keywords_joined"])
-        |> Enum.map(&String.trim(&1))
-      )
-      |> Map.delete("keywords_joined")
+      |> process_sign_params()
+      |> maybe_preserve_keywords(socket)
+      |> filter_by_section(socket.assigns.current_section)
 
     case Dictionary.update_sign(socket.assigns.sign, sign_params) do
       {:ok, data} ->
@@ -72,17 +80,58 @@ defmodule SignbankWeb.SignLive.Edit do
     end
   end
 
+  defp maybe_preserve_keywords(sign_params, _socket) do
+    # If no keywords were provided (e.g. saving from a non-glossing form),
+    # remove the key entirely so existing keywords are left untouched.
+    case sign_params do
+      %{"keywords" => []} ->
+        Map.delete(sign_params, "keywords")
+      _ ->
+        sign_params
+    end
+  end
+
+  defp filter_by_section(sign_params, current_section) do
+    # Always include glossing and keyword fields
+    glossing_fields = ["id_gloss_annotation", "id_gloss_variant_analysis", "keywords", "active_video"]
+
+    section_fields = case current_section do
+      :phonology -> ["phonology"]
+      :vocabulary -> [
+        "regions",
+        "lexis_technical_or_specialist_jargon",
+        "lexis_marginal_or_minority",
+        "lexis_obsolete",
+        "school_anglican_or_state",
+        "school_catholic",
+        "crude",
+        "is_bsl_loan",
+        "bsl_gloss",
+        "is_asl_loan",
+        "asl_gloss",
+        "is_signed_english_based_on_auslan",
+        "signed_english_gloss",
+        "iconicity",
+        "popular_explanation"
+      ]
+      :morphology -> ["morphology"]
+      :definitions -> ["definitions", "definitions_position"]
+      :editorial -> [
+        "editorial_doubtful_or_unsure",
+        "editorial_problematic",
+        "published",
+        "proposed_new_sign",
+        "editorial_problematic_video"
+      ]
+      _ -> []
+    end
+
+    fields_to_keep = glossing_fields ++ section_fields
+    Map.take(sign_params, fields_to_keep)
+  end
+
   def handle_event("validate", %{"sign" => sign_params}, socket) do
-    # TODO: Refactor this duplication out into function
-    sign_params =
-      sign_params
-      |> Map.put(
-        "keywords",
-        ~r/,(?=(?:[^\(\)]*\([^\(\)]*\))*[^\(\)]*$)/
-        |> Regex.split(sign_params["keywords_joined"])
-        |> Enum.map(&String.trim(&1))
-      )
-      |> Map.delete("keywords_joined")
+    sign_params = process_sign_params(sign_params)
 
     changeset =
       socket.assigns.sign
@@ -119,18 +168,14 @@ defmodule SignbankWeb.SignLive.Edit do
 
     socket =
       update(socket, :form, fn %{source: changeset} ->
-        existing =
-          Ecto.Changeset.get_assoc(changeset, :definitions)
-
+        existing = Ecto.Changeset.get_assoc(changeset, :definitions)
         {to_delete, rest} = List.pop_at(existing, index)
 
         definitions =
           cond do
-            # if it has no ID then it has never been committed to the DB and we can throw it out
             not Map.has_key?(Ecto.Changeset.change(to_delete).data, :id) ->
               rest
 
-            # revert deletion
             Ecto.Changeset.get_change(to_delete, :delete) ->
               List.replace_at(existing, index, Ecto.Changeset.delete_change(to_delete, :delete))
 
@@ -144,6 +189,22 @@ defmodule SignbankWeb.SignLive.Edit do
       end)
 
     {:noreply, socket}
+  end
+
+  defp process_sign_params(sign_params) do
+    if Map.has_key?(sign_params, "keywords_joined") do
+      sign_params
+      |> Map.put(
+        "keywords",
+        ~r/,(?=(?:[^\(\)]*\([^\(\)]*\))*[^\(\)]*$)/
+        |> Regex.split(sign_params["keywords_joined"] || "")
+        |> Enum.map(&String.trim(&1))
+        |> Enum.filter(&(&1 != ""))
+      )
+      |> Map.delete("keywords_joined")
+    else
+      sign_params
+    end
   end
 
   defp presign_upload(entry, %{assigns: %{uploads: uploads}} = socket) do
@@ -160,8 +221,6 @@ defmodule SignbankWeb.SignLive.Edit do
 
       socket =
         update(socket, :form, fn %{source: changeset} ->
-          existing = Ecto.Changeset.get_assoc(changeset, :videos)
-
           changeset =
             changeset
             |> Ecto.Changeset.put_assoc(:active_video, %{

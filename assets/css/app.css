@@ -38,10 +38,14 @@
 
   @font-face {
     font-family: hamnosys;
-    src: url("/fonts/hamnosysunicode-webfont.woff2") format("woff2"), url("/fonts/hamnosysunicode-webfont.ttf") format("ttf");
+    src: url("/fonts/hamnosysunicode-webfont.woff2") format("woff2"), url("/fonts/hamnosysunicode-webfont.ttf") format("truetype");
     font-style: normal;
     font-weight: normal;
   }
+}
+
+.hamnosys {
+  font-family: hamnosys, sans-serif;
 }
 
 @theme {
@@ -182,70 +186,172 @@
 }
 
 /* Edit page */
-.edit_sections {
-  display: grid;
-  gap: 10px;
-  grid-template-rows: 1fr 2fr 2fr 2fr;
-  grid-template-areas:
-    "video video editorial grammatical_function"
-    "phonology phonology vocabulary morphology"
-    "phonology phonology definitions definitions"
-    "phonology phonology definitions definitions";
+.edit_layout {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
 }
-.edit_sections,
-.edit_sections input {
+
+.edit_sidebar {
+  flex: 0 0 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.edit_main {
+  flex: 1;
+  min-width: 0;
+}
+
+.edit_sidebar #video_section,
+.edit_sidebar #grammatical_function_section {
+  border: 4px solid var(--section_color);
+  padding: 10px;
+  background-color: white;
+}
+
+.edit_sidebar #video_section {
+  --section_color: rgba(0, 0, 0, 0);
+}
+
+.edit_sidebar #video_section video {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.edit_sidebar #video_section label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.edit_sidebar #video_section .file-input {
+  margin-top: 5px;
+}
+
+.edit_sidebar #grammatical_function_section {
+  --section_color: #fffc8c;
+}
+
+.edit_sidebar #grammatical_function_section table {
+  width: 100%;
   font-size: 12px;
 }
-.edit_sections #phonology_section {
+
+.edit_sidebar #grammatical_function_section table thead {
+  background: var(--section_color);
+}
+
+.edit_sidebar #grammatical_function_section table th {
+  text-align: left;
+  padding: 5px;
+}
+
+.edit_sidebar #grammatical_function_section table td {
+  text-align: center;
+  padding: 5px;
+}
+
+.edit_main form {
+  display: contents;
+}
+
+.edit_main > div {
+  border: 4px solid var(--section_color);
+  padding: 10px;
+  background-color: white;
+}
+
+.edit_main #main_section {
+  --section_color: rgba(0, 0, 0, 0);
+}
+
+.edit_main #main_section table {
+  width: 100%;
+  font-size: 12px;
+  margin-bottom: 15px;
+}
+
+.edit_main #main_section table:first-child {
+  margin-bottom: 10px;
+}
+
+.edit_main #main_section table th,
+.edit_main #main_section table td {
+  padding: 8px;
+}
+
+.edit_main #main_section table th {
+  text-align: left;
+  font-weight: bold;
+}
+
+.edit_main #main_section table td {
+  text-align: right;
+}
+
+.edit_main #main_section table th[colspan="2"] {
+  background-color: #e8f4f8;
+}
+
+.edit_main #phonology_section,
+.edit_main #vocabulary_section,
+.edit_main #morphology_section,
+.edit_main #definitions_section,
+.edit_main #editorial_section {
+  font-size: 12px;
+}
+
+.edit_main #phonology_section {
   --section_color: #c9ecfc;
-  grid-area: phonology;
 }
-.edit_sections #phonology_section table + table {
-  margin-top: 10px;
-}
-.edit_sections #vocabulary_section {
+
+.edit_main #vocabulary_section {
   --section_color: #fcf0cf;
-  grid-area: vocabulary;
 }
-.edit_sections #vocabulary_section table + table {
-  margin-top: 10px;
-}
-.edit_sections #morphology_section {
+
+.edit_main #morphology_section {
   --section_color: #f4be72;
-  grid-area: morphology;
 }
-.edit_sections #morphology_section table + table {
+
+.edit_main #phonology_section table,
+.edit_main #vocabulary_section table,
+.edit_main #morphology_section table {
+  width: 100%;
+  max-width: 600px;
+}
+
+.edit_main #phonology_section table thead,
+.edit_main #vocabulary_section table thead,
+.edit_main #morphology_section table thead {
+  background: var(--section_color);
+}
+
+.edit_main #phonology_section table td,
+.edit_main #vocabulary_section table td,
+.edit_main #morphology_section table td {
+  text-align: right;
+}
+
+.edit_main #phonology_section table + table,
+.edit_main #vocabulary_section table + table,
+.edit_main #morphology_section table + table {
   margin-top: 10px;
 }
-.edit_sections #grammatical_function_section {
-  --section_color: #fffc8c;
-  grid-area: grammatical_function;
-}
-.edit_sections #grammatical_function_section table + table {
-  margin-top: 10px;
-}
-.edit_sections #definitions_section {
+
+.edit_main #definitions_section {
   --section_color: rgba(0, 0, 0, 0);
-  grid-area: definitions;
 }
-.edit_sections #definitions_section table + table {
-  margin-top: 10px;
-}
-.edit_sections #video_section {
-  --section_color: rgba(0, 0, 0, 0);
-  grid-area: video;
-}
-.edit_sections #video_section table + table {
-  margin-top: 10px;
-}
-.edit_sections #editorial_section thead {
-  border: 4px solid #ec602c;
-}
-.edit_sections #definitions_section .drag-handle {
+
+.edit_main #definitions_section .drag-handle {
   margin-right: 1em;
   @apply cursor-ns-resize
 }
-.edit_sections #definitions_section .definition {
+
+.edit_main #definitions_section .definition {
   display: flex;
   padding: 1em;
   width: 100%;
@@ -253,36 +359,47 @@
   background-color: white;
   margin-bottom: 20px;
 }
-.edit_sections #definitions_section .definition textarea {
+
+.edit_main #definitions_section .definition textarea {
   width: 100%;
 }
-.edit_sections table {
-  width: 310px;
+
+.edit_main #editorial_section {
+  --section_color: rgba(0, 0, 0, 0);
 }
-.edit_sections table td {
-  text-align: right;
+
+.edit_main #editorial_section table {
+  width: 100%;
+  margin-bottom: 15px;
 }
-.edit_sections > div {
-  border: 4px solid var(--section_color);
-  padding: 10px;
+
+.edit_main #editorial_section table thead {
+  border: 4px solid #ec602c;
 }
-.edit_sections > div thead {
-  background: var(--section_color);
+
+.edit_main input,
+.edit_main select {
+  background-color: var(--section_color, white);
 }
-.edit_sections input,
-.edit_sections select {
-  background-color: var(--section_color);
+
+.edit_sidebar input,
+.edit_sidebar select {
+  background-color: var(--section_color, white);
 }
-.edit_sections .dominant_hand_field {
+
+.edit_main .dominant_hand_field {
   background: #9db5f7;
 }
-.edit_sections .dominant_hand_field.allophone_field {
+
+.edit_main .dominant_hand_field.allophone_field {
   background: rgb(44.9471698113, 96.3886792453, 237.8528301887);
 }
-.edit_sections .subordinate_hand_field {
+
+.edit_main .subordinate_hand_field {
   background: #aed784;
 }
-.edit_sections .subordinate_hand_field.allophone_field {
+
+.edit_main .subordinate_hand_field.allophone_field {
   background: rgb(122.1950920245, 183.2926380368, 59.6073619632);
 }
 

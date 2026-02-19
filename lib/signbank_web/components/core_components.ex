@@ -451,7 +451,7 @@ defmodule SignbankWeb.CoreComponents do
     ~H"""
     <div>
       <!-- Open the modal using ID.showModal() method -->
-      <button :if={@button_label} type="button" class="btn" onclick={"#{@id}.showModal()"}>
+      <button :if={@button_label} type="button" class="btn" onclick={"document.getElementById('#{@id}').showModal()"}>
         {@button_label}
       </button>
       <dialog id={@id} class="modal">

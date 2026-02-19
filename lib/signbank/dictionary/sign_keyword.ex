@@ -20,5 +20,6 @@ defmodule Signbank.Dictionary.SignKeyword do
     keyword
     |> cast(attrs, required_fields ++ [:sign_id])
     |> validate_required(required_fields)
+    |> unique_constraint(:text, name: :sign_keywords_pkey)
   end
 end

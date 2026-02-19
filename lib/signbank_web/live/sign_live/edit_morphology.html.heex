@@ -1,0 +1,133 @@
+<.inputs_for :let={morphology_f} field={@form[:morphology]}>
+    <div id="morphology_section">
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">{gettext("Morphology: space & movement")}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{gettext("Directional")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={morphology_f[:directional]}
+                            options={[nil, true, false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("Begin directional sign")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={morphology_f[:beginning_directional]} options={[nil, true, false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("End directional sign")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={morphology_f[:end_directional]}
+                            options={[nil, true, false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("Orientating sign")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={morphology_f[:orientating]}
+                            options={[nil, true, false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("Body locating sign")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={morphology_f[:body_locating]}
+                            options={[nil, true, false]} />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">{gettext("Morphology: fingerspelling")}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{gettext("is_fingerspelled_word")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select"
+                            field={morphology_f[:is_fingerspelled_word]} options={[nil, true, false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("is_alphabet")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={morphology_f[:is_alphabet]}
+                            options={[nil, true, false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("is_abbreviation")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={morphology_f[:is_abbreviation]}
+                            options={[nil, true, false]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("is_initialism")}</th>
+                    <td>
+                        <.input form="sign-form" class="select" type="select" field={morphology_f[:is_initialism]}
+                            options={[nil, true, false]} />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">{gettext("Morphology: sign combinations")}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{gettext("initialization_of")}</th>
+                    <td>
+                        <.input type="text" field={morphology_f[:initialization_of]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("compound_of")}</th>
+                    <td>
+                        <.input type="text" field={morphology_f[:compound_of]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("blend_of")}</th>
+                    <td>
+                        <.input type="text" field={morphology_f[:blend_of]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("idiom_of")}</th>
+                    <td>
+                        <.input type="text" field={morphology_f[:idiom_of]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("calque_of")}</th>
+                    <td>
+                        <.input type="text" field={morphology_f[:calque_of]} />
+                    </td>
+                </tr>
+                <tr>
+                    <th>{gettext("multi_sign_expression")}</th>
+                    <%!-- TODO: textareas need styling --%>
+                        <td>
+                            <.input type="textarea" field={morphology_f[:multi_sign_expression]} />
+                        </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</.inputs_for>
