@@ -526,7 +526,6 @@ defmodule SignbankWeb.CoreComponents do
   attr :label, :string, default: nil
   attr :field, Phoenix.HTML.FormField
   attr :errors, :list, default: []
-  attr :options, :list
   attr :rest, :global, include: ~w(disabled form readonly)
   attr :class, :string, default: nil
 
@@ -543,24 +542,122 @@ defmodule SignbankWeb.CoreComponents do
       )
 
     ~H"""
-    <div phx-feedback-for={@name} class="text-sm">
+    <div phx-feedback-for={@name} class="text-sm regions-tree" style="text-align: left;">
       <fieldset class="fieldset p-4">
         <input type="hidden" name={@name} value="" />
-        <label :for={{label, value} <- @options} for={"#{@name}-#{value}"} class="label">
-          <input
-            type="checkbox"
-            id={"#{@name}-#{value}"}
-            name={@name}
-            value={value}
-            checked={Atom.to_string(value) in @selected}
-            class="checkbox"
-            {@rest}
-          />
-          {label}
-        </label>
+        <%!-- Top-level: no_region, unknown, not_applicable --%>
+        <.region_checkbox
+          :for={value <- [:no_region, :unknown, :not_applicable]}
+          name={@name}
+          value={value}
+          selected={@selected}
+          {@rest}
+        />
+        <%!-- Australia-wide with nested dialects --%>
+        <details class="my-1" open>
+          <summary class="cursor-pointer list-none flex items-center gap-2 py-1">
+            <span class="region-arrow text-xs select-none">▶</span>
+            <label for={"#{@name}-australia_wide"} class="inline-flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                id={"#{@name}-australia_wide"}
+                name={@name}
+                value="australia_wide"
+                checked={Atom.to_string(:australia_wide) in @selected}
+                class="checkbox"
+                {@rest}
+              />
+              {Signbank.Dictionary.SignRegion.region_to_string(:australia_wide)}
+            </label>
+          </summary>
+          <div class="ml-6">
+            <%!-- Northern dialect with nested states --%>
+            <details class="my-1" open>
+              <summary class="cursor-pointer list-none flex items-center gap-2 py-1">
+                <span class="region-arrow text-xs select-none">▶</span>
+                <label
+                  for={"#{@name}-northern_dialect"}
+                  class="inline-flex items-center gap-2 cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    id={"#{@name}-northern_dialect"}
+                    name={@name}
+                    value="northern_dialect"
+                    checked={Atom.to_string(:northern_dialect) in @selected}
+                    class="checkbox"
+                    {@rest}
+                  />
+                  {Signbank.Dictionary.SignRegion.region_to_string(:northern_dialect)}
+                </label>
+              </summary>
+              <div class="ml-6">
+                <.region_checkbox
+                  :for={value <- [:queensland, :new_south_wales]}
+                  name={@name}
+                  value={value}
+                  selected={@selected}
+                  {@rest}
+                />
+              </div>
+            </details>
+            <%!-- Southern dialect with nested states --%>
+            <details class="my-1" open>
+              <summary class="cursor-pointer list-none flex items-center gap-2 py-1">
+                <span class="region-arrow text-xs select-none">▶</span>
+                <label
+                  for={"#{@name}-southern_dialect"}
+                  class="inline-flex items-center gap-2 cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    id={"#{@name}-southern_dialect"}
+                    name={@name}
+                    value="southern_dialect"
+                    checked={Atom.to_string(:southern_dialect) in @selected}
+                    class="checkbox"
+                    {@rest}
+                  />
+                  {Signbank.Dictionary.SignRegion.region_to_string(:southern_dialect)}
+                </label>
+              </summary>
+              <div class="ml-6">
+                <.region_checkbox
+                  :for={value <- [:victoria, :western_australia, :south_australia, :tasmania]}
+                  name={@name}
+                  value={value}
+                  selected={@selected}
+                  {@rest}
+                />
+              </div>
+            </details>
+          </div>
+        </details>
       </fieldset>
       <.error :for={msg <- @errors}>{msg}</.error>
     </div>
+    """
+  end
+
+  attr :name, :string, required: true
+  attr :value, :atom, required: true
+  attr :selected, :list, required: true
+  attr :extra_attrs, :global
+
+  defp region_checkbox(assigns) do
+    ~H"""
+    <label for={"#{@name}-#{@value}"} class="flex items-center gap-2 py-1 cursor-pointer">
+      <input
+        type="checkbox"
+        id={"#{@name}-#{@value}"}
+        name={@name}
+        value={@value}
+        checked={Atom.to_string(@value) in @selected}
+        class="checkbox"
+        {@extra_attrs}
+      />
+      {Signbank.Dictionary.SignRegion.region_to_string(@value)}
+    </label>
     """
   end
 

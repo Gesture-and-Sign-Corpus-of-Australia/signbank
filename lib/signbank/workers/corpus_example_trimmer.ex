@@ -37,12 +37,13 @@ defmodule Signbank.Workers.CorpusExampleTrimmer do
       # TODO: I think System.cmd will throw on ffmpeg failure; but there may be some failures we need to check for to provide a better error message
       trim(annotation_text, start_ms, end_ms, source_video, output)
 
-      upload(output)
+      # upload(output)
 
       # TODO: store videos locally and have a periodic job to upload them to S3
       %Corpus.Example{
         annotation_text: annotation_text,
-        video_url: Path.relative_to(output, Application.fetch_env!(:signbank, :upload_staging)),
+        # video_url: Path.relative_to(output, Application.fetch_env!(:signbank, :upload_staging)),
+        video_url: output,
         source_video_id: source_video,
         start_ms: start_ms,
         end_ms: end_ms

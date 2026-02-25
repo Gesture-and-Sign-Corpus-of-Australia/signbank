@@ -680,13 +680,7 @@ defmodule SignbankWeb.SignLive.EditSections do
         <tbody>
           <tr>
             <td>
-              <.regions_checkgroup
-                field={@form[:regions]}
-                options={
-                  Signbank.Dictionary.SignRegion.regions()
-                  |> Enum.map(&{Signbank.Dictionary.SignRegion.region_to_string(&1), &1})
-                }
-              />
+              <.regions_checkgroup field={@form[:regions]} />
             </td>
           </tr>
         </tbody>

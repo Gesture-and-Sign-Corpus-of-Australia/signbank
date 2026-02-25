@@ -406,6 +406,23 @@
 
 
 /* Dialects */
+
+/* Hide default details marker */
+.regions-tree summary.list-none::-webkit-details-marker,
+.regions-tree summary.list-none::marker {
+  display: none;
+  content: "";
+}
+
+.regions-tree details[open] > summary .region-arrow {
+  transform: rotate(90deg);
+}
+
+.regions-tree details > summary .region-arrow {
+  transition: transform 0.15s ease;
+  display: inline-block;
+}
+
 .region_map_svg__select_aus #VIC,
 .region_map_svg__select_aus #SA,
 .region_map_svg__select_aus #Kangaroo-Island,
