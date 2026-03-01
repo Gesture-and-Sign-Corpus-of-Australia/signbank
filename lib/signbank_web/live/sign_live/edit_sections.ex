@@ -760,6 +760,12 @@ defmodule SignbankWeb.SignLive.EditSections do
           <tr>
             <th>{gettext("BSL recent loan sign")}</th>
             <td>
+              <.input
+                class="select"
+                type="select"
+                field={@form[:is_bsl_loan]}
+                options={[nil, true, false]}
+              />
             </td>
           </tr>
           <tr>
@@ -771,6 +777,12 @@ defmodule SignbankWeb.SignLive.EditSections do
           <tr>
             <th>{gettext("ASL recent loan sign")}</th>
             <td>
+              <.input
+                class="select"
+                type="select"
+                field={@form[:is_asl_loan]}
+                options={[nil, true, false]}
+              />
             </td>
           </tr>
           <tr>

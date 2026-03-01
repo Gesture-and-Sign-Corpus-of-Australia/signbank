@@ -82,8 +82,18 @@ defmodule SignbankWeb.CorpusExamples do
 
       <!-- ELAN viewer (if annotations exist) -->
       <%= if @elan_data do %>
-        <div class="border border-gray-300 rounded-lg p-4 bg-white">
-          <h4 class="font-semibold mb-2">Annotations</h4>
+        <div class="border border-gray-300 rounded-lg p-1 sm:p-4 bg-white">
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="font-semibold">Annotations</h4>
+            <button
+              type="button"
+              class="btn btn-sm btn-ghost gap-1 w-28"
+              onclick={"var el=document.getElementById('elan_#{@id}');if(el){el.querySelector('[data-zoom-fit]').click()}"}
+              data-zoom-fit-external={"elan_#{@id}"}
+            >
+              <span class="text-sm">🔍︎</span> Zoom out
+            </button>
+          </div>
           <.live_component
             module={SignbankWeb.ElanViewer}
             id={"elan_#{@id}"}
@@ -109,7 +119,16 @@ defmodule SignbankWeb.CorpusExamples do
   end
 
   def handle_event("randomize_example", _params, socket) do
-    example = Enum.random(socket.assigns.examples)
+    current = socket.assigns.current_example
+    examples = socket.assigns.examples
+
+    candidates =
+      case current do
+        nil -> examples
+        %{id: current_id} -> Enum.reject(examples, &(&1.id == current_id))
+      end
+
+    example = Enum.random(if(candidates == [], do: examples, else: candidates))
 
     socket =
       socket

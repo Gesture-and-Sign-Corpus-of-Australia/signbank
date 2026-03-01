@@ -542,7 +542,7 @@ defmodule SignbankWeb.CoreComponents do
       )
 
     ~H"""
-    <div phx-feedback-for={@name} class="text-sm regions-tree" style="text-align: left;">
+    <div phx-feedback-for={@name} class="text-sm regions-tree" style="text-align: left;" id={@id <> "-regions-tree"} phx-hook="RegionsTree">
       <fieldset class="fieldset p-4">
         <input type="hidden" name={@name} value="" />
         <%!-- Top-level: no_region, unknown, not_applicable --%>
@@ -554,7 +554,7 @@ defmodule SignbankWeb.CoreComponents do
           {@rest}
         />
         <%!-- Australia-wide with nested dialects --%>
-        <details class="my-1" open>
+        <details class="my-1" open data-region-group="australia">
           <summary class="cursor-pointer list-none flex items-center gap-2 py-1">
             <span class="region-arrow text-xs select-none">▶</span>
             <label for={"#{@name}-australia_wide"} class="inline-flex items-center gap-2 cursor-pointer">
@@ -572,7 +572,7 @@ defmodule SignbankWeb.CoreComponents do
           </summary>
           <div class="ml-6">
             <%!-- Northern dialect with nested states --%>
-            <details class="my-1" open>
+            <details class="my-1" open data-region-group="northern">
               <summary class="cursor-pointer list-none flex items-center gap-2 py-1">
                 <span class="region-arrow text-xs select-none">▶</span>
                 <label
@@ -602,7 +602,7 @@ defmodule SignbankWeb.CoreComponents do
               </div>
             </details>
             <%!-- Southern dialect with nested states --%>
-            <details class="my-1" open>
+            <details class="my-1" open data-region-group="southern">
               <summary class="cursor-pointer list-none flex items-center gap-2 py-1">
                 <span class="region-arrow text-xs select-none">▶</span>
                 <label

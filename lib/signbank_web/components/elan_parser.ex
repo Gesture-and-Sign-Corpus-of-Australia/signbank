@@ -5,7 +5,7 @@ defmodule Signbank.ElanParser do
 
   import SweetXml
 
-  @relevant_tiers ["RH-IDgloss", "LH-IDgloss", "LitTransl", "FreeTransl"]
+  @relevant_tiers ["RH-IDgloss", "LH-IDgloss", "FreeTransl"]
 
   @doc """
   Parses an ELAN XML file and returns structured data.
