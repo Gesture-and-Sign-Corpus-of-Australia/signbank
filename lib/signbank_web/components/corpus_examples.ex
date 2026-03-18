@@ -152,6 +152,8 @@ defmodule SignbankWeb.CorpusExamples do
     media_dir = Application.get_env(:signbank, :eaf_dir, "/mnt/data/signbank/corpus_examples")
     full_path = Path.join(media_dir, filename)
 
+    IO.inspect("trying... " <> media_dir)
+
     case File.read(full_path) do
       {:ok, content} ->
         ElanParser.parse(content,
@@ -160,7 +162,8 @@ defmodule SignbankWeb.CorpusExamples do
           end_ms: Keyword.get(opts, :end_ms)
         )
 
-      {:error, _reason} ->
+      {:error, reason} ->
+        IO.inspect("failed: " <> reason)
         nil
     end
   rescue
