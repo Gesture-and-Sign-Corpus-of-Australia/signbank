@@ -168,8 +168,7 @@ defmodule SignbankWeb.CorpusExamples do
   end
 
   defp load_elan_file(filename, opts) do
-    media_dir = Application.get_env(:signbank, :media_dir, "priv/static/media")
-    # media_dir = Application.get_env(:signbank, :corpus_root, "priv/static/media")
+    media_dir = Application.get_env(:signbank, :eaf_dir, "/home/signbank/hack_corpus_examples")
     full_path = Path.join(media_dir, filename)
 
     case File.read(full_path) do
@@ -180,7 +179,8 @@ defmodule SignbankWeb.CorpusExamples do
           end_ms: Keyword.get(opts, :end_ms)
         )
 
-      {:error, _reason} ->
+      {:error, reason} ->
+        IO.warn(reason)
         nil
     end
   rescue

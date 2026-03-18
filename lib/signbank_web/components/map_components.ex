@@ -46,6 +46,7 @@ defmodule SignbankWeb.MapComponents do
       :not_applicable -> ""
       :unknown -> ""
       nil -> ""
+      _ -> ""
     end)
   end
 
