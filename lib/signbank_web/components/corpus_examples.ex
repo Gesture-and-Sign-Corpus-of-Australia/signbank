@@ -149,7 +149,7 @@ defmodule SignbankWeb.CorpusExamples do
   end
 
   defp load_elan_file(filename, opts) do
-    media_dir = Application.get_env(:signbank, :eaf_dir, "/home/ubuntu/hack_corpus_examples")
+    media_dir = Application.get_env(:signbank, :eaf_dir, "/home/signbank/hack_corpus_examples")
     full_path = Path.join(media_dir, filename)
 
     case File.read(full_path) do
