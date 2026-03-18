@@ -3,9 +3,9 @@ defmodule Signbank.ElanParser do
   Parses ELAN XML files and extracts tier and annotation data.
   """
 
-  import SweetXml
+  import Meeseeks.CSS
 
-  @relevant_tiers ["RH-IDgloss", "LH-IDgloss", "LitTransl", "FreeTransl"]
+  @relevant_tiers ["RH-IDgloss", "LH-IDgloss", "FreeTransl"]
 
   @doc """
   Parses an ELAN XML file and returns structured data.
@@ -24,12 +24,14 @@ defmodule Signbank.ElanParser do
     start_ms = Keyword.get(opts, :start_ms, nil)
     end_ms = Keyword.get(opts, :end_ms, nil)
 
+    xml = Meeseeks.parse(xml_content, :xml)
+
     # Parse time slots
-    time_slots = parse_time_slots(xml_content)
+    time_slots = parse_time_slots(xml)
 
     # Parse tiers
     tiers =
-      xml_content
+      xml
       |> parse_tiers(time_slots)
       |> filter_tiers(tier_filter)
       |> filter_annotations_by_range(start_ms, end_ms)
@@ -60,42 +62,38 @@ defmodule Signbank.ElanParser do
   """
   def relevant_tiers, do: @relevant_tiers
 
-  defp parse_time_slots(xml_content) do
-    xml_content
-    |> xpath(
-      ~x"//TIME_SLOT"l,
-      id: ~x"./@TIME_SLOT_ID"s,
-      value: ~x"./@TIME_VALUE"i
-    )
-    |> Enum.into(%{}, fn slot -> {slot.id, slot.value} end)
+  defp parse_time_slots(xml) do
+    xml
+    |> Meeseeks.all(css("TIME_SLOT"))
+    |> Enum.into(%{}, fn slot ->
+      {Meeseeks.attr(slot, "TIME_SLOT_ID"),
+       slot |> Meeseeks.attr("TIME_VALUE") |> String.to_integer()}
+    end)
   end
 
-  defp parse_tiers(xml_content, time_slots) do
-    xml_content
-    |> xpath(
-      ~x"//TIER"l,
-      name: ~x"./@TIER_ID"s,
-      annotations: [
-        ~x"./ANNOTATION/ALIGNABLE_ANNOTATION"l,
-        text: ~x"./ANNOTATION_VALUE/text()"s,
-        start_ref: ~x"./@TIME_SLOT_REF1"s,
-        end_ref: ~x"./@TIME_SLOT_REF2"s
-      ]
-    )
+  defp parse_tiers(xml, time_slots) do
+    xml
+    |> Meeseeks.all(css("TIER"))
     |> Enum.map(fn tier ->
-      %{
-        name: tier.name,
-        annotations:
-          tier.annotations
-          |> Enum.map(fn anno ->
-            %{
-              text: anno.text,
-              start: Map.get(time_slots, anno.start_ref, 0),
-              end: Map.get(time_slots, anno.end_ref, 0)
-            }
-          end)
-          |> Enum.reject(fn anno -> anno.text == "" end)
-      }
+      name = Meeseeks.attr(tier, "TIER_ID")
+
+      annotations =
+        tier
+        |> Meeseeks.all(css("ANNOTATION ALIGNABLE_ANNOTATION"))
+        |> Enum.map(fn anno ->
+          text = anno |> Meeseeks.one(css("ANNOTATION_VALUE")) |> Meeseeks.text()
+          start_ref = Meeseeks.attr(anno, "TIME_SLOT_REF1")
+          end_ref = Meeseeks.attr(anno, "TIME_SLOT_REF2")
+
+          %{
+            text: text || "",
+            start: Map.get(time_slots, start_ref, 0),
+            end: Map.get(time_slots, end_ref, 0)
+          }
+        end)
+        |> Enum.reject(fn anno -> anno.text == "" end)
+
+      %{name: name, annotations: annotations}
     end)
   end
 

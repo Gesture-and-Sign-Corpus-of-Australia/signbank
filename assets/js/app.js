@@ -116,6 +116,119 @@ Hooks.CrudePreferenceHandler = {
   }
 }
 
+Hooks.RegionsTree = {
+  mounted() {
+    this.updateDisabledState();
+    this.el.addEventListener("change", (e) => this.updateDisabledState(e));
+  },
+  updated() {
+    this.updateDisabledState();
+  },
+  updateDisabledState(e) {
+    const getCheckbox = (val) => this.el.querySelector(`input[type=checkbox][value="${val}"]`);
+    const isChecked = (val) => { const cb = getCheckbox(val); return cb && cb.checked; };
+    const setChecked = (val, state) => { const cb = getCheckbox(val); if (cb) cb.checked = state; };
+
+    // Exclusionary options disable the entire Australia-wide tree
+    const exclusionary = ["no_region", "unknown", "not_applicable"];
+    const hasExclusionary = exclusionary.some(v => isChecked(v));
+
+    const ausTree = this.el.querySelector("[data-region-group=australia]");
+    const northTree = this.el.querySelector("[data-region-group=northern]");
+    const southTree = this.el.querySelector("[data-region-group=southern]");
+    if (!ausTree) return;
+
+    const northChildren = ["queensland", "new_south_wales"];
+    const southChildren = ["victoria", "western_australia", "south_australia", "tasmania"];
+
+    // Helper: disable + check + grey out children within a container
+    const setChildState = (container, parentValue, disabled) => {
+      const children = container.querySelectorAll(
+        `input[type=checkbox]:not([value="${parentValue}"])`
+      );
+      children.forEach(input => {
+        input.disabled = disabled;
+        if (disabled) input.checked = true;
+      });
+      const childArea = container.querySelector(":scope > div.ml-6");
+      if (childArea) {
+        childArea.style.opacity = disabled ? "0.4" : "1";
+        childArea.style.pointerEvents = disabled ? "none" : "auto";
+      }
+    };
+
+    // Reset everything to enabled first, then apply rules top-down
+    const resetAll = () => {
+      ausTree.querySelectorAll("input[type=checkbox]").forEach(input => {
+        input.disabled = false;
+      });
+      ausTree.style.opacity = "1";
+      ausTree.style.pointerEvents = "auto";
+      const ausChild = ausTree.querySelector(":scope > div.ml-6");
+      if (ausChild) { ausChild.style.opacity = "1"; ausChild.style.pointerEvents = "auto"; }
+      [northTree, southTree].forEach(tree => {
+        if (!tree) return;
+        const area = tree.querySelector(":scope > div.ml-6");
+        if (area) { area.style.opacity = "1"; area.style.pointerEvents = "auto"; }
+      });
+    };
+
+    resetAll();
+
+    // 1. Exclusionary locks out the whole Australia tree
+    if (hasExclusionary) {
+      ausTree.querySelectorAll("input[type=checkbox]").forEach(input => {
+        input.disabled = true;
+        input.checked = false;
+      });
+      ausTree.style.opacity = "0.4";
+      ausTree.style.pointerEvents = "none";
+      return;
+    }
+
+    // 2. Bottom-up auto-fill: if all children checked, auto-check parent
+    //    Northern: if QLD + NSW both checked → auto-check northern_dialect
+    if (northChildren.every(v => isChecked(v)) && !isChecked("northern_dialect")) {
+      setChecked("northern_dialect", true);
+    }
+    //    Southern: if VIC + WA + SA + TAS all checked → auto-check southern_dialect
+    if (southChildren.every(v => isChecked(v)) && !isChecked("southern_dialect")) {
+      setChecked("southern_dialect", true);
+    }
+    //    Australia-wide: if both dialects checked → auto-check australia_wide
+    if (isChecked("northern_dialect") && isChecked("southern_dialect") && !isChecked("australia_wide")) {
+      setChecked("australia_wide", true);
+    }
+
+    // 3. Top-down disable: australia_wide → grey out everything beneath
+    if (isChecked("australia_wide")) {
+      const allChildren = ausTree.querySelectorAll(
+        'input[type=checkbox]:not([value="australia_wide"])'
+      );
+      allChildren.forEach(input => {
+        input.disabled = true;
+        input.checked = true;
+      });
+      const childArea = ausTree.querySelector(":scope > div.ml-6");
+      if (childArea) {
+        childArea.style.opacity = "0.4";
+        childArea.style.pointerEvents = "none";
+      }
+      return;
+    }
+
+    // 4. Northern dialect checked → tick and grey out QLD, NSW
+    if (northTree) {
+      setChildState(northTree, "northern_dialect", isChecked("northern_dialect"));
+    }
+
+    // 5. Southern dialect checked → tick and grey out VIC, WA, SA, TAS
+    if (southTree) {
+      setChildState(southTree, "southern_dialect", isChecked("southern_dialect"));
+    }
+  }
+}
+
 Uploaders.S3 = function (entries, onViewError) {
   entries.forEach(entry => {
     let formData = new FormData()
@@ -180,7 +293,6 @@ Hooks.VideoPlayer = {
       const v = document.getElementById(video_id);
       if (v) {
         v.currentTime = time;
-        v.play();
       }
     });
 
@@ -237,36 +349,105 @@ Hooks.VideoPlayer = {
 Hooks.ElanPlayhead = {
   mounted() {
     const el = this.el;
+    const scrollContainer = el.querySelector("[id$='-scroll']") || el;
     const videoId = el.dataset.videoId;
     const duration = parseFloat(el.dataset.duration);        // ms
-    const pxPerMs = parseFloat(el.dataset.pixelsPerMs);
+    const basePxPerMs = parseFloat(el.dataset.pixelsPerMs);
+    let pxPerMs = basePxPerMs;
+    let isFitToView = false;
     const playhead = el.querySelector("[id$='-playhead']");
     const ruler = el.querySelector("[id$='-ruler']");
 
     if (!playhead || !ruler) return;
 
+    // ---- Full extent zoom (fit to view) ----
+    const applyScale = (newPxPerMs) => {
+      pxPerMs = newPxPerMs;
+      const timelineWidth = Math.floor(duration * pxPerMs);
+
+      // Resize rows (clear min-width so it doesn't fight the JS-set width)
+      el.querySelectorAll("[data-role=timeline-row]").forEach(row => {
+        row.style.width = timelineWidth + "px";
+        row.style.minWidth = timelineWidth + "px";
+      });
+
+      // Reposition ticks
+      el.querySelectorAll("[data-tick-ms]").forEach(tick => {
+        tick.style.left = (parseFloat(tick.dataset.tickMs) * pxPerMs) + "px";
+      });
+
+      // Resize & reposition annotations
+      el.querySelectorAll("[data-start-ms]").forEach(anno => {
+        const start = parseFloat(anno.dataset.startMs);
+        const end = parseFloat(anno.dataset.endMs);
+        anno.style.left = (start * pxPerMs) + "px";
+        anno.style.width = ((end - start) * pxPerMs) + "px";
+      });
+    };
+
+    const fitToView = () => {
+      // Hide overflow so no scrollbar appears (avoids clientWidth feedback loop)
+      scrollContainer.style.overflowX = "hidden";
+      const availableWidth = scrollContainer.clientWidth;
+      const fitPxPerMs = availableWidth / duration;
+      applyScale(fitPxPerMs);
+      scrollContainer.scrollLeft = 0;
+    };
+
+    const resetScale = () => {
+      scrollContainer.style.overflowX = "auto";
+      applyScale(basePxPerMs);
+    };
+
+    const fitBtn = el.querySelector("[data-zoom-fit]");
+    // Find the external button that targets this viewer
+    const externalBtn = document.querySelector(`[data-zoom-fit-external="${el.id}"]`);
+    if (fitBtn) {
+      fitBtn.addEventListener("click", () => {
+        isFitToView = !isFitToView;
+        if (isFitToView) {
+          fitToView();
+          if (externalBtn) externalBtn.innerHTML = '<span class="text-sm">⟲</span>&nbsp;Reset';
+        } else {
+          resetScale();
+          if (externalBtn) externalBtn.innerHTML = '<span class="text-sm">🔍︎</span> Zoom out';
+        }
+      });
+    }
+
+    // Re-fit when the container resizes (e.g. window resize)
+    const resizeObserver = new ResizeObserver(() => {
+      if (isFitToView) fitToView();
+    });
+    resizeObserver.observe(scrollContainer);
+
     // Show the playhead
     playhead.style.display = "";
 
-    // ---- Follow video playback ----
-    const onTimeUpdate = (e) => {
-      if (e.detail.video_id !== videoId) return;
-      const timeMs = e.detail.time * 1000;
-      const x = timeMs * pxPerMs;
-      playhead.style.left = x + "px";
+    // ---- Smooth playhead via requestAnimationFrame ----
+    let rafId = null;
+    const updatePlayhead = () => {
+      const video = document.getElementById(videoId);
+      if (video && !dragging) {
+        const timeMs = video.currentTime * 1000;
+        const x = timeMs * pxPerMs;
+        playhead.style.left = x + "px";
 
-      // Auto-scroll to keep the playhead visible within the container
-      const viewLeft = el.scrollLeft;
-      const viewRight = viewLeft + el.clientWidth;
-      // Use a margin so the playhead doesn't hug the very edge
-      const margin = el.clientWidth * 0.2;
-      if (x > viewRight - margin) {
-        el.scrollLeft = x - margin;
-      } else if (x < viewLeft) {
-        el.scrollLeft = Math.max(0, x - margin);
+        // Auto-scroll only while the video is actively playing
+        if (!video.paused) {
+          const viewLeft = scrollContainer.scrollLeft;
+          const viewRight = viewLeft + scrollContainer.clientWidth;
+          const margin = scrollContainer.clientWidth * 0.2;
+          if (x > viewRight - margin) {
+            scrollContainer.scrollLeft = x - margin;
+          } else if (x < viewLeft) {
+            scrollContainer.scrollLeft = Math.max(0, x - margin);
+          }
+        }
       }
+      rafId = requestAnimationFrame(updatePlayhead);
     };
-    window.addEventListener("video_timeupdate", onTimeUpdate);
+    rafId = requestAnimationFrame(updatePlayhead);
 
     // ---- Helper: compute time from mouse x position ----
     // getBoundingClientRect() is viewport-relative and already accounts for scroll,
@@ -284,7 +465,6 @@ Hooks.ElanPlayhead = {
       const video = document.getElementById(videoId);
       if (video) {
         video.currentTime = timeSec;
-        video.play();
       }
       playhead.style.left = x + "px";
     };
@@ -339,7 +519,8 @@ Hooks.ElanPlayhead = {
 
     // Store references for cleanup
     this._cleanup = () => {
-      window.removeEventListener("video_timeupdate", onTimeUpdate);
+      if (rafId) cancelAnimationFrame(rafId);
+      resizeObserver.disconnect();
       ruler.removeEventListener("click", onRulerClick);
       ruler.removeEventListener("mousedown", onRulerMouseDown);
       if (handle) handle.removeEventListener("mousedown", onHandleMouseDown);

@@ -43,6 +43,7 @@ defmodule Signbank.Workers.CorpusExampleTrimmer do
       %Corpus.Example{
         annotation_text: annotation_text,
         video_url: Path.relative_to(output, Application.fetch_env!(:signbank, :upload_staging)),
+        # video_url: output,
         source_video_id: source_video,
         start_ms: start_ms,
         end_ms: end_ms
