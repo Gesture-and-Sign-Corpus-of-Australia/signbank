@@ -142,7 +142,6 @@ defmodule SignbankWeb.CorpusExamples do
         clip_start = max(start_ms - @clip_padding_ms, 0)
         clip_end = end_ms + @clip_padding_ms
         load_elan_file(eaf_filename, start_ms: clip_start, end_ms: clip_end)
-        |> IO.inspect()
 
       _ ->
         nil
@@ -150,10 +149,8 @@ defmodule SignbankWeb.CorpusExamples do
   end
 
   defp load_elan_file(filename, opts) do
-    media_dir = Application.get_env(:signbank, :eaf_dir, "/mnt/data/signbank/corpus_examples")
+    media_dir = Application.get_env(:signbank, :eaf_dir, "/home/ubuntu/hack_corpus_examples")
     full_path = Path.join(media_dir, filename)
-
-    IO.inspect("trying... " <> full_path)
 
     case File.read(full_path) do
       {:ok, content} ->
@@ -164,7 +161,7 @@ defmodule SignbankWeb.CorpusExamples do
         )
 
       {:error, reason} ->
-        IO.inspect("failed: " <> reason)
+        IO.warn(reason)
         nil
     end
   rescue
