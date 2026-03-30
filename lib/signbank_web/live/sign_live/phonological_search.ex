@@ -17,6 +17,7 @@ defmodule SignbankWeb.SignLive.PhonologicalSearch do
         Find a sign by clicking on a <a href="#handshape">handshape</a>, or <a href="#location">location</a>. You can select both a
         handshape and a location.
       </p>
+      <p class="md:hidden font-bold">This functionality works best on a computer or tablet.</p>
 
       <hr />
 
