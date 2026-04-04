@@ -173,38 +173,35 @@ defmodule SignbankWeb.SignLive.Detail do
   def details_accordion(assigns) do
     ~H"""
     <div class="join join-vertical bg-base-100">
-      <div class="collapse collapse-arrow join-item border-base-300 border">
-        <input type="radio" name="details-accordion" />
-        <div class="collapse-title bg-base-200">
+      <details class="collapse collapse-arrow join-item border-base-300 border">
+        <summary class="collapse-title bg-base-200">
           <h2 class="text-md font-semibold" aria-label="Vocabulary:">Vocabulary</h2>
           <span class="text-sm">usage &ndash; meaning &ndash; dialect</span>
-        </div>
+        </summary>
         <div class="collapse-content text-sm">
           <.vocab_details sign={@sign} current_scope={@current_scope} />
         </div>
-      </div>
+      </details>
 
-      <div class="collapse collapse-arrow join-item border-base-300 border">
-        <input type="radio" name="details-accordion" />
-        <div class="collapse-title bg-base-200">
+      <details class="collapse collapse-arrow join-item border-base-300 border">
+        <summary class="collapse-title bg-base-200">
           <h2 class="text-md font-semibold" aria-label="Vocabulary:">Morphology</h2>
           <span class="text-sm">spatial &ndash; lexical</span>
-        </div>
+        </summary>
         <div class="collapse-content text-sm">
           <.morph_details sign={@sign} current_scope={@current_scope} />
         </div>
-      </div>
+      </details>
 
-      <div class="collapse collapse-arrow join-item border-base-300 border">
-        <input type="radio" name="details-accordion" />
-        <div class="collapse-title bg-base-200">
+      <details class="collapse collapse-arrow join-item border-base-300 border">
+        <summary class="collapse-title bg-base-200">
           <h2 class="text-md font-semibold" aria-label="Vocabulary:">Phonology</h2>
           <span class="text-sm">movement &ndash; orientation &ndash; location</span>
-        </div>
+        </summary>
         <div class="collapse-content text-sm">
           <.phon_details sign={@sign} current_scope={@current_scope} />
         </div>
-      </div>
+      </details>
     </div>
     """
   end
