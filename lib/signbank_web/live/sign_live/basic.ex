@@ -164,7 +164,7 @@ defmodule SignbankWeb.SignLive.Basic do
               <ul class="flex gap-2">
                 <li :for={suggestion <- Enum.sort_by(@sign.suggested_signs, & &1.url)}>
                   <.modal id={"suggesed_sign_modal_#{suggestion.id}"}>
-                    <video controls autoplay muted width="400">
+                    <video controls autoplay muted class="mx-auto mt-8 w-4/5">
                       <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{suggestion.url}"} />
                     </video>
                     <p :if={suggestion.description} class="mt-2">
@@ -494,7 +494,7 @@ defmodule SignbankWeb.SignLive.Basic do
           ← Go back to matches for <i>"{@search_term}"</i>
         </.link>
       </div>
-
+      
     <!-- Show normal matches when current sign contains the search term or no specific match to go back to -->
       <div
         :if={

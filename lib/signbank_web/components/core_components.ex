@@ -445,17 +445,24 @@ defmodule SignbankWeb.CoreComponents do
 
   attr :id, :string, required: true
   attr :button_label, :string, default: nil
+  attr :button_class, :string, default: nil
+  attr :div_class, :string, default: nil
   slot :inner_block, doc: "the optional inner block that renders the flash message"
 
   def modal(assigns) do
     ~H"""
     <div>
       <!-- Open the modal using ID.showModal() method -->
-      <button :if={@button_label} type="button" class="btn" onclick={"document.getElementById('#{@id}').showModal()"}>
+      <button
+        :if={@button_label}
+        type="button"
+        class={["btn", @button_class]}
+        onclick={"document.getElementById('#{@id}').showModal()"}
+      >
         {@button_label}
       </button>
       <dialog id={@id} class="modal">
-        <div class="modal-box">
+        <div class={["modal-box max-w-none w-7/10", @div_class]}>
           <%!-- <p class="py-4">Press ESC key or click the button below to close</p> --%>
           {render_slot(@inner_block)}
           <div class="modal-action">
@@ -542,7 +549,13 @@ defmodule SignbankWeb.CoreComponents do
       )
 
     ~H"""
-    <div phx-feedback-for={@name} class="text-sm regions-tree" style="text-align: left;" id={@id <> "-regions-tree"} phx-hook="RegionsTree">
+    <div
+      phx-feedback-for={@name}
+      class="text-sm regions-tree"
+      style="text-align: left;"
+      id={@id <> "-regions-tree"}
+      phx-hook="RegionsTree"
+    >
       <fieldset class="fieldset p-4">
         <input type="hidden" name={@name} value="" />
         <%!-- Top-level: no_region, unknown, not_applicable --%>
@@ -557,7 +570,10 @@ defmodule SignbankWeb.CoreComponents do
         <details class="my-1" open data-region-group="australia">
           <summary class="cursor-pointer list-none flex items-center gap-2 py-1">
             <span class="region-arrow text-xs select-none">▶</span>
-            <label for={"#{@name}-australia_wide"} class="inline-flex items-center gap-2 cursor-pointer">
+            <label
+              for={"#{@name}-australia_wide"}
+              class="inline-flex items-center gap-2 cursor-pointer"
+            >
               <input
                 type="checkbox"
                 id={"#{@name}-australia_wide"}
