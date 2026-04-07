@@ -449,6 +449,7 @@ defmodule SignbankWeb.CoreComponents do
   attr :div_class, :string, default: nil
   slot :inner_block, doc: "the optional inner block that renders the flash message"
 
+  @spec modal(map()) :: Phoenix.LiveView.Rendered.t()
   def modal(assigns) do
     ~H"""
     <div>
@@ -461,8 +462,10 @@ defmodule SignbankWeb.CoreComponents do
       >
         {@button_label}
       </button>
-      <dialog id={@id} class="modal">
-        <div class={["modal-box max-w-none w-7/10", @div_class]}>
+      <%!-- for whatever reason, having a responsive md:modal-middle class breaks width. --%>
+      <%!-- ideally we would have: class="modal modal-bottom md:modal-middle" --%>
+      <dialog id={@id} class="modal modal-middle">
+        <div class={["modal-box max-w-none w-full md:w-4/5", @div_class]}>
           <%!-- <p class="py-4">Press ESC key or click the button below to close</p> --%>
           {render_slot(@inner_block)}
           <div class="modal-action">
