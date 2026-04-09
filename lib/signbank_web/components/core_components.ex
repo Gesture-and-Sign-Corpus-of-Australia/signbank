@@ -464,8 +464,8 @@ defmodule SignbankWeb.CoreComponents do
       </button>
       <%!-- for whatever reason, having a responsive md:modal-middle class breaks width. --%>
       <%!-- ideally we would have: class="modal modal-bottom md:modal-middle" --%>
-      <dialog id={@id} class="modal modal-middle">
-        <div class={["modal-box max-w-none w-full md:w-4/5", @div_class]}>
+      <dialog id={@id} class="modal modal-bottom max-height-8/10 md:modal-middle">
+        <div class={["modal-box !max-w-none w-full min-h-1/2 md:w-4/5", @div_class]}>
           <%!-- <p class="py-4">Press ESC key or click the button below to close</p> --%>
           {render_slot(@inner_block)}
           <div class="modal-action">
