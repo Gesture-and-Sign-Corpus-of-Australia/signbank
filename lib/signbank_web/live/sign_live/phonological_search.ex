@@ -30,7 +30,7 @@ defmodule SignbankWeb.SignLive.PhonologicalSearch do
         <input id="search-location-filter" type="hidden" name="loc" value={@selected_location} />
 
         <h2 id="handshape" class="is-size-4">Handshape</h2>
-        <.handshapes />
+        <.handshapes_allophones />
 
         <h2 id="location" class="is-size-4">Location</h2>
         <a phx-click="deselect" phx-value-filter={:location}>
@@ -211,6 +211,71 @@ defmodule SignbankWeb.SignLive.PhonologicalSearch do
     """
   end
 
+  def handshapes_allophones(assigns) do
+    ~H"""
+    <a phx-click="deselect" phx-value-filter={:handshape}>
+      <.icon name="hero-x-mark" class="size-16 bg-black" />
+    </a>
+    <div id="handshapegrid" class="flex flex-auto flex-wrap">
+      <.handshapes_grid ref={:round} shapes={[:round, :round_flat]} />
+      <.handshapes_grid ref={:okay} shapes={[:okay, :okay_flat, :okay_f]} />
+      <.handshapes_grid ref={:point} shapes={[:point, :point_d]} />
+      <.handshapes_grid ref={:hook} shapes={[:hook]} />
+      <.handshapes_grid ref={:two} shapes={[:two]} />
+      <.handshapes_grid ref={:kneel} shapes={[:kneel]} />
+      <.handshapes_grid ref={:perth} shapes={[:perth]} />
+      <.handshapes_grid ref={:spoon} shapes={[:spoon]} />
+      <.handshapes_grid ref={:letter_n} shapes={[:letter_n]} />
+      <.handshapes_grid ref={:wish} shapes={[:wish]} />
+      <.handshapes_grid ref={:three} shapes={[:three]} />
+      <.handshapes_grid ref={:mother} shapes={[:mother]} />
+      <.handshapes_grid ref={:letter_m} shapes={[:letter_m]} />
+      <.handshapes_grid ref={:four} shapes={[:four]} />
+      <.handshapes_grid ref={:five} shapes={[:five]} />
+      <.handshapes_grid ref={:ball} shapes={[:ball]} />
+      <.handshapes_grid ref={:flat} shapes={[:flat, :flat_b, :flat_angled, :flat_b_angled]} />
+      <.handshapes_grid ref={:thick} shapes={[:thick, :thick_open]} />
+      <.handshapes_grid ref={:cup} shapes={[:cup, :cup_thumb, :cup_flush]} />
+      <.handshapes_grid ref={:good} shapes={[:good, :good_bent]} />
+      <.handshapes_grid ref={:bad} shapes={[:bad]} />
+      <.handshapes_grid ref={:gun} shapes={[:gun, :gun_bent]} />
+      <.handshapes_grid ref={:buckle} shapes={[:buckle]} />
+      <.handshapes_grid ref={:letter_c} shapes={[:letter_c]} />
+      <.handshapes_grid ref={:small} shapes={[:small, :small_open]} />
+      <.handshapes_grid ref={:seven_old} shapes={[:seven_old]} />
+      <.handshapes_grid ref={:eight} shapes={[:eight]} />
+      <.handshapes_grid ref={:nine} shapes={[:nine]} />
+      <.handshapes_grid ref={:fist} shapes={[:fist, :fist_a]} />
+      <.handshapes_grid ref={:soon} shapes={[:soon]} />
+      <.handshapes_grid ref={:ten} shapes={[:ten, :ten_tip]} />
+      <.handshapes_grid ref={:write} shapes={[:write]} />
+      <.handshapes_grid ref={:salt} shapes={[:salt, :salt_closed, :salt_flick]} />
+      <.handshapes_grid ref={:duck} shapes={[:duck]} />
+      <.handshapes_grid ref={:middle} shapes={[:middle]} />
+      <.handshapes_grid ref={:rude} shapes={[:rude]} />
+      <.handshapes_grid ref={:ambivalent} shapes={[:ambivalent]} />
+      <.handshapes_grid ref={:love} shapes={[:love]} />
+      <.handshapes_grid ref={:animal} shapes={[:animal]} />
+      <.handshapes_grid ref={:queer} shapes={[:queer]} />
+    </div>
+    """
+  end
+
+  attr :shapes, :list, required: true
+  attr :ref, :atom, required: true
+
+  def handshapes_grid(assigns) do
+    ~H"""
+    <a href={"##{@ref}"} class="flex" phx-click="filter" phx-value-handshape={@ref}>
+      <div class="h-auto grid grid-cols-2 border-3 w-55">
+        <%= for hs <- @shapes do %>
+          <.handshape handshape={hs} />
+        <% end %>
+      </div>
+    </a>
+    """
+  end
+
   def handshapes(assigns) do
     ~H"""
     <style>
@@ -238,7 +303,7 @@ defmodule SignbankWeb.SignLive.PhonologicalSearch do
         }
       }
     </style>
-    <div id="handshapegrid">
+    <a id="handshapegrid">
       <%!-- TODO: relaxed is not a handshape per-se, but we should have a "none" button to unselect handshape --%>
       <%!-- <.handshape handshape={nil} /> --%>
       <a phx-click="deselect" phx-value-filter={:handshape}>
@@ -284,16 +349,15 @@ defmodule SignbankWeb.SignLive.PhonologicalSearch do
       <.handshape handshape={:love} />
       <.handshape handshape={:animal} />
       <.handshape handshape={:queer} />
-    </div>
+    </a>
     """
   end
 
   defp handshape(assigns) do
-    # TODO: add small allophone images
     ~H"""
-    <a href={"##{@handshape}"} phx-click="filter" phx-value-handshape={@handshape}>
+    <div>
       <img src={Dictionary.Phonology.handshape_image(@handshape)} />
-    </a>
+    </div>
     """
   end
 end
