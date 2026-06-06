@@ -217,45 +217,45 @@ defmodule SignbankWeb.SignLive.PhonologicalSearch do
       <.icon name="hero-x-mark" class="size-16 bg-black" />
     </a>
     <div id="handshapegrid" class="flex flex-auto flex-wrap">
-      <.handshapes_grid ref={:round} shapes={[:round, :round_flat]} />
+      <.handshapes_grid ref={:round} shapes={[:round, :round_flat, :round_flick, :round_e]} />
       <.handshapes_grid ref={:okay} shapes={[:okay, :okay_flat, :okay_f]} />
-      <.handshapes_grid ref={:point} shapes={[:point, :point_d]} />
-      <.handshapes_grid ref={:hook} shapes={[:hook]} />
-      <.handshapes_grid ref={:two} shapes={[:two]} />
+      <.handshapes_grid ref={:point} shapes={[:point, :point_d, :point_angled, :point_angled_thumb]} />
+      <.handshapes_grid ref={:hook} shapes={[:hook, :hook_bent]} />
+      <.handshapes_grid ref={:two} shapes={[:two, :two_angled]} />
       <.handshapes_grid ref={:kneel} shapes={[:kneel]} />
       <.handshapes_grid ref={:perth} shapes={[:perth]} />
-      <.handshapes_grid ref={:spoon} shapes={[:spoon]} />
+      <.handshapes_grid ref={:spoon} shapes={[:spoon, :spoon_thumb, :spoon_curved]} />
       <.handshapes_grid ref={:letter_n} shapes={[:letter_n]} />
       <.handshapes_grid ref={:wish} shapes={[:wish]} />
-      <.handshapes_grid ref={:three} shapes={[:three]} />
+      <.handshapes_grid ref={:three} shapes={[:three, :three_curved, :three_bent]} />
       <.handshapes_grid ref={:mother} shapes={[:mother]} />
       <.handshapes_grid ref={:letter_m} shapes={[:letter_m]} />
-      <.handshapes_grid ref={:four} shapes={[:four]} />
-      <.handshapes_grid ref={:five} shapes={[:five]} />
-      <.handshapes_grid ref={:ball} shapes={[:ball]} />
+      <.handshapes_grid ref={:four} shapes={[:four, :four_curved]} />
+      <.handshapes_grid ref={:five} shapes={[:five, :five_angled]} />
+      <.handshapes_grid ref={:ball} shapes={[:ball, :ball_bent]} />
       <.handshapes_grid ref={:flat} shapes={[:flat, :flat_b, :flat_angled, :flat_b_angled]} />
       <.handshapes_grid ref={:thick} shapes={[:thick, :thick_open]} />
       <.handshapes_grid ref={:cup} shapes={[:cup, :cup_thumb, :cup_flush]} />
       <.handshapes_grid ref={:good} shapes={[:good, :good_bent]} />
-      <.handshapes_grid ref={:bad} shapes={[:bad]} />
+      <.handshapes_grid ref={:bad} shapes={[:bad, :bad_bent]} />
       <.handshapes_grid ref={:gun} shapes={[:gun, :gun_bent]} />
       <.handshapes_grid ref={:buckle} shapes={[:buckle]} />
-      <.handshapes_grid ref={:letter_c} shapes={[:letter_c]} />
+      <.handshapes_grid ref={:letter_c} shapes={[:letter_c, :letter_c_open]} />
       <.handshapes_grid ref={:small} shapes={[:small, :small_open]} />
       <.handshapes_grid ref={:seven_old} shapes={[:seven_old]} />
-      <.handshapes_grid ref={:eight} shapes={[:eight]} />
+      <.handshapes_grid ref={:eight} shapes={[:eight, :eight_curved]} />
       <.handshapes_grid ref={:nine} shapes={[:nine]} />
       <.handshapes_grid ref={:fist} shapes={[:fist, :fist_a]} />
-      <.handshapes_grid ref={:soon} shapes={[:soon]} />
-      <.handshapes_grid ref={:ten} shapes={[:ten, :ten_tip]} />
-      <.handshapes_grid ref={:write} shapes={[:write]} />
+      <.handshapes_grid ref={:soon} shapes={[:soon, :soon_flick, :soon_closed]} />
+      <.handshapes_grid ref={:ten} shapes={[:ten, :ten_tip, :ten_flat, :ten_tip_open]} />
+      <.handshapes_grid ref={:write} shapes={[:write, :write_flat, :write_flick]} />
       <.handshapes_grid ref={:salt} shapes={[:salt, :salt_closed, :salt_flick]} />
       <.handshapes_grid ref={:duck} shapes={[:duck]} />
       <.handshapes_grid ref={:middle} shapes={[:middle]} />
       <.handshapes_grid ref={:rude} shapes={[:rude]} />
       <.handshapes_grid ref={:ambivalent} shapes={[:ambivalent]} />
       <.handshapes_grid ref={:love} shapes={[:love]} />
-      <.handshapes_grid ref={:animal} shapes={[:animal]} />
+      <.handshapes_grid ref={:animal} shapes={[:animal, :animal_closed]} />
       <.handshapes_grid ref={:queer} shapes={[:queer]} />
     </div>
     """
@@ -267,7 +267,7 @@ defmodule SignbankWeb.SignLive.PhonologicalSearch do
   def handshapes_grid(assigns) do
     ~H"""
     <a href={"##{@ref}"} class="flex" phx-click="filter" phx-value-handshape={@ref}>
-      <div class="h-auto grid grid-cols-2 border-3 w-55">
+      <div class="h-auto grid grid-cols-2 outline-1 gap-1 w-55">
         <%= for hs <- @shapes do %>
           <.handshape handshape={hs} />
         <% end %>
