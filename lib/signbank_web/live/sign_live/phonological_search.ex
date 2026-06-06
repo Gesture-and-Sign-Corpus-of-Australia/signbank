@@ -267,7 +267,7 @@ defmodule SignbankWeb.SignLive.PhonologicalSearch do
   def handshapes_grid(assigns) do
     ~H"""
     <a href={"##{@ref}"} class="flex" phx-click="filter" phx-value-handshape={@ref}>
-      <div class="h-auto grid grid-cols-2 outline-1 gap-1 w-55">
+      <div class="h-auto grid grid-cols-2 border-2 w-55">
         <%= for hs <- @shapes do %>
           <.handshape handshape={hs} />
         <% end %>
