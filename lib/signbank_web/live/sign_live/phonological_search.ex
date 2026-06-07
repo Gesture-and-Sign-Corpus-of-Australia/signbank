@@ -14,7 +14,8 @@ defmodule SignbankWeb.SignLive.PhonologicalSearch do
     <Layouts.app flash={@flash} current_scope={@current_scope}>
       <h1 class="is-size-3">Search by sign features</h1>
       <p>
-        Find a sign by clicking on a <a href="#handshape">handshape</a>, or <a href="#location">location</a>. You can select both a
+        Find a sign by clicking on a <a href="#handshape">handshape</a>
+        or <a href="#location">location</a>. You can select both a
         handshape and a location.
       </p>
       <p class="md:hidden font-bold">This functionality works best on a computer or tablet.</p>
@@ -34,7 +35,7 @@ defmodule SignbankWeb.SignLive.PhonologicalSearch do
 
         <h2 id="location" class="is-size-4">Location</h2>
         <a phx-click="deselect" phx-value-filter={:location}>
-          <.icon name="hero-x-mark" class="size-8 bg-black" />
+          <.icon name="hero-x-mark" class="size-16 bg-black" />
         </a>
         <div class="level" style="height:80%;display:flex;">
           <.face class="location_filter_container" style="flex-basis: 60%" />
@@ -213,10 +214,14 @@ defmodule SignbankWeb.SignLive.PhonologicalSearch do
 
   def handshapes_allophones(assigns) do
     ~H"""
-    <a phx-click="deselect" phx-value-filter={:handshape}>
-      <.icon name="hero-x-mark" class="size-16 bg-black" />
-    </a>
     <div id="handshapegrid" class="flex flex-auto flex-wrap">
+      <a
+        phx-click="deselect"
+        class="h-auto cursor-pointer w-55 border-2 flex justify-center items-center"
+        phx-value-filter={:handshape}
+      >
+        <.icon name="hero-x-mark" class="size-16 bg-black" />
+      </a>
       <.handshapes_grid ref={:round} shapes={[:round, :round_flat, :round_flick, :round_e]} />
       <.handshapes_grid ref={:okay} shapes={[:okay, :okay_flat, :okay_f]} />
       <.handshapes_grid ref={:point} shapes={[:point, :point_d, :point_angled, :point_angled_thumb]} />
@@ -272,83 +277,6 @@ defmodule SignbankWeb.SignLive.PhonologicalSearch do
           <.handshape handshape={hs} />
         <% end %>
       </div>
-    </a>
-    """
-  end
-
-  def handshapes(assigns) do
-    ~H"""
-    <style>
-      #handshapegrid {
-      display:flex;
-      width: 70%;
-      flex-wrap: wrap;
-      gap: 2px;
-      }
-      #handshapegrid * {
-      margin: 0.2em;
-      flex: 0 1 14%;
-      /* TODO: images 100% width, to fix small ones */
-      }
-      @media (max-width: 1000px) {
-        #handshapegrid * {
-          margin: 0.2em;
-          flex: 0 1 23%;
-        }
-        #handshapegrid {
-          display:flex;
-          width: 90%;
-          flex-wrap: wrap;
-          gap: 2px;
-        }
-      }
-    </style>
-    <a id="handshapegrid">
-      <%!-- TODO: relaxed is not a handshape per-se, but we should have a "none" button to unselect handshape --%>
-      <%!-- <.handshape handshape={nil} /> --%>
-      <a phx-click="deselect" phx-value-filter={:handshape}>
-        <.icon name="hero-x-mark" class="size-8 bg-black" />
-      </a>
-      <.handshape handshape={:round} />
-      <.handshape handshape={:okay} />
-      <.handshape handshape={:point} />
-      <.handshape handshape={:hook} />
-      <.handshape handshape={:two} />
-      <.handshape handshape={:kneel} />
-      <.handshape handshape={:perth} />
-      <.handshape handshape={:spoon} />
-      <.handshape handshape={:letter_n} />
-      <.handshape handshape={:wish} />
-      <.handshape handshape={:three} />
-      <.handshape handshape={:mother} />
-      <.handshape handshape={:letter_m} />
-      <.handshape handshape={:four} />
-      <.handshape handshape={:five} />
-      <.handshape handshape={:ball} />
-      <.handshape handshape={:flat} />
-      <.handshape handshape={:thick} />
-      <.handshape handshape={:cup} />
-      <.handshape handshape={:good} />
-      <.handshape handshape={:bad} />
-      <.handshape handshape={:gun} />
-      <.handshape handshape={:buckle} />
-      <.handshape handshape={:letter_c} />
-      <.handshape handshape={:small} />
-      <.handshape handshape={:seven_old} />
-      <.handshape handshape={:eight} />
-      <.handshape handshape={:nine} />
-      <%!-- TODO: check the database for instances of :fist; I think its been renamed; <.handshape handshape={:fist} /> --%>
-      <.handshape handshape={:soon} />
-      <.handshape handshape={:ten} />
-      <.handshape handshape={:write} />
-      <.handshape handshape={:salt} />
-      <.handshape handshape={:duck} />
-      <.handshape handshape={:middle} />
-      <.handshape handshape={:rude} />
-      <.handshape handshape={:ambivalent} />
-      <.handshape handshape={:love} />
-      <.handshape handshape={:animal} />
-      <.handshape handshape={:queer} />
     </a>
     """
   end
