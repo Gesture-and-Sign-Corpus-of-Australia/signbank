@@ -14,7 +14,8 @@ defmodule SignbankWeb.SignLive.PhonologicalSearch do
     <Layouts.app flash={@flash} current_scope={@current_scope}>
       <h1 class="is-size-3">Search by sign features</h1>
       <p>
-        Find a sign by clicking on a <a href="#handshape">handshape</a>, or <a href="#location">location</a>. You can select both a
+        Find a sign by clicking on a <a href="#handshape">handshape</a>
+        or <a href="#location">location</a>. You can select both a
         handshape and a location.
       </p>
       <p class="md:hidden font-bold">This functionality works best on a computer or tablet.</p>
@@ -30,11 +31,11 @@ defmodule SignbankWeb.SignLive.PhonologicalSearch do
         <input id="search-location-filter" type="hidden" name="loc" value={@selected_location} />
 
         <h2 id="handshape" class="is-size-4">Handshape</h2>
-        <.handshapes />
+        <.handshapes_allophones />
 
         <h2 id="location" class="is-size-4">Location</h2>
         <a phx-click="deselect" phx-value-filter={:location}>
-          <.icon name="hero-x-mark" class="size-8 bg-black" />
+          <.icon name="hero-x-mark" class="size-16 bg-black" />
         </a>
         <div class="level" style="height:80%;display:flex;">
           <.face class="location_filter_container" style="flex-basis: 60%" />
@@ -211,89 +212,80 @@ defmodule SignbankWeb.SignLive.PhonologicalSearch do
     """
   end
 
-  def handshapes(assigns) do
+  def handshapes_allophones(assigns) do
     ~H"""
-    <style>
-      #handshapegrid {
-      display:flex;
-      width: 70%;
-      flex-wrap: wrap;
-      gap: 2px;
-      }
-      #handshapegrid * {
-      margin: 0.2em;
-      flex: 0 1 14%;
-      /* TODO: images 100% width, to fix small ones */
-      }
-      @media (max-width: 1000px) {
-        #handshapegrid * {
-          margin: 0.2em;
-          flex: 0 1 23%;
-        }
-        #handshapegrid {
-          display:flex;
-          width: 90%;
-          flex-wrap: wrap;
-          gap: 2px;
-        }
-      }
-    </style>
-    <div id="handshapegrid">
-      <%!-- TODO: relaxed is not a handshape per-se, but we should have a "none" button to unselect handshape --%>
-      <%!-- <.handshape handshape={nil} /> --%>
-      <a phx-click="deselect" phx-value-filter={:handshape}>
-        <.icon name="hero-x-mark" class="size-8 bg-black" />
+    <div id="handshapegrid" class="flex flex-auto flex-wrap">
+      <a
+        phx-click="deselect"
+        class="h-auto cursor-pointer w-55 border-2 flex justify-center items-center"
+        phx-value-filter={:handshape}
+      >
+        <.icon name="hero-x-mark" class="size-16 bg-black" />
       </a>
-      <.handshape handshape={:round} />
-      <.handshape handshape={:okay} />
-      <.handshape handshape={:point} />
-      <.handshape handshape={:hook} />
-      <.handshape handshape={:two} />
-      <.handshape handshape={:kneel} />
-      <.handshape handshape={:perth} />
-      <.handshape handshape={:spoon} />
-      <.handshape handshape={:letter_n} />
-      <.handshape handshape={:wish} />
-      <.handshape handshape={:three} />
-      <.handshape handshape={:mother} />
-      <.handshape handshape={:letter_m} />
-      <.handshape handshape={:four} />
-      <.handshape handshape={:five} />
-      <.handshape handshape={:ball} />
-      <.handshape handshape={:flat} />
-      <.handshape handshape={:thick} />
-      <.handshape handshape={:cup} />
-      <.handshape handshape={:good} />
-      <.handshape handshape={:bad} />
-      <.handshape handshape={:gun} />
-      <.handshape handshape={:buckle} />
-      <.handshape handshape={:letter_c} />
-      <.handshape handshape={:small} />
-      <.handshape handshape={:seven_old} />
-      <.handshape handshape={:eight} />
-      <.handshape handshape={:nine} />
-      <%!-- TODO: check the database for instances of :fist; I think its been renamed; <.handshape handshape={:fist} /> --%>
-      <.handshape handshape={:soon} />
-      <.handshape handshape={:ten} />
-      <.handshape handshape={:write} />
-      <.handshape handshape={:salt} />
-      <.handshape handshape={:duck} />
-      <.handshape handshape={:middle} />
-      <.handshape handshape={:rude} />
-      <.handshape handshape={:ambivalent} />
-      <.handshape handshape={:love} />
-      <.handshape handshape={:animal} />
-      <.handshape handshape={:queer} />
+      <.handshapes_grid ref={:round} shapes={[:round, :round_flat, :round_flick, :round_e]} />
+      <.handshapes_grid ref={:okay} shapes={[:okay, :okay_flat, :okay_f]} />
+      <.handshapes_grid ref={:point} shapes={[:point, :point_d, :point_angled, :point_angled_thumb]} />
+      <.handshapes_grid ref={:hook} shapes={[:hook, :hook_bent]} />
+      <.handshapes_grid ref={:two} shapes={[:two, :two_angled]} />
+      <.handshapes_grid ref={:kneel} shapes={[:kneel]} />
+      <.handshapes_grid ref={:perth} shapes={[:perth]} />
+      <.handshapes_grid ref={:spoon} shapes={[:spoon, :spoon_thumb, :spoon_curved]} />
+      <.handshapes_grid ref={:letter_n} shapes={[:letter_n]} />
+      <.handshapes_grid ref={:wish} shapes={[:wish]} />
+      <.handshapes_grid ref={:three} shapes={[:three, :three_curved, :three_bent]} />
+      <.handshapes_grid ref={:mother} shapes={[:mother]} />
+      <.handshapes_grid ref={:letter_m} shapes={[:letter_m]} />
+      <.handshapes_grid ref={:four} shapes={[:four, :four_curved]} />
+      <.handshapes_grid ref={:five} shapes={[:five, :five_angled]} />
+      <.handshapes_grid ref={:ball} shapes={[:ball, :ball_bent]} />
+      <.handshapes_grid ref={:flat} shapes={[:flat, :flat_b, :flat_angled, :flat_b_angled]} />
+      <.handshapes_grid ref={:thick} shapes={[:thick, :thick_open]} />
+      <.handshapes_grid ref={:cup} shapes={[:cup, :cup_thumb, :cup_flush]} />
+      <.handshapes_grid ref={:good} shapes={[:good, :good_bent]} />
+      <.handshapes_grid ref={:bad} shapes={[:bad, :bad_bent]} />
+      <.handshapes_grid ref={:gun} shapes={[:gun, :gun_bent]} />
+      <.handshapes_grid ref={:buckle} shapes={[:buckle]} />
+      <.handshapes_grid ref={:letter_c} shapes={[:letter_c, :letter_c_open]} />
+      <.handshapes_grid ref={:small} shapes={[:small, :small_open]} />
+      <.handshapes_grid ref={:seven_old} shapes={[:seven_old]} />
+      <.handshapes_grid ref={:eight} shapes={[:eight, :eight_curved]} />
+      <.handshapes_grid ref={:nine} shapes={[:nine]} />
+      <.handshapes_grid ref={:fist} shapes={[:fist, :fist_a]} />
+      <.handshapes_grid ref={:soon} shapes={[:soon, :soon_flick, :soon_closed]} />
+      <.handshapes_grid ref={:ten} shapes={[:ten, :ten_tip, :ten_flat, :ten_tip_open]} />
+      <.handshapes_grid ref={:write} shapes={[:write, :write_flat, :write_flick]} />
+      <.handshapes_grid ref={:salt} shapes={[:salt, :salt_closed, :salt_flick]} />
+      <.handshapes_grid ref={:duck} shapes={[:duck]} />
+      <.handshapes_grid ref={:middle} shapes={[:middle]} />
+      <.handshapes_grid ref={:rude} shapes={[:rude]} />
+      <.handshapes_grid ref={:ambivalent} shapes={[:ambivalent]} />
+      <.handshapes_grid ref={:love} shapes={[:love]} />
+      <.handshapes_grid ref={:animal} shapes={[:animal, :animal_closed]} />
+      <.handshapes_grid ref={:queer} shapes={[:queer]} />
     </div>
     """
   end
 
-  defp handshape(assigns) do
-    # TODO: add small allophone images
+  attr :shapes, :list, required: true
+  attr :ref, :atom, required: true
+
+  def handshapes_grid(assigns) do
     ~H"""
-    <a href={"##{@handshape}"} phx-click="filter" phx-value-handshape={@handshape}>
-      <img src={Dictionary.Phonology.handshape_image(@handshape)} />
+    <a href={"##{@ref}"} class="flex" phx-click="filter" phx-value-handshape={@ref}>
+      <div class="h-auto grid grid-cols-2 border-2 w-55">
+        <%= for hs <- @shapes do %>
+          <.handshape handshape={hs} />
+        <% end %>
+      </div>
     </a>
+    """
+  end
+
+  defp handshape(assigns) do
+    ~H"""
+    <div>
+      <img src={Dictionary.Phonology.handshape_image(@handshape)} />
+    </div>
     """
   end
 end
