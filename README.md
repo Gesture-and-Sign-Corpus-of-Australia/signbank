@@ -2,7 +2,7 @@
 
 To setup your Signbank development environment:
 
-  * Install Elixir, the recommended way is: (other methods are [outlined here](https://elixir-lang.org/install.html#version-managers))
+  * Install Elixir, the recommended way is: (other methods are [outlined here](https://elixir-lang.org/install/#version-managers))
     * Start by installing [`mise` version manager](https://github.com/jdx/mise)
     * Install the Erlang plugin https://github.com/asdf-vm/asdf-erlang
     * Install the Elixir plugin https://github.com/asdf-vm/asdf-elixir
