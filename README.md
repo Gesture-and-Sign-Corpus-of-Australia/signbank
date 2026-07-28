@@ -6,7 +6,7 @@ To setup your Signbank development environment:
     * Start by installing [`mise` version manager](https://github.com/jdx/mise)
     * Install the Erlang plugin https://github.com/asdf-vm/asdf-erlang
     * Install the Elixir plugin https://github.com/asdf-vm/asdf-elixir
-    * Run `asdf install` in the root of this repo (This will install the correct versions of both Erlang and Elixir)
+    * Run `mise install` in the root of this repo (This will install the correct versions of both Erlang and Elixir)
   * Run `mix setup` to install and setup dependencies
   * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
 
