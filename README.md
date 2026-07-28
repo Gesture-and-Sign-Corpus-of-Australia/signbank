@@ -12,6 +12,7 @@ To setup your Signbank development environment:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
+> ⚠️ you will need [postgres](https://www.postgresql.org) set up
 
 ## Deployment
 
