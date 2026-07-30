@@ -42,7 +42,8 @@ defmodule SignbankWeb.SignLive.Edit do
   def handle_params(%{"id" => id_gloss, "section" => section}, _, socket) do
     sign = Dictionary.get_sign_by_id_gloss(id_gloss, socket.assigns.current_scope)
 
-    result = socket
+    result =
+      socket
       |> assign(:page_title, "edit entry - #{section}")
       |> assign(:sign, sign)
       |> assign(:regions, Dictionary.SignRegion.regions())
@@ -86,6 +87,7 @@ defmodule SignbankWeb.SignLive.Edit do
     case sign_params do
       %{"keywords" => []} ->
         Map.delete(sign_params, "keywords")
+
       _ ->
         sign_params
     end
@@ -93,45 +95,64 @@ defmodule SignbankWeb.SignLive.Edit do
 
   defp filter_by_section(sign_params, current_section) do
     # Always include glossing and keyword fields
-    glossing_fields = ["id_gloss_annotation", "id_gloss_variant_analysis", "keywords", "active_video"]
+    glossing_fields = [
+      "id_gloss_annotation",
+      "id_gloss_variant_analysis",
+      "keywords",
+      "active_video"
+    ]
 
-    section_fields = case current_section do
-      :phonology -> ["phonology"]
-      :vocabulary -> [
-        "regions",
-        "lexis_technical_or_specialist_jargon",
-        "lexis_marginal_or_minority",
-        "lexis_obsolete",
-        "school_anglican_or_state",
-        "school_catholic",
-        "crude",
-        "is_bsl_loan",
-        "bsl_gloss",
-        "is_asl_loan",
-        "asl_gloss",
-        "is_signed_english_based_on_auslan",
-        "signed_english_gloss",
-        "iconicity",
-        "popular_explanation"
-      ]
-      :morphology -> ["morphology"]
-      :definitions -> ["definitions", "definitions_position"]
-      :editorial -> [
-        "editorial_doubtful_or_unsure",
-        "editorial_problematic",
-        "published",
-        "proposed_new_sign",
-        "editorial_problematic_video"
-      ]
-      _ -> []
-    end
+    section_fields =
+      case current_section do
+        :phonology ->
+          ["phonology"]
+
+        :vocabulary ->
+          [
+            "regions",
+            "lexis_technical_or_specialist_jargon",
+            "lexis_marginal_or_minority",
+            "lexis_obsolete",
+            "school_anglican_or_state",
+            "school_catholic",
+            "crude",
+            "is_bsl_loan",
+            "bsl_gloss",
+            "is_asl_loan",
+            "asl_gloss",
+            "is_signed_english_based_on_auslan",
+            "signed_english_gloss",
+            "iconicity",
+            "popular_explanation"
+          ]
+
+        :morphology ->
+          ["morphology"]
+
+        :definitions ->
+          ["definitions", "definitions_position"]
+
+        :editorial ->
+          [
+            "editorial_doubtful_or_unsure",
+            "editorial_problematic",
+            "published",
+            "proposed_new_sign",
+            "editorial_problematic_video"
+          ]
+
+        _ ->
+          []
+      end
 
     fields_to_keep = glossing_fields ++ section_fields
     Map.take(sign_params, fields_to_keep)
   end
 
   def handle_event("validate", %{"sign" => sign_params}, socket) do
+    IO.inspect("in validate")
     sign_params = process_sign_params(sign_params)
+    IO.inspect(sign_params)
 
     changeset =
       socket.assigns.sign

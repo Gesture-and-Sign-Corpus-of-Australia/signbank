@@ -186,9 +186,9 @@ defmodule Signbank.Dictionary.Sign do
           Enum.find(sign.keywords, fn existing ->
             String.downcase(existing.text) == String.downcase(keyword)
           end) ||
-            (sign
-             |> Ecto.build_assoc(:keywords)
-             |> Dictionary.SignKeyword.changeset(%{text: keyword}))
+            sign
+            |> Ecto.build_assoc(:keywords)
+            |> Dictionary.SignKeyword.changeset(%{text: keyword})
         end)
 
       put_assoc(changeset, :keywords, keywords)

@@ -5,6 +5,7 @@ defmodule SignbankWeb.SignLive.EditSections do
 
   attr :form, :any, required: true
   attr :sign, :any, required: true
+
   def phonology_section(assigns) do
     ~H"""
     <.inputs_for :let={phonology_f} field={@form[:phonology]}>
@@ -314,7 +315,11 @@ defmodule SignbankWeb.SignLive.EditSections do
             <tr>
               <th>{gettext("contact start")}</th>
               <td>
-                <.input type="select" options={[nil, true, false]} field={phonology_f[:contact_start]} />
+                <.input
+                  type="select"
+                  options={[nil, true, false]}
+                  field={phonology_f[:contact_start]}
+                />
               </td>
             </tr>
             <tr>
@@ -326,7 +331,11 @@ defmodule SignbankWeb.SignLive.EditSections do
             <tr>
               <th>{gettext("contact during")}</th>
               <td>
-                <.input type="select" options={[nil, true, false]} field={phonology_f[:contact_during]} />
+                <.input
+                  type="select"
+                  options={[nil, true, false]}
+                  field={phonology_f[:contact_during]}
+                />
               </td>
             </tr>
             <tr>
@@ -338,7 +347,11 @@ defmodule SignbankWeb.SignLive.EditSections do
             <tr>
               <th>{gettext("contact hands")}</th>
               <td>
-                <.input type="select" options={[nil, true, false]} field={phonology_f[:contact_hands]} />
+                <.input
+                  type="select"
+                  options={[nil, true, false]}
+                  field={phonology_f[:contact_hands]}
+                />
               </td>
             </tr>
           </tbody>
@@ -477,7 +490,9 @@ defmodule SignbankWeb.SignLive.EditSections do
         <table>
           <thead>
             <tr>
-              <th colspan="3">{gettext("Phonology: large movements (interaction of hands) — 2 hand signs only")}</th>
+              <th colspan="3">
+                {gettext("Phonology: large movements (interaction of hands) — 2 hand signs only")}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -495,37 +510,61 @@ defmodule SignbankWeb.SignLive.EditSections do
             <tr>
               <th>{gettext("movement_symmetrical")}</th>
               <td>
-                <.input type="select" options={[nil, true, false]} field={phonology_f[:movement_symmetrical]} />
+                <.input
+                  type="select"
+                  options={[nil, true, false]}
+                  field={phonology_f[:movement_symmetrical]}
+                />
               </td>
             </tr>
             <tr>
               <th>{gettext("movement_parallel")}</th>
               <td>
-                <.input type="select" options={[nil, true, false]} field={phonology_f[:movement_parallel]} />
+                <.input
+                  type="select"
+                  options={[nil, true, false]}
+                  field={phonology_f[:movement_parallel]}
+                />
               </td>
             </tr>
             <tr>
               <th>{gettext("movement_alternating")}</th>
               <td>
-                <.input type="select" options={[nil, true, false]} field={phonology_f[:movement_alternating]} />
+                <.input
+                  type="select"
+                  options={[nil, true, false]}
+                  field={phonology_f[:movement_alternating]}
+                />
               </td>
             </tr>
             <tr>
               <th>{gettext("movement_separating")}</th>
               <td>
-                <.input type="select" options={[nil, true, false]} field={phonology_f[:movement_separating]} />
+                <.input
+                  type="select"
+                  options={[nil, true, false]}
+                  field={phonology_f[:movement_separating]}
+                />
               </td>
             </tr>
             <tr>
               <th>{gettext("movement_approaching")}</th>
               <td>
-                <.input type="select" options={[nil, true, false]} field={phonology_f[:movement_approaching]} />
+                <.input
+                  type="select"
+                  options={[nil, true, false]}
+                  field={phonology_f[:movement_approaching]}
+                />
               </td>
             </tr>
             <tr>
               <th>{gettext("movement_cross")}</th>
               <td>
-                <.input type="select" options={[nil, true, false]} field={phonology_f[:movement_cross]} />
+                <.input
+                  type="select"
+                  options={[nil, true, false]}
+                  field={phonology_f[:movement_cross]}
+                />
               </td>
             </tr>
           </tbody>
@@ -601,11 +640,7 @@ defmodule SignbankWeb.SignLive.EditSections do
             <tr>
               <th>{"hamnosys (variant analysis)"}</th>
               <td>
-                <.input
-                  class="hamnosys"
-                  type="text"
-                  field={phonology_f[:hamnosys_variant_analysis]}
-                />
+                <.input class="hamnosys" type="text" field={phonology_f[:hamnosys_variant_analysis]} />
               </td>
             </tr>
           </tbody>
@@ -637,13 +672,16 @@ defmodule SignbankWeb.SignLive.EditSections do
 
   attr :form, :any, required: true
   attr :sign, :any, required: true
+
   def vocabulary_section(assigns) do
     ~H"""
     <div id="vocabulary_section">
       <table>
         <thead>
           <tr>
-            <th colspan="2">{gettext("Vocabulary: dictionary entry type (box colour = frame colour)")}</th>
+            <th colspan="2">
+              {gettext("Vocabulary: dictionary entry type (box colour = frame colour)")}
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -717,8 +755,7 @@ defmodule SignbankWeb.SignLive.EditSections do
           </tr>
           <tr>
             <th>{gettext("Obsolete")}</th>
-            <td>
-            </td>
+            <td></td>
           </tr>
           <tr>
             <th>{gettext("Anglican/state school")}</th>
@@ -744,8 +781,7 @@ defmodule SignbankWeb.SignLive.EditSections do
           </tr>
           <tr>
             <th>{gettext("Crude & offensive")}</th>
-            <td>
-            </td>
+            <td></td>
           </tr>
         </tbody>
       </table>
@@ -832,7 +868,11 @@ defmodule SignbankWeb.SignLive.EditSections do
           <tr>
             <th>{gettext("Popular explanation")}</th>
             <td>
-              <.input type="textarea" field={@form[:popular_explanation]} options={[nil, true, false]} />
+              <.input
+                type="textarea"
+                field={@form[:popular_explanation]}
+                options={[nil, true, false]}
+              />
             </td>
           </tr>
         </tbody>
@@ -849,6 +889,12 @@ defmodule SignbankWeb.SignLive.EditSections do
             <th>{gettext("Semantic categories")}</th>
             <td>selection UI TBD</td>
           </tr>
+          <tr>
+            <th>{gettext("Add Semantic Category")}</th>
+            <td>
+              <.input type="text" field={@form[:new_semcat]} options={[nil, true, false]} />
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -856,6 +902,7 @@ defmodule SignbankWeb.SignLive.EditSections do
   end
 
   attr :form, :any, required: true
+
   def morphology_section(assigns) do
     ~H"""
     <.inputs_for :let={morphology_f} field={@form[:morphology]}>
