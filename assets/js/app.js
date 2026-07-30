@@ -534,6 +534,76 @@ Hooks.ElanPlayhead = {
   }
 };
 
+function map_range(value, min1, max1, min2, max2) {
+    return Number(min2) + (value - min1) * (max2 - min2) / (max1 - min1)
+}
+
+Hooks.StreamingVideoPlayer = {
+    mounted() {
+        const videoContainer = document.getElementById("videoContainer");
+        const video = document.getElementById("video");
+        const progress = document.getElementById("progress");``
+        const pauseIndicator = document.getElementById("pauseIndicator");
+        const restartIndicator = document.getElementById("restartIndicator");
+
+        const start = video.getAttribute("start")
+        const ending = video.getAttribute("ending")
+
+        // pauseIndicator.style.visibility = "hidden";
+        restartIndicator.style.visibility = "hidden";
+
+        video.controls = false;
+        video.addEventListener("click", (e) => {
+            if (video.currentTime >= ending) {
+                video.pause();
+                video.currentTime = start;
+                progress.value = 0;
+                video.play();
+                console.log("restarting");
+                pauseIndicator.style.visibility = "hidden";
+                restartIndicator.style.visibility = "hidden";
+            } else if (video.paused) {
+                video.play();
+                pauseIndicator.style.visibility = "hidden";
+                restartIndicator.style.visibility = "hidden";
+            } else {
+                video.pause();
+                pauseIndicator.style.visibility = "visible";
+                restartIndicator.style.visibility = "hidden";
+            }
+        });
+        video.addEventListener("dblclick", (event) => {
+            console.log("double click");
+            if (document.fullscreenElement !== null) {
+                document.exitFullscreen();
+            } else {
+                videoContainer.requestFullscreen();
+            }
+        });
+        video.addEventListener("loadedmetadata", () => {
+            progress.setAttribute("max", 100);
+        });
+        video.addEventListener("timeupdate", () => {
+            if (!progress.getAttribute("max"))``
+                progress.setAttribute("max", 100);
+            progress.value = map_range(video.currentTime, start, ending, 0, 100);
+            if (video.currentTime >= ending) {
+                video.pause();
+                pauseIndicator.style.visibility = "hidden";
+                restartIndicator.style.visibility = "visible";
+            }
+
+        });
+        progress.addEventListener("click", (e) => {
+            if (!Number.isFinite(video.duration)) return;
+            const rect = progress.getBoundingClientRect();
+            const pos = (e.pageX - rect.left) / progress.offsetWidth;
+            const mapped = map_range(pos, 0, 1, start, ending);
+            video.currentTime = mapped;
+        });
+    }
+}
+
 window.validateSearchForm = (event) => {
   const searchInput = document.getElementById('main-search-input');
   if (!searchInput || !searchInput.value || searchInput.value.trim() === '') {
@@ -548,7 +618,7 @@ window.allowCrudeSigns = () => {
   return localStorage.getItem('allowCrudeSigns') === 'true';
 }
 
-// TODO: use this to highlight the current selected phonological search handshape/location
+// TODO: use this to highlight the current selected phonologica``l search handshape/location
 window.addEventListener("phx:phon-filter-highlight", (e) => {
   if (e.detail.hasOwnProperty('location')) {
     [...document.querySelectorAll(".location_filter_container > *")].forEach(x => x.classList.remove("highlight"));
