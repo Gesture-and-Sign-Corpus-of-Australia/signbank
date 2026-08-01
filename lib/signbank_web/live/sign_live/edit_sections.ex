@@ -889,12 +889,6 @@ defmodule SignbankWeb.SignLive.EditSections do
             <th>{gettext("Semantic categories")}</th>
             <td>selection UI TBD</td>
           </tr>
-          <tr>
-            <th>{gettext("Add Semantic Category")}</th>
-            <td>
-              <.input type="text" field={@form[:new_semcat]} options={[nil, true, false]} />
-            </td>
-          </tr>
         </tbody>
       </table>
     </div>

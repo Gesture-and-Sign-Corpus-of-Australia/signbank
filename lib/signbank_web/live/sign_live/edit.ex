@@ -150,9 +150,7 @@ defmodule SignbankWeb.SignLive.Edit do
   end
 
   def handle_event("validate", %{"sign" => sign_params}, socket) do
-    IO.inspect("in validate")
     sign_params = process_sign_params(sign_params)
-    IO.inspect(sign_params)
 
     changeset =
       socket.assigns.sign
@@ -182,6 +180,21 @@ defmodule SignbankWeb.SignLive.Edit do
       end)
 
     {:noreply, socket}
+  end
+
+  def handle_event("add-semcat", %{"sign" => new_semcat}, socket) do
+    new_semcat = new_semcat["new_semcat"]
+
+    changeset =
+      %Dictionary.SemanticCategory{}
+      |> Dictionary.SemanticCategory.changeset(%{name: new_semcat})
+
+    Signbank.Repo.insert!(changeset)
+
+    {
+      :noreply,
+      socket
+    }
   end
 
   def handle_event("toggle-delete-definition", %{"index" => index}, socket) do

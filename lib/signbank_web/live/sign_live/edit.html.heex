@@ -194,12 +194,22 @@
       <%= if @current_section == :vocabulary do %>
         <.form for={@form} id="vocabulary-form" phx-change="validate" phx-submit="save">
           <SignbankWeb.SignLive.EditSections.vocabulary_section form={@form} sign={@sign} />
-          <div class="mt-4">
-            <button form="vocabulary-form" class="btn">
-              {gettext("Save")}
-            </button>
-          </div>
         </.form>
+          <%!-- Semcat Adding UI -%>
+          <%!-- A: im not sure how much i like having this as a seperate section --%>
+          <%!-- but its the easiest way to distinguish the forms. --%>
+          <.form for={@form} id="add-semcat" phx-change="validate" phx-submit="add-semcat">
+            <.button>
+              {gettext("Add Semantic Category")}
+            </.button>
+            <.input type="text" field={@form[:new_semcat]} />
+          </.form>
+
+<div class="mt-4">
+  <button form="vocabulary-form" class="btn">
+    {gettext("Save")}
+  </button>
+</div>
       <% end %>
 
       <%!-- MORPHOLOGY SECTION --%>
