@@ -232,6 +232,16 @@ defmodule Signbank.Dictionary do
   end
 
   @doc """
+  Gets a list of all semantic categories.
+  """
+  def list_semantic_categories() do
+    Repo.all(
+      from c in SemanticCategory,
+        select: c.name
+    )
+  end
+
+  @doc """
   Gets a single sign.
 
   Raises `Ecto.NoResultsError` if the Sign does not exist.

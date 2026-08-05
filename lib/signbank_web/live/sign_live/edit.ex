@@ -190,18 +190,18 @@ defmodule SignbankWeb.SignLive.Edit do
       %Dictionary.SemanticCategory{}
       |> Dictionary.SemanticCategory.changeset(%{name: new_semcat})
 
-    # TODO case statement to check on duplicates
     existing =
+      Signbank.Dictionary.list_semantic_categories()
+
+    # TODO case statement to check on duplicates
+    result =
       Signbank.Repo.insert(changeset)
 
     case result do
       {:ok, data} ->
-        IO.inspect(socket, label: "pre flash", limit: :infinity)
-
         {:noreply,
          socket
-         |> put_flash(:info, "Semantic Category inserted succesfully")
-         |> IO.inspect(label: "post flash", limit: :infinity)}
+         |> put_flash(:info, "Semantic Category inserted succesfully")}
 
       {:error, changeset} ->
         {:noreply, socket |> put_flash(:error, "Error inserting Semantic Category")}
