@@ -74,7 +74,10 @@ defmodule SignbankWeb.SignLive.Edit do
 
     case Dictionary.update_sign(socket.assigns.sign, sign_params) do
       {:ok, data} ->
-        {:noreply, socket |> put_flash(:info, "Updated successfully") |> init(data)}
+        {:noreply,
+         socket
+         |> put_flash(:info, "Updated successfully")
+         |> init(data)}
 
       {:error, changeset} ->
         {:noreply, assign(socket, form: to_form(changeset))}
@@ -182,32 +185,38 @@ defmodule SignbankWeb.SignLive.Edit do
     {:noreply, socket}
   end
 
-  @impl true
   def handle_event("add-semcat", %{"sign" => new_semcat}, socket) do
     new_semcat = new_semcat["new_semcat"]
 
-    changeset =
-      %Dictionary.SemanticCategory{}
-      |> Dictionary.SemanticCategory.changeset(%{name: new_semcat})
-
-    existing =
+    conflict =
       Signbank.Dictionary.list_semantic_categories()
+      |> Enum.map(&String.trim/1)
+      |> Enum.map(&String.downcase/1)
+      |> Enum.member?(new_semcat |> String.trim() |> String.downcase())
 
-    # TODO case statement to check on duplicates
-    result =
-      Signbank.Repo.insert(changeset)
-
-    case result do
-      {:ok, data} ->
+    case conflict do
+      true ->
         {:noreply,
          socket
-         |> put_flash(:info, "Semantic Category inserted succesfully")}
-
-      {:error, changeset} ->
-        {:noreply, socket |> put_flash(:error, "Error inserting Semantic Category")}
+         |> put_flash(:info, "Semantic Category already exists")}
 
       _ ->
-        {:noreply, socket |> put_flash(:error, "Unknown error")}
+        changeset =
+          %Dictionary.SemanticCategory{}
+          |> Dictionary.SemanticCategory.changeset(%{name: new_semcat})
+
+        case Signbank.Repo.insert(changeset) do
+          {:ok, data} ->
+            {:noreply,
+             socket
+             |> put_flash(:info, "Semantic Category inserted succesfully")}
+
+          {:error, changeset} ->
+            {:noreply, socket |> put_flash(:info, "Error inserting Semantic Category")}
+
+          _ ->
+            {:noreply, socket |> put_flash(:info, "Unknown error")}
+        end
     end
 
     {

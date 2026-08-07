@@ -11,6 +11,7 @@ defmodule Signbank.Dictionary do
   alias Signbank.Dictionary.SignVideo
   alias Signbank.Dictionary.SignKeyword
   alias Signbank.Dictionary.Definition
+  alias Signbank.Dictionary.SemanticCategory
   alias Signbank.Repo
 
   @default_order [
