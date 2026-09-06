@@ -55,7 +55,7 @@ defmodule Signbank.Dictionary.Sign do
       on_replace: :nilify
 
     has_many :videos, Dictionary.SignVideo, on_replace: :delete
-    # Some signs are only in use in particular regions of Australia
+    # Some signs are only in used in particular regions of Australia
     has_many :regions, Dictionary.SignRegion, on_replace: :delete
 
     has_many :suggested_signs, Dictionary.SuggestedSign
@@ -82,6 +82,7 @@ defmodule Signbank.Dictionary.Sign do
     #   join_through: Dictionary.Relation,
     #   join_keys: [sign_a_id_gloss: :id_gloss, sign_b_id_gloss: :id_gloss]
 
+    # ASL = American Sign Language, BSL = British Sign Language
     field :asl_gloss, :string
     field :bsl_gloss, :string
     # A sign is 'iconic' if it has a relationship to what it represents
@@ -95,6 +96,7 @@ defmodule Signbank.Dictionary.Sign do
     # Signs may be loaned or 'borrowed' from another sign language
     field :is_asl_loan, :boolean
     field :is_bsl_loan, :boolean
+    # Signed English is a sign language using English word order, not Auslan
     field :signed_english_gloss, :string
     field :is_signed_english_only, :boolean
     field :is_signed_english_based_on_auslan, :boolean
