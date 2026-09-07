@@ -59,6 +59,7 @@ These fields are ling information:
 - locdirtf
 
 Compound is you can see all signs
+
 Blend is when it is less obvious
 
 **Initialization** is when the first letter handshape is included in the form of the sign
