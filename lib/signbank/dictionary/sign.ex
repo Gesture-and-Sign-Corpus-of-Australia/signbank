@@ -20,23 +20,31 @@ defmodule Signbank.Dictionary.Sign do
   end
 
   schema "signs" do
+    # The type of sign. A variant is a variation on an existing sign.
+    # The 'citation form' is a sort of 'canonical' version.
     field :type, Ecto.Enum, values: [:citation, :variant]
+    # The gloss used to identify a sign. A 'gloss' is an English term
+    # used as shorthand to refer to a sign. Importantly, it is not a
+    # translation or 'equivalent' English word.
     field :id_gloss, :string
     field :id_gloss_annotation, :string
     field :id_gloss_variant_analysis, :string
 
     field :sense_number, :integer
 
+    # A sign is identified by many English 'keywords', eg 'house, home' for house1b
     has_many :keywords, Dictionary.SignKeyword, on_replace: :delete
     field :legacy_id, :integer
     field :legacy_sign_number, :integer
     field :legacy_stem_sign_number, :integer
+    # Controls visibility to non-admin users.
     field :published, :boolean, default: false
     field :proposed_new_sign, :boolean, default: false
 
     # TODO: uncomment this after adding %Tag{}/SignTag
     # many_to_many :tags, Dictionary.Tag, join_through: Dictionary.SignTag
 
+    # See explainer document for expansion on these embedded fields.
     embeds_one :phonology, Dictionary.Phonology, on_replace: :update
     embeds_one :morphology, Dictionary.Morphology, on_replace: :update
 
@@ -47,6 +55,7 @@ defmodule Signbank.Dictionary.Sign do
       on_replace: :nilify
 
     has_many :videos, Dictionary.SignVideo, on_replace: :delete
+    # Some signs are only in used in particular regions of Australia
     has_many :regions, Dictionary.SignRegion, on_replace: :delete
 
     has_many :suggested_signs, Dictionary.SuggestedSign
@@ -73,22 +82,28 @@ defmodule Signbank.Dictionary.Sign do
     #   join_through: Dictionary.Relation,
     #   join_keys: [sign_a_id_gloss: :id_gloss, sign_b_id_gloss: :id_gloss]
 
+    # ASL = American Sign Language, BSL = British Sign Language
     field :asl_gloss, :string
     field :bsl_gloss, :string
+    # A sign is 'iconic' if it has a relationship to what it represents
+    # eg house1a indicates the shape of a house
     field :iconicity, Ecto.Enum, values: @iconicity_values
     field :popular_explanation, :string
     # TODO: add these note fields
     # field :augment_note, :string
     # field :note, :string
     # field :editor_note, :string
+    # Signs may be loaned or 'borrowed' from another sign language
     field :is_asl_loan, :boolean
     field :is_bsl_loan, :boolean
+    # Signed English is a sign language using English word order, not Auslan
     field :signed_english_gloss, :string
     field :is_signed_english_only, :boolean
     field :is_signed_english_based_on_auslan, :boolean
 
     field :english_entry, :boolean
 
+    # These editorial values may be used to hide signs
     field :editorial_doubtful_or_unsure, :boolean
     field :editorial_problematic, :boolean
     field :editorial_problematic_video, :boolean
@@ -186,9 +201,9 @@ defmodule Signbank.Dictionary.Sign do
           Enum.find(sign.keywords, fn existing ->
             String.downcase(existing.text) == String.downcase(keyword)
           end) ||
-            (sign
-             |> Ecto.build_assoc(:keywords)
-             |> Dictionary.SignKeyword.changeset(%{text: keyword}))
+            sign
+            |> Ecto.build_assoc(:keywords)
+            |> Dictionary.SignKeyword.changeset(%{text: keyword})
         end)
 
       put_assoc(changeset, :keywords, keywords)
