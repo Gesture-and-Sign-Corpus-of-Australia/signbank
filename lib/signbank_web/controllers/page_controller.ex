@@ -2,6 +2,7 @@ defmodule SignbankWeb.PageController do
   use SignbankWeb, :controller
 
   def home(conn, _params), do: render(conn, :home)
+  def redirect_home(conn, _params), do: redirect(conn, to: ~p"/")
   def acknowledgements(conn, _params), do: render(conn, :acknowledgements)
   def classes(conn, _params), do: render(conn, :classes)
   def community(conn, _params), do: render(conn, :community)
