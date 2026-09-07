@@ -28,7 +28,7 @@ config :signbank, Signbank.Repo,
 
 These indicate that the username and password values `postgres` will be used to log into the `signbank_dev` database on `localhost`. Postgres does not include a password for the default `postgres` user, so we'll have to set one ourselves. Run the following:
 
-``` sh
+```
 sudo -u postgres psql # log into psql as postgres
 postgres=# \password postgres # set the password interactively
 Enter new password: postgres
