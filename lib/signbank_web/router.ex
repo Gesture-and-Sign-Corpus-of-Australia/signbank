@@ -39,7 +39,6 @@ defmodule SignbankWeb.Router do
     live "/dictionary/phonological-search", SignLive.PhonologicalSearch, :show
 
     get "/dictionary/", PageController, :redirect_home
-    get "/dictionary/sign/", PageController, :redirect_home
     live "/dictionary/sign/:id", SignLive.Basic, :show
     live "/dictionary/sign/:id/detail", SignLive.Detail, :show
 
