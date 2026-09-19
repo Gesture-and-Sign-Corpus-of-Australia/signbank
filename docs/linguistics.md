@@ -58,15 +58,25 @@ These fields are ling information:
 - bodyloctf
 - locdirtf
 
-Compound is you can see all signs
+## Morphology fields
 
-Blend is when it is less obvious
+A **compound** sign is formed by two signs, when all signs comprising it can be seen. e.g. [`ROTISSERIE`](https://auslan.org.au/dictionary/words/rotisserie-1.html)
 
-**Initialization** is when the first letter handshape is included in the form of the sign
+A **blend** is like a compound sign, but less obvious [`EXPENSIVE`](https://auslan.org.au/dictionary/words/expensive-1.html)
 
-**Idiom** just lists the words in the idiom
+**Initialization** is when the first letter handshape is included in the form of the sign, e.g. [`KITCHEN`](https://auslan.org.au/dictionary/words/kitchen-1.html)
 
-Calque, same meaning as for spoken languages--a word or phrase borrowed by literally translating from the source language, e.g. the English 'flea market' comes from the French 'marche aux puces', meaning market with fleas.
+**Initialization** is when the fingerspelling handshape for a letter is _used before_ the sign. Some of these use ISL/ASL fingerspelling handshapes. e.g. [`RAT`](https://auslan.org.au/dictionary/words/rat-1.html)
+
+**Idiom** just lists the words in the idiom. e.g. [`TRAIN'S GONE`](https://auslan.org.au/dictionary/words/train%27s%20gone-1.html)
+
+**Calque**, same meaning as for spoken languages--a word or phrase borrowed by literally translating from the source language, e.g. the English 'flea market' comes from the French 'marche aux puces', meaning market with fleas. e.g. [`WORKSHOP`](https://auslan.org.au/dictionary/words/workshop-1.html)
+
+**Abbreviation**, a sign that is fingerspelled but abbreviated (like etc in English). e.g. [`CENTIMETRE`](https://auslan.org.au/dictionary/words/centimetre-1.html)
+
+**Body Locating**, a sign which can be performed at a particular location to modify its meaning. For example, [`ACHE`](https://auslan.org.au/dictionary/words/ache-1.html) can be used at the knee to indicate a sore knee.
+
+**Multi-Sign Expression**, a set of signs which have become a single sign, e.g. [`SEE YOU AGAIN`](https://auslan.org.au/dictionary/words/see%20you%20again-1.html)
 
 ## Design notes for future Signbank UIs
 Make the headsign video larger, make all of the videos larger.
