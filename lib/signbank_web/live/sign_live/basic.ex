@@ -5,6 +5,8 @@ defmodule SignbankWeb.SignLive.Basic do
 
   on_mount {SignbankWeb.UserAuth, :mount_current_scope}
 
+  @per_page 50
+
   @impl true
   def mount(params, _session, socket) do
     id_gloss = Map.get(params, "id")
@@ -23,7 +25,10 @@ defmodule SignbankWeb.SignLive.Basic do
         search_term: search_term,
         handshape: handshape,
         location: location,
-        allow_crude_signs: allow_crude_signs
+        allow_crude_signs: allow_crude_signs,
+        page: 1,
+        total_pages: 1,
+        total_matches: 0
       )
 
     # Request the localStorage value from the client
@@ -231,11 +236,11 @@ defmodule SignbankWeb.SignLive.Basic do
             </p>
           </div>
         <% else %>
-          <%= if not Enum.empty?(@inexact_matches) and @search_term != nil and @search_term != "" do %>
+          <%= if @total_matches > 0  and @search_term != nil and @search_term != "" do %>
             <div>
-              {Enum.count(@inexact_matches)} close matches found <hr />
-              <ul class="keyword-disambig">
-                <%= for {keyword, matches, any_published} <- Enum.sort_by(@inexact_matches, fn {kw, _matches, _any_published} -> String.downcase(kw) end) do %>
+              {@total_matches} close matches found <hr />
+              <ul class="keyword-disambig columns-[10rem] gap-x-8 gap-y-1">
+                <%= for {keyword, matches, any_published} <- @inexact_matches do %>
                   <li class={[
                     if(!any_published, do: "after:content-['*'] after:font-xl after:ml-[-0.2em]")
                   ]}>
@@ -253,6 +258,7 @@ defmodule SignbankWeb.SignLive.Basic do
                   </li>
                 <% end %>
               </ul>
+              <.pagination page={@page} total_pages={@total_pages} query_params={@query_params} />
             </div>
           <% end %>
         <% end %>
@@ -280,6 +286,13 @@ defmodule SignbankWeb.SignLive.Basic do
     handshape = Map.get(params, "hs")
     location = Map.get(params, "loc")
 
+    # Parses "page" from the URL, defaulting to 1 if missing or invalid.
+    page =
+    case Integer.parse(Map.get(params, "page", "1")) do
+      {n, _} when n > 0 -> n
+      _ -> 1
+    end
+
     if handshape || location do
       case Dictionary.get_sign_by_phon_feature!(persist_query_params(params)) do
         [] ->
@@ -300,7 +313,8 @@ defmodule SignbankWeb.SignLive.Basic do
           handshape: handshape,
           location: location,
           search_term: search_term,
-          query_params: persist_query_params(params)
+          query_params: persist_query_params(params),
+          page: page
         )
 
       # TODO: we need to use `n` to get to a specific match number, but right now we can't
@@ -328,7 +342,15 @@ defmodule SignbankWeb.SignLive.Basic do
           {:noreply, assign(socket, :error, "No results found.")}
 
         inexact_matches ->
-          {:noreply, assign(socket, :inexact_matches, inexact_matches)}
+        result = paginate_matches(inexact_matches, page, @per_page)
+
+        {:noreply,
+        assign(socket,
+          inexact_matches: result.entries,
+          page: result.page,
+          total_pages: result.total_pages,
+          total_matches: result.total_matches
+        )}
       end
     end
   end
@@ -357,8 +379,14 @@ defmodule SignbankWeb.SignLive.Basic do
             assign(socket, search_results: results)
 
           {:multiple, inexact_matches} ->
-            assign(socket, inexact_matches: inexact_matches)
+            result = paginate_matches(inexact_matches, socket.assigns.page, @per_page)
 
+          assign(socket,
+            inexact_matches: result.entries,
+            page: result.page,
+            total_pages: result.total_pages,
+            total_matches: result.total_matches
+          )
           _ ->
             socket
         end
@@ -418,7 +446,7 @@ defmodule SignbankWeb.SignLive.Basic do
   end
 
   def persist_query_params(params) do
-    Map.filter(params, fn {key, val} -> key in ["hs", "loc", "q"] and val not in ["", nil] end)
+    Map.filter(params, fn {key, val} -> key in ["hs", "loc", "q", "page"] and val not in ["", nil] end)
   end
 
   # TODO: fix the page title
@@ -571,5 +599,59 @@ defmodule SignbankWeb.SignLive.Basic do
       {@index}
     </a>
     """
+  end
+
+  # Renders a single clickable page-number link for the pagination control
+  defp page_link(assigns) do
+    ~H"""
+    <.link
+      id={"page_link_#{@page_number}"}
+      class={"join-item border-none btn #{if @page_number == @current_page do "bg-slate-300" end}"}
+      patch={~p"/dictionary/sign?#{Map.put(@query_params, "page", @page_number)}"}
+    >
+      {@page_number}
+    </.link>
+    """
+  end
+
+  # Renders the pagination controls
+  defp pagination(assigns) do
+    ~H"""
+    <div :if={@total_pages > 1} class="input join gap-0 w-min p-0 border-none mt-4">
+      <% lower_bound = min(@page - 2, @total_pages - 4) %>
+      <% upper_bound = max(@page + 2, 5) %>
+      <.page_link page_number={1} query_params={@query_params} current_page={@page} />
+      <span class={["join-item border-none btn btn-disabled", if(lower_bound <= 2, do: "hidden")]}>
+        &hellip;
+      </span>
+      <%= for i <- lower_bound..upper_bound do %>
+        <.page_link
+          :if={1 < i and i < @total_pages}
+          page_number={i}
+          query_params={@query_params}
+          current_page={@page}
+        />
+      <% end %>
+      <span class={["join-item border-none btn btn-disabled", if(upper_bound >= @total_pages - 1, do: "hidden")]}>
+        &hellip;
+      </span>
+      <.page_link
+        :if={@total_pages > 1}
+        page_number={@total_pages}
+        query_params={@query_params}
+        current_page={@page}
+      />
+    </div>
+    """
+  end
+
+  # Sorts keyword matches alphabetically and slices out the requested page.
+  defp paginate_matches(inexact_matches, page, per_page) do
+    sorted = Enum.sort_by(inexact_matches, fn {kw, _, _} -> String.downcase(kw) end)
+    total = Enum.count(sorted)
+    total_pages = max(ceil(total / per_page), 1)
+    page = min(page, total_pages)
+    paged = Enum.slice(sorted, (page - 1) * per_page, per_page)
+    %{entries: paged, page: page, total_pages: total_pages, total_matches: total}
   end
 end
