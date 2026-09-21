@@ -13,7 +13,7 @@ To setup your Signbank development environment:
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 > ## ⚠️ Running with the justfile
-> We highly recommend installing and using `just` to run Signbank. This will automatically source your `.env` file (TODO LINK TO .env HEADING) and start an IEx session.
+> We highly recommend installing and using `just` to run Signbank. This will automatically source your [`.env`](#env-file) file and start an IEx session.
 
 ### Postgres
 Postgres will require a few tweaks before use. At the top of `dev.exs`, you'll see the following lines:
