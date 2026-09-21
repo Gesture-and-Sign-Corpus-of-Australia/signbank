@@ -7,7 +7,7 @@ In linguistics, phonology refers to the organisation of the *sounds* that make u
 - **Orientation**: The rotation of the hand/direction of the palm when signing. In `RED`, this is to the `Left` of the signer.
 - **Location**: The location of the hand relative to the rest of the body during a sign. In `RED`, this is on the `Mouth or lips` of the signer.
 - **Movement**: The movement(s) the hands undergo during the sign. In `RED`, this is a `Side-to-side` `Circular` movement.
-- Expression: The expression(s) the signer's face takes on during the sign.
+- **Expression**: The expression(s) the signer's face takes on during the sign.
 
 #### In the Database
 These elements are expressed in the `phonology` column of the `signs` table as `Dictionary.Phonology`s in the Ecto schema.
@@ -60,11 +60,11 @@ These fields are ling information:
 
 ## Morphology fields
 
-A **compound** sign is formed by two signs, when all signs comprising it can be seen. e.g. [`ROTISSERIE`](https://auslan.org.au/dictionary/words/rotisserie-1.html)
+A **compound** sign is formed by two or more signs, when all signs comprising it can be seen. e.g. [`ROTISSERIE`](https://auslan.org.au/dictionary/words/rotisserie-1.html)
 
 A **blend** is like a compound sign, but less obvious [`EXPENSIVE`](https://auslan.org.au/dictionary/words/expensive-1.html)
 
-**Initialization** is when the first letter handshape is included in the form of the sign, e.g. [`KITCHEN`](https://auslan.org.au/dictionary/words/kitchen-1.html)
+**Initialization** is when the handshape of the first letter of the English translation of the sign is included in the form of the sign, e.g. [`KITCHEN`](https://auslan.org.au/dictionary/words/kitchen-1.html)
 
 **Initialization** is when the fingerspelling handshape for a letter is _used before_ the sign. Some of these use ISL/ASL fingerspelling handshapes. e.g. [`RAT`](https://auslan.org.au/dictionary/words/rat-1.html)
 
