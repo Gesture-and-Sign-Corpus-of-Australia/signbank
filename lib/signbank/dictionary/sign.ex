@@ -7,6 +7,8 @@ defmodule Signbank.Dictionary.Sign do
   import Ecto.Changeset
   alias Signbank.Dictionary
 
+  # How much the form of the sign represents its meaning. (See `docs/linguistics.md` for more)
+  # Opaque → Obscure → Translucent → Transparent
   @iconicity_values [
     opaque: gettext("opaque"),
     obscure: gettext("obscure"),
