@@ -618,7 +618,7 @@ window.allowCrudeSigns = () => {
   return localStorage.getItem('allowCrudeSigns') === 'true';
 }
 
-// TODO: use this to highlight the current selected phonologica``l search handshape/location
+// TODO: use this to highlight the current selected phonological search handshape/location
 window.addEventListener("phx:phon-filter-highlight", (e) => {
   if (e.detail.hasOwnProperty('location')) {
     [...document.querySelectorAll(".location_filter_container > *")].forEach(x => x.classList.remove("highlight"));
