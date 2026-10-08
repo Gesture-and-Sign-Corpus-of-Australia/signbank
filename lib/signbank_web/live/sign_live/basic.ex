@@ -108,6 +108,10 @@ defmodule SignbankWeb.SignLive.Basic do
   @impl true
   def render(assigns) do
     if :sign in Map.keys(assigns) do
+      # for assigns.sign.relations do
+
+      # end
+
       ~H"""
       <Layouts.app flash={@flash} current_scope={@current_scope}>
         <div

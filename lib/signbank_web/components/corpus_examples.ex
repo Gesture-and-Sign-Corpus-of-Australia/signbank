@@ -20,21 +20,13 @@ defmodule SignbankWeb.CorpusExamples do
             {example.video_url}
           </div>
         <% else %>
-          <button
-            type="button"
-            class="btn"
-            phx-click="randomize_example"
-            phx-target={@myself}
-          >
+          <button type="button" class="btn" phx-click="randomize_example" phx-target={@myself}>
             Show corpus examples
           </button>
           <dialog id={"corpus_examples_modal__#{@gloss}"} class="modal">
             <div class="modal-box">
               <%= if @current_example do %>
-                <.example_with_elan
-                  example={@current_example}
-                  id={"example_#{@current_example.id}"}
-                />
+                <.example_with_elan example={@current_example} id={"example_#{@current_example.id}"} />
               <% end %>
               <div class="modal-action">
                 <button
@@ -70,16 +62,12 @@ defmodule SignbankWeb.CorpusExamples do
     ~H"""
     <div class="space-y-4 mb-8">
       <!-- Video player -->
-      <video
-        id={"video_#{@id}"}
-        muted
-        controls
-        class="w-full max-w-2xl"
-        phx-hook="VideoPlayer"
-      >
-        <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{@example.video_url}"} />
-      </video>
-
+      <.streaming_player
+        video_id={"video_#{@id}"}
+        video_url={"#{Application.fetch_env!(:signbank, :media_url)}/#{@example.video_url}"}
+        start="0"
+        ending="10"
+      />
       <!-- ELAN viewer (if annotations exist) -->
       <%= if @elan_data do %>
         <div class="border border-gray-300 rounded-lg p-1 sm:p-4 bg-white">

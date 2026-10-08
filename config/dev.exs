@@ -67,6 +67,8 @@ config :signbank, SignbankWeb.Endpoint,
 # Enable dev route for mailbox
 config :signbank, dev_routes: true
 
+config :signbank, eaf_dir: "corpus"
+
 # Do not include metadata nor timestamps in development logs
 config :logger, :default_formatter, format: "[$level] $message\n"
 

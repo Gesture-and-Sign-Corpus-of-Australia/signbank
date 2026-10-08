@@ -354,7 +354,7 @@ Hooks.ElanPlayhead = {
     const duration = parseFloat(el.dataset.duration);        // ms
     const basePxPerMs = parseFloat(el.dataset.pixelsPerMs);
     let pxPerMs = basePxPerMs;
-    let isFitToView = false;
+    let isFitToView = true;
     const playhead = el.querySelector("[id$='-playhead']");
     const ruler = el.querySelector("[id$='-ruler']");
 
@@ -402,6 +402,10 @@ Hooks.ElanPlayhead = {
     const fitBtn = el.querySelector("[data-zoom-fit]");
     // Find the external button that targets this viewer
     const externalBtn = document.querySelector(`[data-zoom-fit-external="${el.id}"]`);
+    // initial zoom out
+    fitToView();
+    if (externalBtn) externalBtn.innerHTML = '<span class="text-sm">⟲</span>&nbsp;Reset';
+      
     if (fitBtn) {
       fitBtn.addEventListener("click", () => {
         isFitToView = !isFitToView;
@@ -414,7 +418,6 @@ Hooks.ElanPlayhead = {
         }
       });
     }
-
     // Re-fit when the container resizes (e.g. window resize)
     const resizeObserver = new ResizeObserver(() => {
       if (isFitToView) fitToView();
@@ -538,13 +541,12 @@ function map_range(value, min1, max1, min2, max2) {
     return Number(min2) + (value - min1) * (max2 - min2) / (max1 - min1)
 }
 
-Hooks.StreamingVideoPlayer = {
-    mounted() {
+function update_elan_viewer(el) {
         const videoContainer = document.getElementById("videoContainer");
-        const video = document.getElementById("video");
-        const progress = document.getElementById("progress");``
+        const progress = document.getElementById("progress");
         const pauseIndicator = document.getElementById("pauseIndicator");
         const restartIndicator = document.getElementById("restartIndicator");
+        const video = el.querySelector("video");
 
         const start = video.getAttribute("start")
         const ending = video.getAttribute("ending")
@@ -554,12 +556,12 @@ Hooks.StreamingVideoPlayer = {
 
         video.controls = false;
         video.addEventListener("click", (e) => {
+            console.log(video);
             if (video.currentTime >= ending) {
                 video.pause();
                 video.currentTime = start;
                 progress.value = 0;
                 video.play();
-                console.log("restarting");
                 pauseIndicator.style.visibility = "hidden";
                 restartIndicator.style.visibility = "hidden";
             } else if (video.paused) {
@@ -573,7 +575,6 @@ Hooks.StreamingVideoPlayer = {
             }
         });
         video.addEventListener("dblclick", (event) => {
-            console.log("double click");
             if (document.fullscreenElement !== null) {
                 document.exitFullscreen();
             } else {
@@ -592,7 +593,6 @@ Hooks.StreamingVideoPlayer = {
                 pauseIndicator.style.visibility = "hidden";
                 restartIndicator.style.visibility = "visible";
             }
-
         });
         progress.addEventListener("click", (e) => {
             if (!Number.isFinite(video.duration)) return;
@@ -601,6 +601,14 @@ Hooks.StreamingVideoPlayer = {
             const mapped = map_range(pos, 0, 1, start, ending);
             video.currentTime = mapped;
         });
+}
+
+Hooks.StreamingVideoPlayer = {
+    updated() {
+        update_elan_viewer(this.el);
+    },
+    mounted() {
+        update_elan_viewer(this.el);
     }
 }
 

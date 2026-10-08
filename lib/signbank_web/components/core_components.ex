@@ -722,15 +722,17 @@ defmodule SignbankWeb.CoreComponents do
   # try double click to fullscreen?
   # my linux firefox install breaks on restarting the vid. 
   attr :video_url, :string, required: true
+  attr :video_id, :string, required: true
   attr :start, :float, required: true
   attr :ending, :float, required: true
 
   def streaming_player(assigns) do
     ~H"""
-    <div class="flex w-2xl">
+    <div class="flex w-full">
       <figure
         id="videoContainer"
-        class="border border-solid rounded-md relative flex flex-col"
+        video_id={@video_id}
+        class="rounded-md relative flex flex-col"
         phx-hook="StreamingVideoPlayer"
       >
         <img
@@ -744,7 +746,7 @@ defmodule SignbankWeb.CoreComponents do
           class="absolute right-0 top-0 p-4 w-20 h-20"
         />
         <video
-          id="video"
+          id={@video_id}
           class="m-auto grow"
           controls
           preload="metadata"
@@ -755,9 +757,6 @@ defmodule SignbankWeb.CoreComponents do
           type="video/mp4"
         />
         <progress id="progress" class="w-full my-0 h-5" value="0"></progress>
-        <figcaption class="py-0 mt-0">
-          &copy; Auslan Corpus | LINKTOCORPUS
-        </figcaption>
       </figure>
     </div>
     """
