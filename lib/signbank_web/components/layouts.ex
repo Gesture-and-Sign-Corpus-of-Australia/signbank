@@ -27,6 +27,10 @@ defmodule SignbankWeb.Layouts do
     default: nil,
     doc: "the current [scope](https://hexdocs.pm/phoenix/scopes.html)"
 
+  attr :wide, :boolean,
+    default: false,
+    doc: "use a wider content area (for pages like Search by Sign Features)"
+
   slot :inner_block, required: true
 
   def app(assigns) do
@@ -62,7 +66,10 @@ defmodule SignbankWeb.Layouts do
     <.nav id="menu-sm" mobile />
 
     <%!-- <main class="px-4 py-20 sm:px-6 lg:px-8"> --%>
-    <main class="mx-auto max-w-4xl space-y-4 pt-4">
+    <main class={[
+      "mx-auto space-y-4 pt-4",
+      if(@wide, do: "max-w-7xl px-4 sm:px-6 lg:px-8", else: "max-w-4xl")
+    ]}>
       {render_slot(@inner_block)}
     </main>
 

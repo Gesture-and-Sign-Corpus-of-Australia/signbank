@@ -135,6 +135,47 @@
   opacity: 0.8;
 }
 
+/* Search by sign features: location diagram regions */
+.location_filter_container image {
+  filter: hue-rotate(60deg) saturate(0.25) brightness(1.35);
+}
+
+.loc-region {
+  cursor: pointer;
+  outline: none;
+}
+
+.loc-region rect {
+  fill: transparent;
+  stroke: oklch(88% 0.015 295);
+  stroke-width: 2;
+  transition: fill 120ms, stroke 120ms;
+}
+
+.loc-region:hover rect {
+  fill: oklch(85% 0.04 295 / 0.6);
+}
+
+.loc-region:focus-visible rect {
+  stroke: var(--color-purple);
+  stroke-width: 8;
+}
+
+.loc-region[aria-pressed="true"] rect {
+  fill: oklch(78% 0.07 295 / 0.85);
+  stroke: var(--color-purple);
+  stroke-width: 3;
+}
+
+/* Search by sign features: in multi-handshape tiles, the stem/phoneme reads "bold" */
+.handshape-stem {
+  filter: url(#handshape-bold);
+  mix-blend-mode: multiply;
+}
+.handshape-allophone {
+  opacity: 0.55;
+}
+
 .region_map_svg {
   --region-map-fill: gray;
   --region-map-fill--selected: orange;
