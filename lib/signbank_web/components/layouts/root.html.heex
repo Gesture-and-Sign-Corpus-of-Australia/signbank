@@ -33,6 +33,13 @@
     </script>
   </head>
   <body>
+    <%!-- Skip link: first focusable element, hidden until focused, so keyboard users can bypass the nav --%>
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:rounded focus:bg-yellow focus:text-purple focus:font-semibold"
+    >
+      Skip to main content
+    </a>
     <ul
       class="text-yellow bg-purple flex items-end justify-end gap-[1em] m-0 h-[1lh] pt-8 pr-4 sm:pr-6 lg:pr-8"
       data-old-class="menu menu-horizontal w-full relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end"

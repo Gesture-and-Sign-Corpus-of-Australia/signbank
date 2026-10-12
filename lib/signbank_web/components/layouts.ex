@@ -62,7 +62,7 @@ defmodule SignbankWeb.Layouts do
     <.nav id="menu-sm" mobile />
 
     <%!-- <main class="px-4 py-20 sm:px-6 lg:px-8"> --%>
-    <main class="mx-auto max-w-4xl space-y-4 pt-4">
+    <main id="main-content" tabindex="-1" class="mx-auto max-w-4xl space-y-4 pt-4 focus:outline-none">
       {render_slot(@inner_block)}
     </main>
 
