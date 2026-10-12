@@ -185,7 +185,7 @@ defmodule SignbankWeb.SignLive.Detail do
 
       <details class="collapse collapse-arrow join-item border-base-300 border">
         <summary class="collapse-title bg-base-200">
-          <h2 class="text-md font-semibold" aria-label="Vocabulary:">Morphology</h2>
+          <h2 class="text-md font-semibold" aria-label="Morphology:">Morphology</h2>
           <span class="text-sm">spatial &ndash; lexical</span>
         </summary>
         <div class="collapse-content text-sm">
@@ -195,7 +195,7 @@ defmodule SignbankWeb.SignLive.Detail do
 
       <details class="collapse collapse-arrow join-item border-base-300 border">
         <summary class="collapse-title bg-base-200">
-          <h2 class="text-md font-semibold" aria-label="Vocabulary:">Phonology</h2>
+          <h2 class="text-md font-semibold" aria-label="Phonology:">Phonology</h2>
           <span class="text-sm">movement &ndash; orientation &ndash; location</span>
         </summary>
         <div class="collapse-content text-sm">

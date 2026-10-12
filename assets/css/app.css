@@ -364,7 +364,11 @@
   background: rgb(122.1950920245, 183.2926380368, 59.6073619632);
 }
 
-
+/* Show keyboard focus on accordion headers */
+.collapse:is(details) > summary:focus-visible {
+  outline: 2px solid var(--color-base-content);
+  outline-offset: -2px;
+}
 
 /* Dialects */
 

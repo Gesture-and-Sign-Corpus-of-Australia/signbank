@@ -47,7 +47,7 @@ defmodule SignbankWeb.GrammarLive do
         </p>
 
         <p>
-          These videos were produced by <a href="https://www.deafconnected.com.au/">deafConnectEd</a>
+          These videos were produced by <a href="https://www.deafconnected.com.au/" target="_blank">deafConnectEd</a>
           (Melbourne Polytechnic) with support by the
           Victorian Government, and build on earlier work by Della Goswell (Macquarie University).
         </p>
