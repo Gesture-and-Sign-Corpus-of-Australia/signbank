@@ -60,7 +60,7 @@ defmodule SignbankWeb.CorpusExamples do
       |> assign_new(:elan_data, fn -> load_elan_for_example(assigns.example) end)
 
     ~H"""
-    <div class="space-y-4 mb-8">
+    <div class="space-y-4 mb-8 border border-gray-300 rounded-lg p-1 sm:p-4 bg-white">
       <!-- Video player -->
       <.streaming_player
         video_id={"video_#{@id}"}
@@ -70,9 +70,9 @@ defmodule SignbankWeb.CorpusExamples do
       />
       <!-- ELAN viewer (if annotations exist) -->
       <%= if @elan_data do %>
-        <div class="border border-gray-300 rounded-lg p-1 sm:p-4 bg-white">
-          <div class="flex items-center justify-between mb-2">
-            <h4 class="font-semibold">Annotations</h4>
+        <div class="">
+          <div class="flex items-center justify-between mt-2 pb-1 bg-gray-200">
+            <h4 class="px-2 font-semibold">Annotations</h4>
             <button
               type="button"
               class="btn btn-sm btn-ghost gap-1 w-28"

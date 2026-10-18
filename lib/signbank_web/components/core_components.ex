@@ -728,11 +728,11 @@ defmodule SignbankWeb.CoreComponents do
 
   def streaming_player(assigns) do
     ~H"""
-    <div class="flex w-full">
+    <div class="flex w-full m-0">
       <figure
         id="videoContainer"
         video_id={@video_id}
-        class="rounded-md relative flex flex-col"
+        class="relative flex flex-col"
         phx-hook="StreamingVideoPlayer"
       >
         <img
@@ -747,7 +747,7 @@ defmodule SignbankWeb.CoreComponents do
         />
         <video
           id={@video_id}
-          class="m-auto grow"
+          class="m-auto grow rounded-t-lg"
           controls
           preload="metadata"
           <source
@@ -756,7 +756,7 @@ defmodule SignbankWeb.CoreComponents do
           ending={@ending}
           type="video/mp4"
         />
-        <progress id="progress" class="w-full my-0 h-5" value="0"></progress>
+        <progress id="progress" class="w-full my-0 h-5 rounded-b-lg" value="0"></progress>
       </figure>
     </div>
     """
