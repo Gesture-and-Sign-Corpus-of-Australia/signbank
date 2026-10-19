@@ -57,11 +57,15 @@ defmodule SignbankWeb.SignLive.Detail do
           <hr />
 
           <div :if={@sign.type == :citation and Enum.count(@sign.variants) > 0} class="box">
-            <h3 class="text-lg mt-2">Variants</h3>
-            <ol class="entry-page__variant_list">
+            <h3 id="variants-heading" class="text-lg mt-2">Variants</h3>
+            <ol aria-labelledby="variants-heading" class="entry-page__variant_list flex flex-wrap gap-2 mt-2">
               <%= for {variant, index} <- Enum.with_index(@sign.variants, 1) do %>
                 <li>
-                  <.link class="btn" href={~p"/dictionary/sign/#{variant.id_gloss}/detail?#{@params}"}>
+                  <.link
+                    class="btn min-w-11 min-h-11"
+                    href={~p"/dictionary/sign/#{variant.id_gloss}/detail?#{@params}"}
+                    aria-label={"Variant #{index}"}
+                  >
                     {index}
                   </.link>
                 </li>

@@ -62,7 +62,7 @@ defmodule SignbankWeb.Layouts do
     <.nav id="menu-sm" mobile />
 
     <%!-- <main class="px-4 py-20 sm:px-6 lg:px-8"> --%>
-    <main class="mx-auto max-w-4xl space-y-4 pt-4">
+    <main <main id="main-content" tabindex="-1" class="mx-auto max-w-4xl space-y-4 pt-4 px-4 sm:px-6 lg:px-0 focus:outline-none">
       {render_slot(@inner_block)}
     </main>
 
@@ -121,11 +121,12 @@ defmodule SignbankWeb.Layouts do
                 class="input"
                 type="text"
                 name="q"
-                id="main-search-input"
+                id={if @mobile, do: "mobile-search-input", else: "main-search-input"}
+                aria-label={gettext("Search by English keyword")}
                 placeholder={gettext("Search by English keyword…")}
               />
             </div>
-            <button class="join-item btn btn-icon">
+            <button type="submit" class="join-item btn btn-icon" aria-label={gettext("Search")}>
               <.icon name="hero-magnifying-glass" class="size-6 bg-black" />
             </button>
           </div>
