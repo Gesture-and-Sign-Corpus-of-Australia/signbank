@@ -535,7 +535,7 @@ Hooks.ElanPlayhead = {
 };
 
 window.validateSearchForm = (event) => {
-  const searchInput = document.getElementById('main-search-input');
+  const searchInput = event.currentTarget.elements.q;
   if (!searchInput || !searchInput.value || searchInput.value.trim() === '') {
     event.preventDefault();
     return false;
