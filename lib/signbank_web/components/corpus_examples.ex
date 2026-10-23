@@ -7,6 +7,9 @@ defmodule SignbankWeb.CorpusExamples do
   alias Signbank.Corpus
   alias Signbank.ElanParser
 
+  # Clip padding in ms — must match @clip_padding_ms in CorpusExampleTrimmer
+  @clip_padding_ms 2_500
+
   attr :version, :atom, default: :inline
   attr :gloss, :atom, default: :inline
 
@@ -58,6 +61,8 @@ defmodule SignbankWeb.CorpusExamples do
       assigns
       |> assign_new(:id, fn -> "example_#{assigns.example.id}" end)
       |> assign_new(:elan_data, fn -> load_elan_for_example(assigns.example) end)
+      |> assign(:clip_start, max(assigns.example.start_ms - @clip_padding_ms, 0))
+      |> assign(:clip_end, assigns.example.end_ms + @clip_padding_ms)
 
     ~H"""
     <div class="space-y-4 mb-8 border border-gray-300 rounded-lg p-1 sm:p-4 bg-white">
@@ -65,14 +70,17 @@ defmodule SignbankWeb.CorpusExamples do
       <.streaming_player
         video_id={"video_#{@id}"}
         video_url={"#{Application.fetch_env!(:signbank, :media_url)}/#{@example.video_url}"}
-        start="0"
-        ending="10"
+        start={@clip_start / 1000}
+        ending={@clip_end / 1000}
       />
       <!-- ELAN viewer (if annotations exist) -->
       <%= if @elan_data do %>
         <div class="">
-          <div class="flex items-center justify-between mt-2 pb-1 bg-gray-200">
+          <div class="flex items-center justify-between pb-1 bg-gray-200">
             <h4 class="px-2 font-semibold">Annotations</h4>
+            <button type="button" id="pauseplay" class="btn btn-sm btn-ghost gap-1 w-28">
+              <span class="text-sm">⏸️</span> Play/Pause
+            </button>
             <button
               type="button"
               class="btn btn-sm btn-ghost gap-1 w-28"
@@ -134,9 +142,6 @@ defmodule SignbankWeb.CorpusExamples do
        time: time_ms / 1000
      })}
   end
-
-  # Clip padding in ms — must match @clip_padding_ms in CorpusExampleTrimmer
-  @clip_padding_ms 2_500
 
   # Load ELAN data for a specific example, filtered to relevant tiers and time range.
   # The actual video clip has @clip_padding_ms of padding on each side of the annotation,

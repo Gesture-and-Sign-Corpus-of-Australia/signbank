@@ -12,6 +12,7 @@ defmodule SignbankWeb.ElanViewer do
 
     for i <- 0..count do
       ms = i * interval
+
       %{
         ms: ms,
         left: ms * pixels_per_ms,
@@ -77,7 +78,8 @@ defmodule SignbankWeb.ElanViewer do
                 <div class={[
                   "absolute bottom-0 w-px bg-gray-400",
                   if(tick.major, do: "h-4", else: "h-2")
-                ]}></div>
+                ]}>
+                </div>
                 <span
                   :if={tick.label}
                   class="absolute top-0 text-[10px] text-gray-500 -translate-x-1/2 select-none"
@@ -122,7 +124,8 @@ defmodule SignbankWeb.ElanViewer do
               style="left: 0px; display: none;"
             >
               <%!-- Playhead handle (draggable) --%>
-              <div class="absolute -top-1 -left-[5px] w-3 h-3 bg-red-600 rounded-full pointer-events-auto cursor-grab active:cursor-grabbing"></div>
+              <div class="absolute -top-1 -left-[5px] w-3 h-3 bg-red-600 rounded-full pointer-events-auto cursor-grab active:cursor-grabbing">
+              </div>
             </div>
           </div>
         </div>

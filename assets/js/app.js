@@ -541,66 +541,78 @@ function map_range(value, min1, max1, min2, max2) {
     return Number(min2) + (value - min1) * (max2 - min2) / (max1 - min1)
 }
 
-function update_elan_viewer(el) {
-        const videoContainer = document.getElementById("videoContainer");
-        const progress = document.getElementById("progress");
-        const pauseIndicator = document.getElementById("pauseIndicator");
-        const restartIndicator = document.getElementById("restartIndicator");
-        const video = el.querySelector("video");
-
-        const start = video.getAttribute("start")
-        const ending = video.getAttribute("ending")
-
-        // pauseIndicator.style.visibility = "hidden";
+function pause_play_restart_streamingplayer(el) {
+    const video = el.querySelector("video");
+    const start = video.getAttribute("start")
+    const ending = video.getAttribute("ending")
+    if (video.currentTime >= ending) {
+        video.currentTime = start;
+        progress.value = 0;
+        pauseIndicator.style.visibility = "hidden";
         restartIndicator.style.visibility = "hidden";
+        video.play();
+    } else if (video.paused) {
+        video.play();
+        pauseIndicator.style.visibility = "hidden";
+        restartIndicator.style.visibility = "hidden";
+    } else {
+        video.pause();
+        pauseIndicator.style.visibility = "visible";
+        restartIndicator.style.visibility = "hidden";
+    };
+}
 
-        video.controls = false;
-        video.addEventListener("click", (e) => {
-            console.log(video);
-            if (video.currentTime >= ending) {
-                video.pause();
-                video.currentTime = start;
-                progress.value = 0;
-                video.play();
-                pauseIndicator.style.visibility = "hidden";
-                restartIndicator.style.visibility = "hidden";
-            } else if (video.paused) {
-                video.play();
-                pauseIndicator.style.visibility = "hidden";
-                restartIndicator.style.visibility = "hidden";
-            } else {
-                video.pause();
-                pauseIndicator.style.visibility = "visible";
-                restartIndicator.style.visibility = "hidden";
-            }
-        });
-        video.addEventListener("dblclick", (event) => {
-            if (document.fullscreenElement !== null) {
-                document.exitFullscreen();
-            } else {
-                videoContainer.requestFullscreen();
-            }
-        });
-        video.addEventListener("loadedmetadata", () => {
-            progress.setAttribute("max", 100);
-        });
-        video.addEventListener("timeupdate", () => {
-            if (!progress.getAttribute("max"))``
-                progress.setAttribute("max", 100);
-            progress.value = map_range(video.currentTime, start, ending, 0, 100);
-            if (video.currentTime >= ending) {
-                video.pause();
-                pauseIndicator.style.visibility = "hidden";
-                restartIndicator.style.visibility = "visible";
-            }
-        });
-        progress.addEventListener("click", (e) => {
-            if (!Number.isFinite(video.duration)) return;
-            const rect = progress.getBoundingClientRect();
-            const pos = (e.pageX - rect.left) / progress.offsetWidth;
-            const mapped = map_range(pos, 0, 1, start, ending);
-            video.currentTime = mapped;
-        });
+function update_elan_viewer(el) {
+    const videoContainer = document.getElementById("videoContainer");
+    const progress = document.getElementById("progress");
+    const pauseIndicator = document.getElementById("pauseIndicator");
+    const restartIndicator = document.getElementById("restartIndicator");
+    const video = el.querySelector("video");
+    const pauseplay = document.getElementById("pauseplay");
+
+    const start = video.getAttribute("start")
+    const ending = video.getAttribute("ending")
+
+    // pauseIndicator.style.visibility = "hidden";
+    restartIndicator.style.visibility = "hidden";
+
+    video.controls = false;
+    if (pauseplay) {
+        pauseplay.addEventListener("click", (e) => {
+            pause_play_restart_streamingplayer(el);
+        })  
+    }
+    if (!video) { return; }
+    video.addEventListener("click", (e) => {
+        pause_play_restart_streamingplayer(el);
+    });
+    video.addEventListener("dblclick", (event) => {
+        if (document.fullscreenElement !== null) {
+            document.exitFullscreen();
+        } else {
+            videoContainer.requestFullscreen();
+        }
+    });
+    video.addEventListener("loadedmetadata", () => {
+        progress.setAttribute("max", 100);
+    });
+    video.addEventListener("timeupdate", () => {
+        if (!progress.getAttribute("max"))``
+        progress.setAttribute("max", 100);
+        progress.value = map_range(video.currentTime, start, ending, 0, 100);
+        if (video.currentTime >= ending) {
+            video.pause();
+            pauseIndicator.style.visibility = "hidden";
+            restartIndicator.style.visibility = "visible";
+        }
+    });
+    progress.addEventListener("click", (e) => {
+        if (!Number.isFinite(video.duration)) return;
+        const rect = progress.getBoundingClientRect();
+        const pos = (e.pageX - rect.left) / progress.offsetWidth;
+        const mapped = map_range(pos, 0, 1, start, ending);
+        video.currentTime = mapped;
+    });
 }
 
 Hooks.StreamingVideoPlayer = {

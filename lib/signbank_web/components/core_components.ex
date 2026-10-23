@@ -728,37 +728,35 @@ defmodule SignbankWeb.CoreComponents do
 
   def streaming_player(assigns) do
     ~H"""
-    <div class="flex w-full m-0">
-      <figure
-        id="videoContainer"
-        video_id={@video_id}
-        class="relative flex flex-col"
-        phx-hook="StreamingVideoPlayer"
-      >
-        <img
-          id="pauseIndicator"
-          src="/images/icons/pause.svg"
-          class="absolute right-0 top-0 p-4 w-20 h-20"
-        />
-        <img
-          id="restartIndicator"
-          src="/images/icons/restart.svg"
-          class="absolute right-0 top-0 p-4 w-20 h-20"
-        />
-        <video
-          id={@video_id}
-          class="m-auto grow rounded-t-lg"
-          controls
-          preload="metadata"
-          <source
-          src={"#{@video_url}#t=#{@start},#{@ending}"}
-          start={@start}
-          ending={@ending}
-          type="video/mp4"
-        />
-        <progress id="progress" class="w-full my-0 h-5 rounded-b-lg" value="0"></progress>
-      </figure>
-    </div>
+    <figure
+      id="videoContainer"
+      video_id={@video_id}
+      class="relative flex flex-col mb-0"
+      phx-hook="StreamingVideoPlayer"
+    >
+      <img
+        id="pauseIndicator"
+        src="/images/icons/pause.svg"
+        class="absolute right-0 top-0 p-4 w-20 h-20"
+      />
+      <img
+        id="restartIndicator"
+        src="/images/icons/restart.svg"
+        class="absolute right-0 top-0 p-4 w-20 h-20"
+      />
+      <video
+        id={@video_id}
+        class="m-auto grow rounded-t-lg"
+        controls
+        preload="metadata"
+        <source
+        src={"#{@video_url}#t=#{@start},#{@ending}"}
+        start={@start}
+        ending={@ending}
+        type="video/mp4"
+      />
+      <progress id="progress" class="w-full my-0 h-5" value="0"></progress>
+    </figure>
     """
   end
 end
