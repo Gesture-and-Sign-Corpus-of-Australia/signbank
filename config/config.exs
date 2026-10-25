@@ -23,7 +23,7 @@ config :signbank, :scopes,
 config :signbank, Oban,
   engine: Oban.Engines.Basic,
   notifier: Oban.Notifiers.Postgres,
-  queues: [default: 10, ffmpeg: 4],
+  queues: [default: 10],
   repo: Signbank.Repo,
   plugins: [
     {Oban.Plugins.Pruner, max_age: 60 * 60 * 24 * 7},

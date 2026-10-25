@@ -17,7 +17,7 @@ defmodule SignbankWeb.CorpusExamples do
         <%= if @version == :inline do %>
           inline version
           <div :for={example <- @examples}>
-            {example.video_url}
+            {example.source_video_id} ({example.start_ms}–{example.end_ms} ms)
           </div>
         <% else %>
           <button
@@ -62,8 +62,12 @@ defmodule SignbankWeb.CorpusExamples do
   attr :id, :string, default: nil
 
   def example_with_elan(assigns) do
+    {clip_start_ms, clip_end_ms} = Corpus.playback_window(assigns.example)
+
     assigns =
       assigns
+      |> assign(:clip_start, clip_start_ms / 1000)
+      |> assign(:clip_end, clip_end_ms / 1000)
       |> assign_new(:id, fn -> "example_#{assigns.example.id}" end)
       |> assign_new(:elan_data, fn -> load_elan_for_example(assigns.example) end)
 
@@ -76,8 +80,11 @@ defmodule SignbankWeb.CorpusExamples do
         controls
         class="w-full max-w-2xl"
         phx-hook="VideoPlayer"
+        preload="metadata"
+        data-clip-start={@clip_start}
+        data-clip-end={@clip_end}
       >
-        <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{@example.video_url}"} />
+        <source src={"#{Corpus.source_video_url(@example)}#t=#{@clip_start},#{@clip_end}"} />
       </video>
 
       <!-- ELAN viewer (if annotations exist) -->
@@ -147,19 +154,13 @@ defmodule SignbankWeb.CorpusExamples do
      })}
   end
 
-  # Clip padding in ms — must match @clip_padding_ms in CorpusExampleTrimmer
-  @clip_padding_ms 2_500
-
-  # Load ELAN data for a specific example, filtered to relevant tiers and time range.
-  # The actual video clip has @clip_padding_ms of padding on each side of the annotation,
-  # so we use the full clip boundaries for filtering and time-shifting.
+  # Load ELAN data for the part of the source video that is played for this
+  # example.
   defp load_elan_for_example(example) do
     case example do
-      %{source_video_id: source_video_id, start_ms: start_ms, end_ms: end_ms}
-      when is_binary(source_video_id) ->
+      %{source_video_id: source_video_id} when is_binary(source_video_id) ->
         eaf_filename = String.replace(source_video_id, ~r/\.(mp4|mov|avi)$/i, ".eaf")
-        clip_start = max(start_ms - @clip_padding_ms, 0)
-        clip_end = end_ms + @clip_padding_ms
+        {clip_start, clip_end} = Corpus.playback_window(example)
         load_elan_file(eaf_filename, start_ms: clip_start, end_ms: clip_end)
 
       _ ->
@@ -168,7 +169,9 @@ defmodule SignbankWeb.CorpusExamples do
   end
 
   defp load_elan_file(filename, opts) do
-    media_dir = Application.get_env(:signbank, :eaf_dir, "/home/signbank/hack_corpus_examples")
+    # The .eaf files live alongside the corpus videos unless :eaf_dir says otherwise
+    media_dir =
+      Application.get_env(:signbank, :eaf_dir) || Application.fetch_env!(:signbank, :corpus_root)
     full_path = Path.join(media_dir, filename)
 
     case File.read(full_path) do

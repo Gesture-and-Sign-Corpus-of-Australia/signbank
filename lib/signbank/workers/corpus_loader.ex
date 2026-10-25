@@ -9,13 +9,14 @@ defmodule Signbank.Workers.CorpusLoader do
   import Meeseeks.CSS
   alias Signbank.Corpus
   alias Signbank.Repo
-  alias Signbank.Workers.CorpusExampleTrimmer
 
   @backfill_delay 5
   @overlap_tolerance_ms 20
+  @insert_batch_size 1_000
 
   @doc """
-  Parse all annotations in an `.eaf` file and schedule jobs to create clips for them.
+  Parse all annotations in an `.eaf` file and store each one as a
+  `Corpus.Example` (timecodes into the matching `.mp4`; no clips are cut).
   """
   @impl Oban.Worker
   def perform(%Oban.Job{args: %{"backfill" => true} = args}) do
@@ -35,7 +36,7 @@ defmodule Signbank.Workers.CorpusLoader do
   end
 
   def perform(%Oban.Job{args: %{"eaf" => eaf}}) do
-    clear_existing_examples(eaf)
+    source_video_id = String.replace(eaf, ".eaf", ".mp4")
 
     xml =
       Meeseeks.parse(
@@ -51,34 +52,40 @@ defmodule Signbank.Workers.CorpusLoader do
         }
       end
 
-    for el <- Meeseeks.all(xml, annotation_selector()), reduce: [] do
-      processed ->
-        annotation = %{
-          eaf: eaf,
-          annotation_text: Meeseeks.text(el),
-          start_ms: get_timecode(timeslots, Meeseeks.attr(el, "TIME_SLOT_REF1")),
-          end_ms: get_timecode(timeslots, Meeseeks.attr(el, "TIME_SLOT_REF2"))
-        }
+    examples =
+      for el <- Meeseeks.all(xml, annotation_selector()), reduce: [] do
+        processed ->
+          example = %{
+            annotation_text: Meeseeks.text(el),
+            source_video_id: source_video_id,
+            start_ms: get_timecode(timeslots, Meeseeks.attr(el, "TIME_SLOT_REF1")),
+            end_ms: get_timecode(timeslots, Meeseeks.attr(el, "TIME_SLOT_REF2"))
+          }
 
-        overlaps_any_already_proccessed? =
-          Enum.any?(processed, fn other ->
-            annotation.annotation_text == other.annotation_text and
-              abs(annotation.start_ms - other.start_ms) < @overlap_tolerance_ms and
-              abs(annotation.end_ms - other.end_ms) < @overlap_tolerance_ms
-          end)
+          if overlaps_any?(example, processed), do: processed, else: [example | processed]
+      end
 
-        if overlaps_any_already_proccessed? do
-          processed
-        else
-          annotation
-          |> CorpusExampleTrimmer.new()
-          |> Oban.insert()
-
-          [annotation | processed]
-        end
-    end
+    # Replace this video's examples in one go, so a failed run leaves the old ones in place.
+    Repo.transaction(fn ->
+      clear_existing_examples(source_video_id)
+      # Insert in batches
+      examples
+      |> Enum.reverse()
+      |> Enum.chunk_every(@insert_batch_size)
+      |> Enum.each(&Repo.insert_all(Corpus.Example, &1))
+    end)
 
     :ok
+  end
+
+  # The same sign is often annotated on both the left- and right-hand tiers;
+  # only keep one example when the two annotations line up.
+  defp overlaps_any?(example, processed) do
+    Enum.any?(processed, fn other ->
+      example.annotation_text == other.annotation_text and
+        abs(example.start_ms - other.start_ms) < @overlap_tolerance_ms and
+        abs(example.end_ms - other.end_ms) < @overlap_tolerance_ms
+    end)
   end
 
   def corpus_eafs,
@@ -93,9 +100,7 @@ defmodule Signbank.Workers.CorpusLoader do
     Enum.at(corpus_eafs(), Enum.find_index(corpus_eafs(), &(&1 == eaf)) + 1)
   end
 
-  def clear_existing_examples(eaf) do
-    source_video_id = String.replace(eaf, ".eaf", ".mp4")
-
+  def clear_existing_examples(source_video_id) do
     Repo.delete_all(from(e in Corpus.Example, where: e.source_video_id == ^source_video_id))
   end
 
