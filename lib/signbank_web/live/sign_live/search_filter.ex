@@ -263,6 +263,7 @@ defmodule SearchFilter do
       # they can be handled generically
       %Field{label: "Keywords", name: :keywords, type: "text"},
       %Field{label: "Definitions", name: :definitions, type: "text"},
+      %Field{label: "Notes", name: :notes, type: "text"},
 
       # has video is also special-cased in `query_from_filter/2`
       %Field{
@@ -283,11 +284,6 @@ defmodule SearchFilter do
       %Field{label: "Catholic school", name: :school_catholic, type: "boolean"},
       %Field{label: "ASL gloss", name: :asl_gloss, type: "text"},
       %Field{label: "BSL gloss", name: :bsl_gloss, type: "text"},
-
-      # TODO: these fields don't exist yet, but this is their filter definition for when they do
-      # %Field{label: "Note", name: :note, type: "text"},
-      # %Field{label: "Editor note", name: :editor_note, type: "text"},
-
       %Field{
         label: "Iconicity",
         name: :iconicity,

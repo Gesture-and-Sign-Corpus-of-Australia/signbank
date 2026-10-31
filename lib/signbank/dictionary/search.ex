@@ -13,6 +13,7 @@ defmodule Signbank.Search do
             [
               :keywords,
               :definitions,
+              :notes,
               :has_video
             ]
 
