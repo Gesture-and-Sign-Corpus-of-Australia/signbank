@@ -116,6 +116,7 @@ defmodule SignbankWeb.SignLive.Edit do
       ]
       :morphology -> ["morphology"]
       :definitions -> ["definitions", "definitions_position"]
+      :notes -> ["notes", "notes_position"]
       :editorial -> [
         "editorial_doubtful_or_unsure",
         "editorial_problematic",
@@ -146,49 +147,54 @@ defmodule SignbankWeb.SignLive.Edit do
   end
 
   def handle_event("add-definition", _params, socket) do
-    socket =
-      update(socket, :form, fn %{source: changeset} ->
-        existing = Ecto.Changeset.get_assoc(changeset, :definitions)
-
-        changeset =
-          Ecto.Changeset.put_assoc(
-            changeset,
-            :definitions,
-            existing ++ [%{}]
-          )
-
-        to_form(changeset)
-      end)
-
-    {:noreply, socket}
+    {:noreply, add_entry(socket, :definitions)}
   end
 
   def handle_event("toggle-delete-definition", %{"index" => index}, socket) do
-    index = String.to_integer(index)
+    {:noreply, toggle_delete_entry(socket, :definitions, String.to_integer(index))}
+  end
 
-    socket =
-      update(socket, :form, fn %{source: changeset} ->
-        existing = Ecto.Changeset.get_assoc(changeset, :definitions)
-        {to_delete, rest} = List.pop_at(existing, index)
+  def handle_event("add-note", _params, socket) do
+    {:noreply, add_entry(socket, :notes)}
+  end
 
-        definitions =
-          cond do
-            not Map.has_key?(Ecto.Changeset.change(to_delete).data, :id) ->
-              rest
+  def handle_event("toggle-delete-note", %{"index" => index}, socket) do
+    {:noreply, toggle_delete_entry(socket, :notes, String.to_integer(index))}
+  end
 
-            Ecto.Changeset.get_change(to_delete, :delete) ->
-              List.replace_at(existing, index, Ecto.Changeset.delete_change(to_delete, :delete))
+  # Appends an empty entry to a sortable has_many (definitions or notes)
+  defp add_entry(socket, assoc) do
+    update(socket, :form, fn %{source: changeset} ->
+      existing = Ecto.Changeset.get_assoc(changeset, assoc)
 
-            true ->
-              List.replace_at(existing, index, Ecto.Changeset.change(to_delete, delete: true))
-          end
+      changeset
+      |> Ecto.Changeset.put_assoc(assoc, existing ++ [%{}])
+      |> to_form()
+    end)
+  end
 
-        changeset
-        |> Ecto.Changeset.put_assoc(:definitions, definitions)
-        |> to_form()
-      end)
+  # Removes an unsaved entry, or toggles the `delete` flag on a saved one
+  defp toggle_delete_entry(socket, assoc, index) do
+    update(socket, :form, fn %{source: changeset} ->
+      existing = Ecto.Changeset.get_assoc(changeset, assoc)
+      {to_delete, rest} = List.pop_at(existing, index)
 
-    {:noreply, socket}
+      entries =
+        cond do
+          not Map.has_key?(Ecto.Changeset.change(to_delete).data, :id) ->
+            rest
+
+          Ecto.Changeset.get_change(to_delete, :delete) ->
+            List.replace_at(existing, index, Ecto.Changeset.delete_change(to_delete, :delete))
+
+          true ->
+            List.replace_at(existing, index, Ecto.Changeset.change(to_delete, delete: true))
+        end
+
+      changeset
+      |> Ecto.Changeset.put_assoc(assoc, entries)
+      |> to_form()
+    end)
   end
 
   defp process_sign_params(sign_params) do
@@ -351,6 +357,62 @@ defmodule SignbankWeb.SignLive.Edit do
             type="button"
             phx-value-index={@f.index}
             phx-click="toggle-delete-definition"
+          >
+            <%= if @deleted do %>
+              Undelete?
+            <% else %>
+              Delete?
+            <% end %>
+          </.button>
+        </div>
+      </div>
+    </div>
+    """
+  end
+
+  def note(assigns) do
+    assigns = assign(assigns, :deleted, Phoenix.HTML.Form.input_value(assigns.f, :delete) == true)
+
+    ~H"""
+    <div class={["note", if(@deleted, do: "opacity-50", else: "")]}>
+      <div data-drag-handle class="drag-handle flex items-center">
+        <.icon name="hero-bars-2" />
+      </div>
+      <div class="flex flex-col grow">
+        <div class="level">
+          <.input form={@form} type="hidden" field={@f[:id]} />
+          <input form={@form} type="hidden" name="sign[notes_position][]" value={@f.index} />
+          <input
+            form={@form}
+            type="hidden"
+            name={Phoenix.HTML.Form.input_name(@f, :delete)}
+            value={to_string(Phoenix.HTML.Form.input_value(@f, :delete))}
+          />
+          <.input
+            form={@form}
+            type="select"
+            field={@f[:type]}
+            label="Type"
+            options={
+              Enum.map(Signbank.Dictionary.Note.types(), &{Signbank.Dictionary.Note.type_to_string(&1), &1})
+            }
+          />
+        </div>
+        <.input
+          form={@form}
+          type="textarea"
+          class="textarea resize-y"
+          rows="5"
+          field={@f[:text]}
+          label="Text"
+        />
+        <div class="level">
+          <.input form={@form} type="checkbox" field={@f[:published]} label="Published" />
+          <.button
+            form={@form}
+            type="button"
+            phx-value-index={@f.index}
+            phx-click="toggle-delete-note"
           >
             <%= if @deleted do %>
               Undelete?

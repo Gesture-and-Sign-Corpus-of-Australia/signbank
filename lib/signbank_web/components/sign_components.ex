@@ -16,16 +16,9 @@ defmodule SignbankWeb.SignComponents do
     :noun,
     :verb,
     :modifier,
-    :augment,
     :pointing_sign,
     :interactive,
-    :question,
-    :note,
-    :editor_note
-  ]
-
-  @editor_definitions [
-    :editor_note
+    :question
   ]
 
   defp group_definitions_by_role(definitions) do
@@ -45,15 +38,12 @@ defmodule SignbankWeb.SignComponents do
   defp definition_role_to_string(:noun), do: gettext("As a Noun")
   defp definition_role_to_string(:verb), do: gettext("As a Verb or Adjective")
   defp definition_role_to_string(:modifier), do: gettext("As Modifier")
-  defp definition_role_to_string(:augment), do: gettext("Augmented meaning")
 
   defp definition_role_to_string(:pointing_sign),
     do: gettext("As a Pointing Sign")
 
   defp definition_role_to_string(:question), do: gettext("As a question")
   defp definition_role_to_string(:interactive), do: gettext("Interactive")
-  defp definition_role_to_string(:note), do: gettext("Note")
-  defp definition_role_to_string(:editor_note), do: gettext("Editor note")
 
   attr :type, :atom, values: [:basic, :linguistic], required: true
   attr :sign, Dictionary.Sign, required: true
@@ -64,42 +54,16 @@ defmodule SignbankWeb.SignComponents do
       if Accounts.can_see_unpublished?(assigns[:user]), do: true, else: def.published
     end
 
-    filter_editor_defs = fn {role, _defs} ->
-      if Accounts.can_see_unpublished?(assigns[:user]) do
-        true
-      else
-        # to prevent new roles defaulting to being shown
-        role in @role_order and
-          role not in @editor_definitions
-      end
-    end
+    # to prevent new roles defaulting to being shown
+    filter_unknown_roles = fn {role, _defs} -> role in @role_order end
 
     definitions =
       assigns.sign.definitions
       |> Enum.concat(
         case assigns.sign do
-          %Dictionary.Sign{
-            citation: %Dictionary.Sign{definitions: definitions}
-          } ->
-            # TODO: once we switch to a :notes table table this is useless
-            # Filter to use only the definitions (the other roles represent notes
-            # and shouldn't be inherited by variants)
-            Enum.filter(
-              definitions,
-              &(&1.role in [
-                  :general,
-                  :auslan,
-                  :noun,
-                  :verb,
-                  :modifier,
-                  :pointing_sign,
-                  :questions,
-                  :interactive
-                ])
-            )
-
-          _ ->
-            []
+          # Variants show their citation entry's definitions
+          %Dictionary.Sign{citation: %Dictionary.Sign{definitions: definitions}} -> definitions
+          _ -> []
         end
       )
       |> Enum.filter(filter_unpublished)
@@ -110,7 +74,7 @@ defmodule SignbankWeb.SignComponents do
         :def_groups,
         definitions
         |> group_definitions_by_role()
-        |> Enum.filter(filter_editor_defs)
+        |> Enum.filter(filter_unknown_roles)
       )
 
     ~H"""
@@ -144,6 +108,50 @@ defmodule SignbankWeb.SignComponents do
           </li>
         </ol>
       </div>
+    </div>
+    """
+  end
+
+  @doc """
+  Notes about a sign (augmented meaning, notes, editor notes, ...).
+
+  Unpublished notes and non-public note types
+  are only shown to users who can see unpublished content.
+  """
+  attr :sign, Dictionary.Sign, required: true
+  attr :user, Accounts.User, required: false
+
+  def notes(assigns) do
+    can_see_unpublished? = Accounts.can_see_unpublished?(assigns[:user])
+
+    note_groups =
+      assigns.sign.notes
+      |> Enum.filter(fn note ->
+        can_see_unpublished? or
+          (note.published and note.type in Dictionary.Note.public_types())
+      end)
+      |> Enum.group_by(& &1.type)
+      |> Enum.sort_by(fn {type, _notes} ->
+        Enum.find_index(Dictionary.Note.types(), &(&1 == type))
+      end)
+
+    assigns = assign(assigns, :note_groups, note_groups)
+
+    ~H"""
+    <div :if={@note_groups != []} class="notes flex flex-col gap-4">
+      <section :for={{type, group} <- @note_groups} class="bg-white-200 shadow-sm p-4">
+        <h3 class="text-lg">
+          {Dictionary.Note.type_to_string(type)}
+        </h3>
+        <div :for={note <- group} class="flex gap-2">
+          <SignbankWeb.CoreComponents.icon
+            :if={not note.published}
+            name="hero-eye-slash"
+            class="size-6"
+          />
+          <p>{note.text}</p>
+        </div>
+      </section>
     </div>
     """
   end
