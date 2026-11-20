@@ -289,17 +289,41 @@ Hooks.VideoPlayer = {
     const video = this.el;
     const videoId = video.id;
 
+    // Corpus examples are a segment of a full corpus video. data-clip-start /
+    // data-clip-end (seconds) mark the segment; 
+    const clipStart = parseFloat(video.dataset.clipStart) || 0;
+    const clipEnd = parseFloat(video.dataset.clipEnd) || Infinity;
+
+    const onLoadedMetadata = () => {
+      if (clipStart > 0) video.currentTime = clipStart;
+    };
+    video.addEventListener("loadedmetadata", onLoadedMetadata);
+
+    // When playing from the end of the segment, start again from its beginning
+    const onPlay = () => {
+      if (video.currentTime >= clipEnd || video.currentTime < clipStart) {
+        video.currentTime = clipStart;
+      }
+    };
+    video.addEventListener("play", onPlay);
+
+    // Every VideoPlayer hook receives this event, so only the targeted one
+    // seeks (each video may have a different clipStart offset).
     this.handleEvent("seek_video", ({video_id, time}) => {
-      const v = document.getElementById(video_id);
-      if (v) {
-        v.currentTime = time;
+      if (video_id === videoId) {
+        video.currentTime = clipStart + time;
       }
     });
 
     // Broadcast timeupdate so ElanPlayhead hooks can follow along
     const onTimeUpdate = () => {
+      // Stop at the end of the example 
+      if (video.currentTime >= clipEnd && !video.paused) {
+        video.pause();
+        video.currentTime = clipEnd;
+      }
       window.dispatchEvent(new CustomEvent("video_timeupdate", {
-        detail: { video_id: videoId, time: video.currentTime }
+        detail: { video_id: videoId, time: Math.max(video.currentTime - clipStart, 0) }
       }));
     };
     video.addEventListener("timeupdate", onTimeUpdate);
@@ -336,6 +360,8 @@ Hooks.VideoPlayer = {
 
     this._cleanup = () => {
       video.removeEventListener("timeupdate", onTimeUpdate);
+      video.removeEventListener("loadedmetadata", onLoadedMetadata);
+      video.removeEventListener("play", onPlay);
       document.removeEventListener("keydown", onKeyDown);
       document.removeEventListener("keyup", onKeyUp);
     };
