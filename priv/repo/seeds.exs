@@ -22,6 +22,14 @@
 #         published: true
 #       }
 #     ],
+#     notes: [
+#       %Signbank.Dictionary.Note{
+#         text: "Sample note about this sign.",
+#         pos: 0,
+#         type: :note,
+#         published: true
+#       }
+#     ],
 #     keywords: [
 #       %Signbank.Dictionary.SignKeyword{
 #         text: "house"

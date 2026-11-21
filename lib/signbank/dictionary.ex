@@ -11,6 +11,7 @@ defmodule Signbank.Dictionary do
   alias Signbank.Dictionary.SignVideo
   alias Signbank.Dictionary.SignKeyword
   alias Signbank.Dictionary.Definition
+  alias Signbank.Dictionary.Note
   alias Signbank.Repo
 
   @default_order [
@@ -47,6 +48,34 @@ defmodule Signbank.Dictionary do
     suq =
       from d in SignKeyword,
         where: d.sign_id == parent_as(:signs).id,
+        where: ^conditions
+
+    dynamic([s], ^queryable and exists(subquery(suq)))
+  end
+
+  # Only published, public note types are searchable, because this search is
+  # available to the public and must not reveal editor notes.
+  def query_from_filter(
+        %Signbank.Search.Filter{
+          field: :notes,
+          op: op,
+          value: val
+        },
+        queryable
+      ) do
+    conditions =
+      case op do
+        :equal_to -> dynamic([n], n.text == ^val)
+        :contains -> dynamic([n], like(n.text, ^"%#{val}%"))
+        :starts_with -> dynamic([n], like(n.text, ^"#{val}%"))
+        :regex -> dynamic([n], fragment("? ~ ?", n.text, ^val))
+      end
+
+    suq =
+      from n in Note,
+        where: n.sign_id == parent_as(:signs).id,
+        where: n.published == true,
+        where: n.type in ^Note.public_types(),
         where: ^conditions
 
     dynamic([s], ^queryable and exists(subquery(suq)))
@@ -262,6 +291,7 @@ defmodule Signbank.Dictionary do
         preload: [
           citation: [definitions: [], variants: []],
           definitions: [],
+          notes: [],
           variants: [videos: [], regions: []],
           semantic_categories: [],
           regions: [],

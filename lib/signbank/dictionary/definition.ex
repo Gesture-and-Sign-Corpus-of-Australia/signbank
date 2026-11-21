@@ -1,6 +1,9 @@
 defmodule Signbank.Dictionary.Definition do
   @moduledoc """
   A single definition for a sign. Usually text, can be a video
+
+  Notes about a sign (augmented meaning, notes, editor notes, ...) are stored
+  separately, see `Signbank.Dictionary.Note`.
   """
   use Ecto.Schema
   import Ecto.Changeset
@@ -13,15 +16,7 @@ defmodule Signbank.Dictionary.Definition do
     :modifier,
     :pointing_sign,
     :question,
-    :interactive,
-    # TODO: move this field to notes table
-    :augment,
-    # TODO: move this field to notes table
-    :popular_explanation,
-    # TODO: move this field to notes table
-    :note,
-    # TODO: move this field to notes table (or maybe text field on Sign)
-    :editor_note
+    :interactive
   ]
 
   def roles, do: @roles

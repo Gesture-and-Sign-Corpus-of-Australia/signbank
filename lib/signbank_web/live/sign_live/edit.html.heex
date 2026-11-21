@@ -56,6 +56,16 @@
       Definitions
     </.link>
     <.link
+      patch={~p"/dictionary/sign/#{@sign.id_gloss}/edit/notes"}
+      role="tab"
+      class={[
+        "tab",
+        if(@current_section == :notes, do: "tab-active")
+      ]}
+    >
+      Notes
+    </.link>
+    <.link
       patch={~p"/dictionary/sign/#{@sign.id_gloss}/edit/editorial"}
       role="tab"
       class={[
@@ -160,7 +170,7 @@
                 [:general, gettext("General Sign")],
                 [:noun, gettext("Noun (things)")],
                 [:verb, gettext("Verb & adjective (actions/processes/states)")],
-                [:questions, gettext("Question signs")],
+                [:question, gettext("Question signs")],
                 [:pointing_sign, gettext("Pointing signs")],
                 [:interactive, gettext("Interactive & backchannel")],
                 [:modifier, gettext("Modifier (of verb, sentence, or another modifier)")]
@@ -231,6 +241,29 @@
 
           <div class="mt-4">
             <button form="definitions-form" class="btn">
+              {gettext("Save")}
+            </button>
+          </div>
+        </.form>
+      <% end %>
+
+      <%!-- NOTES SECTION --%>
+      <%= if @current_section == :notes do %>
+        <.form for={@form} id="notes-form" phx-change="validate" phx-submit="save">
+          <div id="notes_section">
+            <p :if={@sign.type == :variant} class="p-2">
+              Notes are not inherited from the citation entry; notes added here only appear on this variant.
+            </p>
+            <div id="notes_list" phx-hook="InitSorting">
+              <.inputs_for :let={f_notes} field={@form[:notes]}>
+                <.note form="notes-form" f={f_notes} />
+              </.inputs_for>
+            </div>
+            <.button class="mt-2" type="button" phx-click="add-note">Add</.button>
+          </div>
+
+          <div class="mt-4">
+            <button form="notes-form" class="btn">
               {gettext("Save")}
             </button>
           </div>

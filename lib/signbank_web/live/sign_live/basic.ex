@@ -192,6 +192,7 @@ defmodule SignbankWeb.SignLive.Basic do
           </div>
           <div>
             <.definitions type={:basic} sign={@sign} />
+            <.notes sign={@sign} />
           </div>
         </div>
 

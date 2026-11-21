@@ -262,6 +262,7 @@
 .edit_main #vocabulary_section,
 .edit_main #morphology_section,
 .edit_main #definitions_section,
+.edit_main #notes_section,
 .edit_main #editorial_section {
   font-size: 12px;
 }
@@ -303,16 +304,19 @@
   margin-top: 10px;
 }
 
-.edit_main #definitions_section {
+.edit_main #definitions_section,
+.edit_main #notes_section {
   --section_color: rgba(0, 0, 0, 0);
 }
 
-.edit_main #definitions_section .drag-handle {
+.edit_main #definitions_section .drag-handle,
+.edit_main #notes_section .drag-handle {
   margin-right: 1em;
   @apply cursor-ns-resize
 }
 
-.edit_main #definitions_section .definition {
+.edit_main #definitions_section .definition,
+.edit_main #notes_section .note {
   display: flex;
   padding: 1em;
   width: 100%;
@@ -321,7 +325,8 @@
   margin-bottom: 20px;
 }
 
-.edit_main #definitions_section .definition textarea {
+.edit_main #definitions_section .definition textarea,
+.edit_main #notes_section .note textarea {
   width: 100%;
 }
 

@@ -65,6 +65,10 @@ defmodule Signbank.Dictionary.Sign do
       preload_order: [asc: :pos],
       on_replace: :delete
 
+    has_many :notes, Dictionary.Note,
+      preload_order: [asc: :pos],
+      on_replace: :delete
+
     # TODO: uncomment this after adding %Relation{}
     has_many :relations, Dictionary.SignRelation, foreign_key: :sign_a_id
 
@@ -77,10 +81,6 @@ defmodule Signbank.Dictionary.Sign do
     field :bsl_gloss, :string
     field :iconicity, Ecto.Enum, values: @iconicity_values
     field :popular_explanation, :string
-    # TODO: add these note fields
-    # field :augment_note, :string
-    # field :note, :string
-    # field :editor_note, :string
     field :is_asl_loan, :boolean
     field :is_bsl_loan, :boolean
     field :signed_english_gloss, :string
@@ -169,6 +169,11 @@ defmodule Signbank.Dictionary.Sign do
       :definitions,
       with: &Dictionary.Definition.changeset/3,
       sort_param: :definitions_position
+    )
+    |> cast_assoc(
+      :notes,
+      with: &Dictionary.Note.changeset/3,
+      sort_param: :notes_position
     )
     |> put_regions(sign, attrs)
     |> put_keywords(sign, attrs)

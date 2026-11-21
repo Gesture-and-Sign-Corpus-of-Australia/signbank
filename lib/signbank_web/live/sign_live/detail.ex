@@ -107,7 +107,8 @@ defmodule SignbankWeb.SignLive.Detail do
 
           <hr />
 
-          <.definitions type={:linguistic} user={@current_scope} sign={@sign} />
+          <.definitions type={:linguistic} user={@current_scope && @current_scope.user} sign={@sign} />
+          <.notes user={@current_scope && @current_scope.user} sign={@sign} />
         </div>
       </div>
     </Layouts.app>
