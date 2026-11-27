@@ -113,6 +113,10 @@ defmodule SignbankWeb.SignLive.Basic do
   @impl true
   def render(assigns) do
     if :sign in Map.keys(assigns) do
+      # for assigns.sign.relations do
+
+      # end
+
       ~H"""
       <Layouts.app flash={@flash} current_scope={@current_scope}>
         <div
@@ -148,7 +152,7 @@ defmodule SignbankWeb.SignLive.Basic do
             )}
           </p>
         </div>
-        <div class="flex gap-4 flex-col md:flex-row">
+        <div class="flex gap-4 flex-col md:flex-row border border-gray-300 rounded-lg p-1 sm:p-4 bg-white">
           <div class="w-full md:w-[60vw] max-w-[450px] grow-0 shrink-0">
             <.live_component
               module={VideoScroller}

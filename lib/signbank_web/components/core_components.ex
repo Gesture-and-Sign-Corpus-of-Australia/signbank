@@ -714,4 +714,49 @@ defmodule SignbankWeb.CoreComponents do
         x
     end)
   end
+
+  # TODO lacks a poster element
+  # TODO ask about caption attribution
+  # TODO check if this works on windows.
+  # ux testing result: make the video bigger.
+  # try double click to fullscreen?
+  # my linux firefox install breaks on restarting the vid. 
+  attr :video_url, :string, required: true
+  attr :video_id, :string, required: true
+  attr :start, :float, required: true
+  attr :ending, :float, required: true
+
+  def streaming_player(assigns) do
+    ~H"""
+    <figure
+      id="videoContainer"
+      video_id={@video_id}
+      class="relative flex flex-col mb-0"
+      phx-hook="StreamingVideoPlayer"
+    >
+      <img
+        id="pauseIndicator"
+        src="/images/icons/pause.svg"
+        class="absolute right-0 top-0 p-4 w-20 h-20"
+      />
+      <img
+        id="restartIndicator"
+        src="/images/icons/restart.svg"
+        class="absolute right-0 top-0 p-4 w-20 h-20"
+      />
+      <video
+        id={@video_id}
+        class="m-auto grow rounded-t-lg"
+        controls
+        preload="metadata"
+        <source
+        src={"#{@video_url}#t=#{@start},#{@ending}"}
+        start={@start}
+        ending={@ending}
+        type="video/mp4"
+      />
+      <progress id="progress" class="w-full my-0 h-5" value="0"></progress>
+    </figure>
+    """
+  end
 end

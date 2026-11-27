@@ -7,6 +7,9 @@ defmodule SignbankWeb.CorpusExamples do
   alias Signbank.Corpus
   alias Signbank.ElanParser
 
+  # Clip padding in ms — must match @clip_padding_ms in CorpusExampleTrimmer
+  @clip_padding_ms 2_500
+
   attr :version, :atom, default: :inline
   attr :gloss, :atom, default: :inline
 
@@ -20,21 +23,13 @@ defmodule SignbankWeb.CorpusExamples do
             {example.video_url}
           </div>
         <% else %>
-          <button
-            type="button"
-            class="btn"
-            phx-click="randomize_example"
-            phx-target={@myself}
-          >
+          <button type="button" class="btn" phx-click="randomize_example" phx-target={@myself}>
             Show corpus examples
           </button>
           <dialog id={"corpus_examples_modal__#{@gloss}"} class="modal">
             <div class="modal-box">
               <%= if @current_example do %>
-                <.example_with_elan
-                  example={@current_example}
-                  id={"example_#{@current_example.id}"}
-                />
+                <.example_with_elan example={@current_example} id={"example_#{@current_example.id}"} />
               <% end %>
               <div class="modal-action">
                 <button
@@ -66,25 +61,26 @@ defmodule SignbankWeb.CorpusExamples do
       assigns
       |> assign_new(:id, fn -> "example_#{assigns.example.id}" end)
       |> assign_new(:elan_data, fn -> load_elan_for_example(assigns.example) end)
+      |> assign(:clip_start, max(assigns.example.start_ms - @clip_padding_ms, 0))
+      |> assign(:clip_end, assigns.example.end_ms + @clip_padding_ms)
 
     ~H"""
-    <div class="space-y-4 mb-8">
+    <div class="space-y-4 mb-8 border border-gray-300 rounded-lg p-1 sm:p-4 bg-white">
       <!-- Video player -->
-      <video
-        id={"video_#{@id}"}
-        muted
-        controls
-        class="w-full max-w-2xl"
-        phx-hook="VideoPlayer"
-      >
-        <source src={"#{Application.fetch_env!(:signbank, :media_url)}/#{@example.video_url}"} />
-      </video>
-
+      <.streaming_player
+        video_id={"video_#{@id}"}
+        video_url={"#{Application.fetch_env!(:signbank, :media_url)}/#{@example.video_url}"}
+        start={@clip_start / 1000}
+        ending={@clip_end / 1000}
+      />
       <!-- ELAN viewer (if annotations exist) -->
       <%= if @elan_data do %>
-        <div class="border border-gray-300 rounded-lg p-1 sm:p-4 bg-white">
-          <div class="flex items-center justify-between mb-2">
-            <h4 class="font-semibold">Annotations</h4>
+        <div class="">
+          <div class="flex items-center justify-between pb-1 bg-gray-200">
+            <h4 class="px-2 font-semibold">Annotations</h4>
+            <button type="button" id="pauseplay" class="btn btn-sm btn-ghost gap-1 w-28">
+              <span class="text-sm">⏸️</span> Play/Pause
+            </button>
             <button
               type="button"
               class="btn btn-sm btn-ghost gap-1 w-28"
@@ -146,9 +142,6 @@ defmodule SignbankWeb.CorpusExamples do
        time: time_ms / 1000
      })}
   end
-
-  # Clip padding in ms — must match @clip_padding_ms in CorpusExampleTrimmer
-  @clip_padding_ms 2_500
 
   # Load ELAN data for a specific example, filtered to relevant tiers and time range.
   # The actual video clip has @clip_padding_ms of padding on each side of the annotation,
